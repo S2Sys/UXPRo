@@ -5716,4 +5716,1969 @@ Ask these questions before generating any UI:
 
 ---
 
+## SECTION 29: ADVANCED STATE MANAGEMENT UI PATTERNS
+
+═══════════════════════════════════════════════════════════════════════════════
+
+State management is the backbone of modern interactive applications. This section covers sophisticated UI patterns for handling complex state scenarios, including state machines, async operations, conflict resolution, and persistence. These patterns ensure applications remain responsive, predictable, and recoverable under all conditions.
+
+### 29.1 State Machine UI
+
+**Purpose:** Visualize application state transitions with clear affordances and illegal state prevention. State machines provide formal state definitions with explicit transitions, preventing invalid state combinations that lead to bugs.
+
+**Key Principles:**
+- Make current state visually prominent
+- Disable transitions that are not currently valid
+- Show state history/path through the machine
+- Animate state transitions smoothly
+- Use semantic HTML to expose state information
+
+**Complete HTML/CSS Example:**
+
+```html
+<!-- State Machine Workflow Step UI -->
+<div class="workflow-container">
+  <nav class="workflow-steps" role="progressbar" aria-valuenow="2" aria-valuemin="1" aria-valuemax="4" aria-label="Order processing workflow">
+    <div class="steps-list">
+      <div class="step" data-state="pending" aria-current="false">
+        <div class="step-indicator">
+          <span class="step-number" aria-label="Step 1">1</span>
+        </div>
+        <div class="step-label">Review</div>
+      </div>
+      
+      <div class="step" data-state="active" aria-current="true">
+        <div class="step-indicator">
+          <span class="step-number" aria-label="Step 2, current">2</span>
+        </div>
+        <div class="step-label">Processing</div>
+      </div>
+      
+      <div class="step" data-state="blocked" aria-disabled="true">
+        <div class="step-indicator">
+          <span class="step-number" aria-label="Step 3">3</span>
+        </div>
+        <div class="step-label">Shipping</div>
+      </div>
+      
+      <div class="step" data-state="pending" aria-disabled="true">
+        <div class="step-indicator">
+          <span class="step-number" aria-label="Step 4">4</span>
+        </div>
+        <div class="step-label">Delivery</div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="step-content">
+    <h2>Processing Order #12345</h2>
+    <p class="state-description" role="status" aria-live="polite">
+      Validating payment information and preparing shipment.
+    </p>
+    <div class="transition-actions">
+      <button class="btn-primary" aria-label="Move to next step: Shipping">Next</button>
+      <button class="btn-secondary" aria-label="Return to previous step: Review">Back</button>
+    </div>
+  </div>
+</div>
+
+<style>
+:root {
+  --state-pending: #E8E8E8;
+  --state-active: #0066CC;
+  --state-completed: #00AA44;
+  --state-blocked: #CC4400;
+  --duration-transition: 300ms;
+  --easing-state: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.workflow-container {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.workflow-steps {
+  margin-bottom: 32px;
+}
+
+.steps-list {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  position: relative;
+}
+
+.steps-list::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  height: 2px;
+  background: var(--state-pending);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.step {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: opacity var(--duration-transition) ease;
+}
+
+.step[data-state="blocked"] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.step-indicator {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  background: var(--state-pending);
+  color: #333;
+  border: 2px solid transparent;
+  transition: all var(--duration-transition) var(--easing-state);
+}
+
+.step[data-state="completed"] .step-indicator {
+  background: var(--state-completed);
+  color: white;
+}
+
+.step[data-state="completed"] .step-indicator::after {
+  content: '✓';
+  position: absolute;
+  font-size: 18px;
+}
+
+.step[data-state="active"] .step-indicator {
+  background: var(--state-active);
+  color: white;
+  border-color: var(--state-active);
+  box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.2);
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+.step[data-state="blocked"] .step-indicator {
+  background: var(--state-blocked);
+  color: white;
+  cursor: not-allowed;
+}
+
+.step-number {
+  font-variant-numeric: tabular-nums;
+}
+
+.step-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  white-space: nowrap;
+}
+
+.step[data-state="active"] .step-label,
+.step[data-state="completed"] .step-label {
+  color: #333;
+  font-weight: 600;
+}
+
+.step-content {
+  padding: 20px;
+  background: #F9FAFB;
+  border-radius: 6px;
+  border: 1px solid #E5E7EB;
+}
+
+.step-content h2 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  color: #1F2937;
+}
+
+.state-description {
+  color: #666;
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.transition-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all var(--duration-transition) ease;
+}
+
+.btn-primary {
+  background: var(--state-active);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #0052A3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
+}
+
+.btn-primary:disabled {
+  background: #B0B8C1;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: white;
+  color: #333;
+  border: 1px solid #D1D5DB;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #F3F4F6;
+  border-color: #9CA3AF;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@keyframes pulse-ring {
+  0%, 100% {
+    box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(0, 102, 204, 0.1);
+  }
+}
+
+@media (max-width: 600px) {
+  .steps-list {
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .steps-list::before {
+    top: 0;
+    left: 20px;
+    right: auto;
+    height: auto;
+    width: 2px;
+  }
+}
+</style>
+```
+
+---
+
+### 29.2 Complex Form State
+
+**Purpose:** Manage multi-step form validation, preserve form state across sessions, and clearly communicate unsaved changes to prevent data loss.
+
+**Key Principles:**
+- Validate at field, section, and form levels
+- Show validation errors without blocking progress
+- Persist form state to prevent data loss
+- Indicate which fields have unsaved changes
+- Provide explicit save/discard workflows
+
+**Complete HTML/CSS Example:**
+
+```html
+<!-- Multi-Step Form with State Management -->
+<form class="complex-form" data-form-state="draft" novalidate>
+  <div class="form-header">
+    <h1>Application Form</h1>
+    <div class="form-status" role="status" aria-live="polite">
+      <span class="status-badge" data-status="draft">Draft (Unsaved Changes)</span>
+    </div>
+  </div>
+
+  <fieldset class="form-section" data-section="personal">
+    <legend>Personal Information</legend>
+    
+    <div class="form-group">
+      <label for="full-name">Full Name</label>
+      <input 
+        type="text" 
+        id="full-name" 
+        name="fullName"
+        class="form-input"
+        data-field-state="modified"
+        aria-invalid="false"
+        required
+      />
+      <span class="field-indicator" aria-label="This field has unsaved changes">●</span>
+      <span class="field-error" role="alert" aria-live="assertive"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input 
+        type="email" 
+        id="email" 
+        name="email"
+        class="form-input"
+        data-field-state="pristine"
+        aria-invalid="false"
+        required
+      />
+      <span class="field-indicator"></span>
+      <span class="field-error" role="alert"></span>
+    </div>
+
+    <div class="section-status">
+      <span class="status-text">2 of 2 fields valid</span>
+      <span class="status-icon">✓</span>
+    </div>
+  </fieldset>
+
+  <fieldset class="form-section" data-section="address">
+    <legend>Address</legend>
+    
+    <div class="form-group">
+      <label for="street">Street Address</label>
+      <input 
+        type="text" 
+        id="street" 
+        name="street"
+        class="form-input"
+        data-field-state="error"
+        aria-invalid="true"
+        aria-describedby="street-error"
+        required
+      />
+      <span class="field-indicator" aria-label="This field has an error">!</span>
+      <span class="field-error" id="street-error" role="alert">Street address is required</span>
+    </div>
+
+    <div class="form-group">
+      <label for="city">City</label>
+      <input 
+        type="text" 
+        id="city" 
+        name="city"
+        class="form-input"
+        data-field-state="pristine"
+        aria-invalid="false"
+        required
+      />
+      <span class="field-indicator"></span>
+      <span class="field-error"></span>
+    </div>
+
+    <div class="section-status">
+      <span class="status-text">1 of 2 fields valid</span>
+      <span class="status-icon">⚠</span>
+    </div>
+  </fieldset>
+
+  <div class="form-actions">
+    <button type="button" class="btn-secondary" aria-label="Discard all unsaved changes">Discard</button>
+    <button type="submit" class="btn-primary" aria-label="Save form and continue">Save Changes</button>
+  </div>
+</form>
+
+<style>
+.complex-form {
+  background: white;
+  border-radius: 8px;
+  padding: 32px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.form-header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #1F2937;
+}
+
+.form-status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.status-badge[data-status="saved"] {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.form-section {
+  margin-bottom: 28px;
+  padding: 20px;
+  background: #F9FAFB;
+  border-radius: 6px;
+  border: 1px solid #E5E7EB;
+}
+
+.form-section legend {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.form-group:last-of-type {
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #374151;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #D1D5DB;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 200ms ease;
+  background: white;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #0066CC;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.form-input[data-field-state="modified"] {
+  background: #FEFCE8;
+  border-color: #F59E0B;
+}
+
+.form-input[data-field-state="error"] {
+  background: #FEE2E2;
+  border-color: #DC2626;
+}
+
+.form-input[aria-invalid="true"] {
+  border-color: #DC2626;
+}
+
+.field-indicator {
+  position: absolute;
+  right: 12px;
+  top: 32px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F59E0B;
+  transition: all 200ms ease;
+}
+
+.form-input[data-field-state="error"] ~ .field-indicator {
+  color: #DC2626;
+}
+
+.form-input[data-field-state="pristine"] ~ .field-indicator {
+  display: none;
+}
+
+.field-error {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #DC2626;
+  font-weight: 500;
+  min-height: 16px;
+}
+
+.section-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #D1D5DB;
+  font-size: 12px;
+  color: #666;
+}
+
+.status-icon {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 24px;
+  border-top: 1px solid #E5E7EB;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.btn-primary {
+  background: #0066CC;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #0052A3;
+}
+
+.btn-secondary {
+  background: white;
+  color: #374151;
+  border: 1px solid #D1D5DB;
+}
+
+.btn-secondary:hover {
+  background: #F9FAFB;
+}
+</style>
+```
+
+---
+
+### 29.3 Undo/Redo UI
+
+**Purpose:** Provide visual undo/redo controls with history visualization and branch awareness. Users can navigate through their editing history safely with clear feedback.
+
+**Key Principles:**
+- Show undo/redo button states clearly
+- Visualize history as a navigable timeline
+- Handle branching when user edits after navigating back
+- Show what action will be undone/redone on hover
+- Limit history depth to prevent memory issues
+
+**Complete HTML/CSS Example:**
+
+```html
+<!-- Undo/Redo Timeline UI -->
+<div class="undo-redo-system">
+  <div class="undo-redo-controls">
+    <button 
+      class="control-btn" 
+      data-action="undo"
+      title="Undo (Ctrl+Z): Revert last action"
+      aria-label="Undo: Remove text"
+    >
+      <span class="control-icon">↶</span>
+    </button>
+    
+    <button 
+      class="control-btn" 
+      data-action="redo"
+      disabled
+      title="Redo (Ctrl+Y): Reapply undone action"
+      aria-label="Redo: Currently disabled"
+    >
+      <span class="control-icon">↷</span>
+    </button>
+
+    <div class="divider"></div>
+
+    <button 
+      class="control-btn"
+      data-action="history"
+      aria-label="Show history timeline"
+      aria-expanded="false"
+    >
+      <span class="control-icon">⏱</span>
+    </button>
+  </div>
+
+  <div class="history-timeline" role="complementary" aria-label="Editing history">
+    <div class="timeline-track">
+      <!-- Current position marker -->
+      <div class="timeline-marker current" aria-current="true"></div>
+      
+      <!-- History events -->
+      <div class="timeline-event" data-index="0">
+        <div class="event-point"></div>
+        <div class="event-content">
+          <span class="event-action">Created document</span>
+          <span class="event-time">Now</span>
+        </div>
+      </div>
+
+      <div class="timeline-event" data-index="1">
+        <div class="event-point"></div>
+        <div class="event-content">
+          <span class="event-action">Added heading</span>
+          <span class="event-time">30s ago</span>
+        </div>
+      </div>
+
+      <div class="timeline-event" data-index="2">
+        <div class="event-point current-position"></div>
+        <div class="event-content">
+          <span class="event-action">Typed paragraph text</span>
+          <span class="event-time">2m ago</span>
+        </div>
+      </div>
+
+      <div class="timeline-event" data-index="3">
+        <div class="event-point"></div>
+        <div class="event-content">
+          <span class="event-action">Added image</span>
+          <span class="event-time">5m ago</span>
+        </div>
+      </div>
+
+      <div class="timeline-branch-indicator">
+        <span class="branch-label">Edited from here (branch)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="history-info">
+    <span class="info-text">3 actions total • 2 in undo stack • 1 in redo stack</span>
+  </div>
+</div>
+
+<style>
+.undo-redo-system {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.undo-redo-controls {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.control-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  border: 1px solid #D1D5DB;
+  background: white;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-btn:hover:not(:disabled) {
+  background: #F3F4F6;
+  border-color: #9CA3AF;
+  color: #111827;
+}
+
+.control-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.control-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.control-icon {
+  font-size: 16px;
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background: #D1D5DB;
+}
+
+.history-timeline {
+  margin: 16px 0;
+  padding: 0;
+}
+
+.timeline-track {
+  position: relative;
+  padding: 12px 0;
+}
+
+.timeline-event {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 200ms ease;
+  position: relative;
+}
+
+.timeline-event:hover {
+  background: #F9FAFB;
+  border-radius: 4px;
+  padding-left: 8px;
+}
+
+.event-point {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #D1D5DB;
+  border: 2px solid white;
+  margin-top: 5px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  transition: all 200ms ease;
+}
+
+.event-point.current-position {
+  background: #0066CC;
+  border-color: white;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.2);
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+}
+
+.timeline-event:hover .event-point:not(.current-position) {
+  background: #9CA3AF;
+  width: 14px;
+  height: 14px;
+  margin-top: 4px;
+}
+
+.event-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 2px;
+}
+
+.event-action {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1F2937;
+}
+
+.event-time {
+  font-size: 11px;
+  color: #9CA3AF;
+}
+
+.timeline-branch-indicator {
+  margin-top: 12px;
+  padding: 8px;
+  background: #FEF3C7;
+  border-left: 2px solid #F59E0B;
+  border-radius: 4px;
+}
+
+.branch-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #92400E;
+}
+
+.history-info {
+  padding-top: 12px;
+  border-top: 1px solid #E5E7EB;
+}
+
+.info-text {
+  font-size: 12px;
+  color: #6B7280;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 500px) {
+  .undo-redo-system {
+    padding: 12px;
+  }
+
+  .timeline-track {
+    padding: 8px 0;
+  }
+
+  .timeline-event {
+    margin-bottom: 8px;
+  }
+}
+</style>
+```
+
+---
+
+### 29.4 Optimistic UI Updates
+
+**Purpose:** Provide immediate visual feedback for user actions while requests process in the background, with graceful rollback if operations fail.
+
+**Key Principles:**
+- Show action result immediately in UI
+- Indicate operation is pending in background
+- Show clear rollback/retry if operation fails
+- Disable interactions that depend on completion
+- Animate transitions between states
+
+**Complete HTML/CSS Example:**
+
+```html
+<!-- Optimistic Update with Rollback -->
+<div class="message-list">
+  <div class="message" data-message-id="msg-1">
+    <div class="message-avatar">
+      <img src="user.jpg" alt="Your avatar" />
+    </div>
+    <div class="message-content">
+      <div class="message-header">
+        <strong>You</strong>
+        <span class="message-time">Just now</span>
+      </div>
+      <p class="message-text">This is an optimistically rendered message that was just sent.</p>
+      <div class="message-state-indicator" role="status" aria-live="polite">
+        <span class="state-badge pending">
+          <span class="spinner"></span>
+          Sending...
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="message" data-message-id="msg-2">
+    <div class="message-avatar">
+      <img src="user.jpg" alt="Your avatar" />
+    </div>
+    <div class="message-content">
+      <div class="message-header">
+        <strong>You</strong>
+        <span class="message-time">2 minutes ago</span>
+      </div>
+      <p class="message-text">This message has been successfully sent to the server.</p>
+      <div class="message-state-indicator">
+        <span class="state-badge sent">
+          <span class="checkmark">✓</span>
+          Sent
+        </span>
+      </div>
+    </div>
+    <div class="message-actions">
+      <button class="action-btn edit" aria-label="Edit this message">Edit</button>
+      <button class="action-btn delete" aria-label="Delete this message">Delete</button>
+    </div>
+  </div>
+
+  <div class="message error" data-message-id="msg-3">
+    <div class="message-avatar">
+      <img src="user.jpg" alt="Your avatar" />
+    </div>
+    <div class="message-content">
+      <div class="message-header">
+        <strong>You</strong>
+        <span class="message-time">5 minutes ago</span>
+      </div>
+      <p class="message-text">This message failed to send and was rolled back from the server.</p>
+      <div class="message-state-indicator">
+        <span class="state-badge failed" role="alert" aria-live="assertive">
+          <span class="error-icon">!</span>
+          Failed to send
+        </span>
+      </div>
+      <div class="error-actions">
+        <button class="action-btn retry" aria-label="Retry sending this message">Retry</button>
+        <button class="action-btn discard" aria-label="Discard this message">Discard</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.message-list {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  max-width: 600px;
+}
+
+.message {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  transition: all 300ms ease;
+  animation: slideInMessage 300ms ease;
+}
+
+.message.error {
+  background: #FEE2E2;
+  border-color: #FCA5A5;
+}
+
+@keyframes slideInMessage {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-avatar {
+  flex-shrink: 0;
+}
+
+.message-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #D1D5DB;
+}
+
+.message-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.message-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.message-header strong {
+  color: #1F2937;
+}
+
+.message-time {
+  color: #9CA3AF;
+  font-size: 12px;
+}
+
+.message-text {
+  margin: 0 0 12px 0;
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.message-state-indicator {
+  display: flex;
+  align-items: center;
+}
+
+.state-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.state-badge.pending {
+  background: #DBEAFE;
+  color: #1E40AF;
+}
+
+.state-badge.sent {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.state-badge.failed {
+  background: #FECACA;
+  color: #991B1B;
+}
+
+.spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 600ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.checkmark {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.error-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.message-actions,
+.error-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #0066CC;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.action-btn:hover {
+  background: rgba(0, 102, 204, 0.1);
+  border-color: #0066CC;
+}
+
+.action-btn.delete,
+.action-btn.discard {
+  color: #DC2626;
+}
+
+.action-btn.delete:hover,
+.action-btn.discard:hover {
+  background: rgba(220, 38, 38, 0.1);
+  border-color: #DC2626;
+}
+
+.action-btn.retry {
+  color: #F59E0B;
+}
+
+.action-btn.retry:hover {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: #F59E0B;
+}
+
+.message.error .action-btn {
+  color: #DC2626;
+}
+
+@media (max-width: 500px) {
+  .message {
+    padding: 12px;
+  }
+
+  .message-header {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .message-time {
+    font-size: 11px;
+  }
+}
+</style>
+```
+
+---
+
+### 29.5 Async State Indicators
+
+**Purpose:** Communicate the status of asynchronous operations (loading, success, error) with clear visual feedback and actionable retry mechanisms.
+
+**Key Principles:**
+- Show loading state immediately
+- Display success confirmation
+- Make errors clear and actionable
+- Provide retry capability
+- Use semantic HTML for accessibility
+- Animate state transitions
+
+**Complete HTML/CSS Example:**
+
+```html
+<!-- Async State Management -->
+<div class="async-operation-container">
+  <div class="operation-card" data-operation-state="loading">
+    <div class="operation-state-icon loading">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="12" r="10" stroke-width="2" opacity="0.2"/>
+        <circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="15.7 31.4" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="operation-content">
+      <h3 class="operation-title">Uploading File</h3>
+      <p class="operation-description">Please wait while we process your document.</p>
+      <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-fill" style="width: 45%"></div>
+      </div>
+      <span class="progress-text">45% complete</span>
+    </div>
+  </div>
+
+  <div class="operation-card" data-operation-state="success">
+    <div class="operation-state-icon success">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 6L9 17l-5-5"/>
+      </svg>
+    </div>
+    <div class="operation-content">
+      <h3 class="operation-title">Upload Successful</h3>
+      <p class="operation-description">Your file has been processed and is ready to use.</p>
+      <div class="operation-actions">
+        <button class="action-btn primary" aria-label="View the uploaded file">View File</button>
+        <button class="action-btn secondary" aria-label="Upload another file">Upload Another</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="operation-card" data-operation-state="error">
+    <div class="operation-state-icon error">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 8v4M12 16h.01"/>
+      </svg>
+    </div>
+    <div class="operation-content">
+      <h3 class="operation-title">Upload Failed</h3>
+      <p class="operation-description">Failed to upload file. Please check your connection and try again.</p>
+      <details class="error-details">
+        <summary>Error details</summary>
+        <pre><code>Error: Network timeout after 30 seconds
+Request ID: req_12345abc
+Timestamp: 2024-04-08 14:32:18 UTC</code></pre>
+      </details>
+      <div class="operation-actions">
+        <button class="action-btn primary" aria-label="Retry uploading the file">Retry</button>
+        <button class="action-btn secondary" aria-label="Cancel and go back">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+:root {
+  --state-loading: #0066CC;
+  --state-success: #00AA44;
+  --state-error: #DC2626;
+  --duration-spin: 1000ms;
+}
+
+.async-operation-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 500px;
+}
+
+.operation-card {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 8px;
+  background: white;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 300ms ease;
+}
+
+.operation-card[data-operation-state="success"] {
+  background: #F0FDF4;
+  border-color: #BBFBBD;
+}
+
+.operation-card[data-operation-state="error"] {
+  background: #FEF2F2;
+  border-color: #FECACA;
+}
+
+.operation-state-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  transition: all 300ms ease;
+}
+
+.operation-state-icon.loading {
+  background: var(--state-loading);
+  animation: pulse-icon 2s ease-in-out infinite;
+}
+
+.operation-state-icon.loading svg {
+  animation: rotate-spin var(--duration-spin) linear infinite;
+}
+
+.operation-state-icon.success {
+  background: var(--state-success);
+  animation: slideInIcon 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.operation-state-icon.error {
+  background: var(--state-error);
+  animation: shakeIcon 600ms ease;
+}
+
+@keyframes rotate-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-icon {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(0, 102, 204, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(0, 102, 204, 0);
+  }
+}
+
+@keyframes slideInIcon {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shakeIcon {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(2px);
+  }
+}
+
+.operation-content {
+  flex: 1;
+}
+
+.operation-title {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1F2937;
+}
+
+.operation-description {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #E5E7EB;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--state-loading), #0052A3);
+  border-radius: 3px;
+  transition: width 300ms ease;
+}
+
+.progress-text {
+  display: block;
+  font-size: 11px;
+  color: #9CA3AF;
+  font-variant-numeric: tabular-nums;
+}
+
+.error-details {
+  margin: 12px 0;
+  padding: 12px;
+  background: rgba(0,0,0,0.05);
+  border-radius: 4px;
+  border-left: 3px solid var(--state-error);
+}
+
+.error-details summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--state-error);
+  user-select: none;
+}
+
+.error-details summary:hover {
+  text-decoration: underline;
+}
+
+.error-details pre {
+  margin: 8px 0 0 0;
+  font-size: 11px;
+  color: #374151;
+  overflow-x: auto;
+}
+
+.operation-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.action-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.action-btn.primary {
+  background: #0066CC;
+  color: white;
+}
+
+.action-btn.primary:hover {
+  background: #0052A3;
+}
+
+.action-btn.secondary {
+  background: white;
+  color: #0066CC;
+  border: 1px solid #0066CC;
+}
+
+.action-btn.secondary:hover {
+  background: #F0F9FF;
+}
+
+@media (max-width: 500px) {
+  .operation-card {
+    padding: 16px;
+  }
+
+  .operation-actions {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+}
+</style>
+```
+
+---
+
+### 29.6 State Persistence UI
+
+**Purpose:** Display sync status, show offline indicators, and visualize sync history. Users understand whether their data is saved locally, syncing, or synced to the server.
+
+**Key Principles:**
+- Show clear sync status at all times
+- Indicate offline mode gracefully
+- Display sync conflicts with resolution options
+- Visualize queue of pending changes
+- Provide manual sync trigger
+
+**Complete HTML/CSS Example:**
+
+```html
+<!-- State Persistence and Sync Status -->
+<div class="sync-status-container">
+  <header class="sync-header">
+    <h2>Document Editor</h2>
+    <div class="sync-indicator" role="status" aria-live="polite" aria-atomic="true">
+      <span class="sync-badge" data-sync-state="synced">
+        <span class="sync-icon">✓</span>
+        <span class="sync-text">All changes saved</span>
+      </span>
+    </div>
+  </header>
+
+  <div class="document-editor">
+    <textarea 
+      class="editor-textarea"
+      placeholder="Start typing..."
+      aria-label="Document content editor"
+    >This document is being synced to the cloud.</textarea>
+  </div>
+
+  <aside class="sync-panel" role="complementary" aria-label="Sync status and history">
+    <div class="sync-panel-header">
+      <h3>Sync Status</h3>
+      <button class="panel-close" aria-label="Close sync panel">×</button>
+    </div>
+
+    <!-- Synced State -->
+    <div class="sync-state synced-state">
+      <div class="state-icon synced">✓</div>
+      <div class="state-content">
+        <strong>Synced</strong>
+        <p>All changes have been saved to the server.</p>
+        <time datetime="2024-04-08T14:32:00Z">Last sync: 2 minutes ago</time>
+      </div>
+    </div>
+
+    <!-- Offline State Example -->
+    <div class="sync-state offline-state">
+      <div class="state-icon offline">↔</div>
+      <div class="state-content">
+        <strong>Offline Mode</strong>
+        <p>You are currently offline. Changes are saved locally.</p>
+        <span class="pending-count">3 changes waiting to sync</span>
+      </div>
+      <button class="retry-btn" aria-label="Retry syncing changes">Retry Sync</button>
+    </div>
+
+    <!-- Sync History -->
+    <div class="sync-history">
+      <h4 class="history-title">Sync History</h4>
+      <ul class="history-list" role="list">
+        <li role="listitem">
+          <span class="history-action">Paragraph updated</span>
+          <span class="history-time">2m ago</span>
+          <span class="history-status synced">✓</span>
+        </li>
+        <li role="listitem">
+          <span class="history-action">Image inserted</span>
+          <span class="history-time">5m ago</span>
+          <span class="history-status synced">✓</span>
+        </li>
+        <li role="listitem">
+          <span class="history-action">Title changed</span>
+          <span class="history-time">12m ago</span>
+          <span class="history-status synced">✓</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Pending Changes -->
+    <div class="pending-changes">
+      <h4 class="changes-title">Pending Changes (Offline)</h4>
+      <ul class="changes-list" role="list">
+        <li role="listitem" class="pending-item">
+          <span class="change-action">Added footnote</span>
+          <span class="change-status pending">⏱</span>
+        </li>
+        <li role="listitem" class="pending-item">
+          <span class="change-action">Fixed formatting</span>
+          <span class="change-status pending">⏱</span>
+        </li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<style>
+.sync-status-container {
+  display: grid;
+  grid-template-columns: 1fr 250px;
+  gap: 16px;
+  height: 100vh;
+  background: white;
+  padding: 16px;
+}
+
+.sync-header {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.sync-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #1F2937;
+}
+
+.sync-indicator {
+  display: flex;
+  align-items: center;
+}
+
+.sync-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #D1FAE5;
+  color: #065F46;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 300ms ease;
+}
+
+.sync-badge[data-sync-state="syncing"] {
+  background: #DBEAFE;
+  color: #1E40AF;
+}
+
+.sync-badge[data-sync-state="offline"] {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.sync-badge[data-sync-state="error"] {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+.sync-icon {
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.sync-text {
+  font-variant-numeric: tabular-nums;
+}
+
+.document-editor {
+  grid-column: 1;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-textarea {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+}
+
+.sync-panel {
+  grid-column: 2;
+  grid-row: 2;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.sync-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.sync-panel-header h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #1F2937;
+}
+
+.panel-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #9CA3AF;
+  transition: color 200ms ease;
+}
+
+.panel-close:hover {
+  color: #1F2937;
+}
+
+.sync-state {
+  padding: 12px;
+  border-radius: 6px;
+  background: white;
+  border: 1px solid #E5E7EB;
+  display: flex;
+  gap: 12px;
+}
+
+.synced-state {
+  background: #F0FDF4;
+  border-color: #BBFBBD;
+}
+
+.offline-state {
+  background: #FFFBEB;
+  border-color: #FDE68A;
+}
+
+.state-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+}
+
+.state-icon.synced {
+  background: var(--state-success);
+}
+
+.state-icon.offline {
+  background: #F59E0B;
+}
+
+.state-content {
+  flex: 1;
+}
+
+.state-content strong {
+  display: block;
+  font-size: 12px;
+  color: #1F2937;
+  margin-bottom: 4px;
+}
+
+.state-content p {
+  margin: 0 0 4px 0;
+  font-size: 11px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.state-content time,
+.pending-count {
+  display: block;
+  font-size: 10px;
+  color: #9CA3AF;
+}
+
+.retry-btn {
+  padding: 6px 12px;
+  background: #F59E0B;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 200ms ease;
+  white-space: nowrap;
+}
+
+.retry-btn:hover {
+  background: #D97706;
+}
+
+.sync-history,
+.pending-changes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-title,
+.changes-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1F2937;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.history-list,
+.changes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.history-list li,
+.changes-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background: white;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.history-action,
+.change-action {
+  color: #374151;
+  font-weight: 500;
+  flex: 1;
+}
+
+.history-time {
+  color: #9CA3AF;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.history-status,
+.change-status {
+  font-weight: 700;
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+.history-status.synced {
+  color: var(--state-success);
+}
+
+.change-status.pending {
+  color: #F59E0B;
+  animation: pulse-pending 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-pending {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 900px) {
+  .sync-status-container {
+    grid-template-columns: 1fr;
+  }
+
+  .sync-panel {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .sync-status-container {
+    gap: 12px;
+    padding: 12px;
+    height: auto;
+  }
+
+  .sync-panel {
+    max-height: 300px;
+  }
+}
+</style>
+```
+
+---
+
+## 29.7 Best Practices for State Management UI
+
+### ✅ DO
+
+- Visualize state transitions with clear before/after states
+- Show current state prominently at all times
+- Disable invalid transitions with visual affordances
+- Provide immediate visual feedback for all user actions
+- Use consistent color/icon system for state indicators
+- Implement proper loading states for all async operations
+- Show error states with actionable recovery options
+- Persist user progress to prevent data loss
+- Use animations to guide attention during state changes
+- Implement accessibility: ARIA labels for all state changes
+
+### ❌ DON'T
+
+- Hide state information in tooltips or modals
+- Allow state transitions without user confirmation when risky
+- Show generic spinners without context about what's loading
+- Forget to handle network failures and offline scenarios
+- Use color alone to communicate state (include text/icons)
+- Create conflicting visual indicators for the same state
+- Block all UI while waiting for async operations
+- Ignore state conflicts in collaborative environments
+- Use animations that distract from state information
+- Implement state persistence without user consent
+
+### Visual Consistency
+
+All state management UIs should follow these guidelines:
+
+```css
+/* Standard State Color Tokens */
+:root {
+  --state-pending: #F3F4F6;
+  --state-active: #0066CC;
+  --state-completed: #00AA44;
+  --state-error: #DC2626;
+  --state-warning: #F59E0B;
+  --state-success: #00AA44;
+  --state-loading: #0066CC;
+  
+  /* Animation Timing */
+  --duration-instant: 0ms;
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  
+  /* Easing Functions */
+  --easing-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --easing-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Accessible State Indicators */
+.state-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 12px;
+  transition: all var(--duration-normal) ease;
+}
+
+/* Loading Animation */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: rotate 600ms linear infinite;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+```
+
+### Testing State Transitions
+
+```html
+<!-- Test Matrix for State Transitions -->
+<div class="state-test-matrix">
+  <!-- Each state should be tested: -->
+  <!-- 1. Initial load (no interaction yet) -->
+  <!-- 2. Valid state transitions -->
+  <!-- 3. Blocked state transitions (disabled buttons) -->
+  <!-- 4. Async operations with timeout -->
+  <!-- 5. Error recovery and retry -->
+  <!-- 6. Offline mode with sync queue -->
+  <!-- 7. Concurrent operations -->
+  <!-- 8. State rollback on failure -->
+  <!-- 9. Accessibility: screen reader announcements -->
+  <!-- 10. Keyboard navigation through all states -->
+</div>
+```
+
+**Accessibility Testing Checklist:**
+- All state changes announced via aria-live regions
+- Semantic HTML elements (button, form, fieldset, etc.)
+- Color + icon/text for state indication
+- Keyboard navigation through all transitions
+- Focus management during state changes
+- Error messages associated with form fields (aria-describedby)
+- Progress indicators announce percentage (aria-valuenow)
+- Current state always visible without hover
+- Status updates use appropriate ARIA roles (status, alert, region)
+- Tests with screen readers: NVDA, JAWS, VoiceOver
+
+---
+
 This system provides 99% coverage for modern UI/UX design. Apply these rules consistently for professional, accessible, and beautiful interfaces.
