@@ -1167,6 +1167,2030 @@ Before considering any UI component complete, verify:
 □ No layout shifts during loading
 ```
 
+═══════════════════════════════════════════════════════════════════════════════
+                    SECTION 16: MICRO-INTERACTIONS & FEEDBACK
+═══════════════════════════════════════════════════════════════════════════════
+
+## 16.1 SKELETON LOADERS & SHIMMER EFFECTS
+
+```css
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--neutral-100) 0%,
+    var(--neutral-200) 50%,
+    var(--neutral-100) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Common skeleton dimensions */
+.skeleton-text { height: 16px; border-radius: 4px; }
+.skeleton-avatar { width: 40px; height: 40px; border-radius: 50%; }
+.skeleton-card { height: 200px; border-radius: 8px; }
+```
+
+## 16.2 PULL-TO-REFRESH PATTERNS
+
+```css
+.pull-to-refresh {
+  --pull-progress: 0;
+  position: relative;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.refresh-indicator {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: calc(var(--pull-progress) * 100%);
+  pointer-events: none;
+}
+
+/* Trigger zone: 60px from top */
+.pull-to-refresh-trigger {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+```
+
+## 16.3 SWIPE GESTURES & HAPTICS (MOBILE)
+
+```javascript
+// Swipe detection angles
+const SWIPE_LEFT = 270;   // ±45° tolerance
+const SWIPE_RIGHT = 90;   // ±45° tolerance
+const SWIPE_UP = 0;       // ±45° tolerance
+const SWIPE_DOWN = 180;   // ±45° tolerance
+const MIN_SWIPE_VELOCITY = 0.5; // px/ms
+
+/* Haptic feedback intensities */
+const HAPTIC_LIGHT = 10;      // Light tap
+const HAPTIC_MEDIUM = 20;     // Normal feedback
+const HAPTIC_HEAVY = 30;      // Strong feedback
+const HAPTIC_PATTERN = [10, 20, 10]; // Success pattern
+```
+
+## 16.4 PROGRESS INDICATORS
+
+### Linear Progress Bar
+```css
+.progress-bar {
+  height: 4px;
+  background: var(--neutral-200);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--accent-400),
+    var(--accent-500)
+  );
+  width: var(--progress-percent);
+  transition: width 0.3s ease-out;
+}
+
+.progress-indeterminate .progress-fill {
+  animation: progress-move 1.5s infinite;
+}
+
+@keyframes progress-move {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+```
+
+### Circular Progress (e.g., file upload)
+```css
+.progress-circle {
+  width: 60px;
+  height: 60px;
+}
+
+.progress-ring {
+  stroke-dasharray: 188.4px;
+  stroke-dashoffset: calc(188.4px * (1 - var(--progress)));
+  stroke: var(--accent-500);
+  stroke-width: 4px;
+  transition: stroke-dashoffset 0.3s ease-out;
+}
+```
+
+### Step Indicators
+```css
+.steps {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.step {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--neutral-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--neutral-600);
+}
+
+.step.active {
+  background: var(--accent-500);
+  color: white;
+}
+
+.step.completed {
+  background: var(--success-500);
+  color: white;
+}
+
+.step-connector {
+  flex: 1;
+  height: 2px;
+  background: var(--neutral-200);
+}
+
+.step-connector.completed {
+  background: var(--success-500);
+}
+```
+
+═══════════════════════════════════════════════════════════════════════════════
+                         SECTION 17: NAVIGATION PATTERNS
+═══════════════════════════════════════════════════════════════════════════════
+
+## 17.1 BREADCRUMBS
+
+```css
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.breadcrumb-item {
+  color: var(--accent-500);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.breadcrumb-item:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-item.current {
+  color: var(--text-primary);
+  cursor: default;
+  pointer-events: none;
+}
+
+.breadcrumb-separator {
+  color: var(--border-default);
+}
+
+/* Truncation for long paths */
+.breadcrumbs.truncated .breadcrumb-item:not(.current) {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+```
+
+## 17.2 TAB BARS (DESKTOP & MOBILE)
+
+### Desktop Tabs
+```css
+.tabs-desktop {
+  display: flex;
+  border-bottom: 1px solid var(--border-default);
+  gap: 0;
+}
+
+.tab {
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tab:hover {
+  color: var(--text-primary);
+}
+
+.tab.active {
+  color: var(--accent-500);
+  border-bottom-color: var(--accent-500);
+}
+```
+
+### Mobile Tab Bar (Bottom Navigation)
+```css
+.tabs-mobile {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  border-top: 1px solid var(--border-default);
+  background: var(--surface-primary);
+  z-index: var(--z-fixed);
+}
+
+.tab-mobile {
+  flex: 1;
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.tab-mobile.active {
+  color: var(--accent-500);
+}
+
+.tab-icon { font-size: 24px; }
+.tab-label { font-size: 12px; }
+```
+
+## 17.3 SIDEBAR PATTERNS
+
+### Collapsible Sidebar
+```css
+.sidebar {
+  width: 280px;
+  background: var(--surface-secondary);
+  border-right: 1px solid var(--border-default);
+  transition: width 0.3s ease-out, margin-left 0.3s ease-out;
+  overflow-y: auto;
+}
+
+.sidebar.collapsed {
+  width: 72px;
+}
+
+.sidebar-item {
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.sidebar-item.active {
+  background: var(--accent-100);
+  color: var(--accent-700);
+  font-weight: 500;
+}
+
+/* Mini state: icon only */
+.sidebar.mini .sidebar-label {
+  display: none;
+}
+
+.sidebar.mini .sidebar-item {
+  padding: var(--space-3);
+  justify-content: center;
+}
+```
+
+### Bottom Sheet (Mobile)
+```css
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface-primary);
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  z-index: var(--z-modal);
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease-out;
+}
+
+.bottom-sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: var(--neutral-300);
+  border-radius: 2px;
+  margin: var(--space-3) auto;
+}
+
+/* Snap points: 50%, 75%, 100% of viewport */
+.bottom-sheet.snap-50 { height: 50vh; }
+.bottom-sheet.snap-75 { height: 75vh; }
+```
+
+## 17.4 COMMAND PALETTE (⌘K PATTERN)
+
+```css
+.command-palette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgb(0 0 0 / 0.5);
+  display: flex;
+  align-items: flex-start;
+  padding-top: var(--space-12);
+  z-index: var(--z-modal);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.command-input {
+  width: min(90vw, 600px);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-base);
+  background: var(--surface-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+}
+
+.command-results {
+  margin-top: var(--space-2);
+  background: var(--surface-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.command-item {
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.command-item:hover,
+.command-item.selected {
+  background: var(--neutral-100);
+}
+
+.command-shortcut {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  background: var(--neutral-200);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+```
+
+═══════════════════════════════════════════════════════════════════════════════
+                       SECTION 18: ADVANCED FORM PATTERNS
+═══════════════════════════════════════════════════════════════════════════════
+
+## 18.1 MULTI-STEP WIZARDS
+
+```css
+.wizard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.wizard-progress {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+}
+
+.wizard-step-indicator {
+  text-align: center;
+  flex: 1;
+}
+
+.step-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--neutral-200);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-2);
+  font-weight: 600;
+}
+
+.step-number.active {
+  background: var(--accent-500);
+  color: white;
+}
+
+.step-number.completed {
+  background: var(--success-500);
+  color: white;
+}
+
+.wizard-form { min-height: 300px; }
+
+.wizard-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+```
+
+## 18.2 INLINE EDITING
+
+```css
+.inline-edit-cell {
+  padding: var(--space-2);
+  position: relative;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.inline-edit-cell:hover {
+  background: var(--neutral-100);
+}
+
+.inline-edit-text {
+  cursor: pointer;
+  flex: 1;
+}
+
+.inline-edit-input {
+  flex: 1;
+  padding: var(--space-2);
+  border: 1px solid var(--accent-500);
+  border-radius: var(--radius-sm);
+  font-size: inherit;
+}
+
+.inline-edit-actions {
+  display: flex;
+  gap: var(--space-1);
+  margin-left: var(--space-2);
+}
+
+.inline-edit-button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+```
+
+## 18.3 AUTO-SAVE INDICATORS
+
+```css
+.autosave-status {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.autosave-status.saving {
+  color: var(--text-muted);
+}
+
+.autosave-status.saved {
+  color: var(--success-500);
+}
+
+.autosave-status.error {
+  color: var(--error-500);
+}
+
+.autosave-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+```
+
+## 18.4 FILE UPLOAD PATTERNS
+
+```css
+.file-upload-zone {
+  border: 2px dashed var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.file-upload-zone:hover {
+  border-color: var(--accent-500);
+  background: var(--accent-50);
+}
+
+.file-upload-zone.dragover {
+  border-color: var(--accent-500);
+  background: var(--accent-100);
+}
+
+.file-upload-list {
+  margin-top: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.file-upload-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--neutral-50);
+  border-radius: var(--radius-md);
+}
+
+.file-upload-progress {
+  flex: 1;
+  height: 4px;
+  background: var(--neutral-200);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.file-upload-progress-bar {
+  height: 100%;
+  background: var(--accent-500);
+  transition: width 0.3s ease-out;
+}
+```
+
+## 18.5 OTP/PIN INPUTS
+
+```css
+.otp-container {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+.otp-input {
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  text-align: center;
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.otp-input:focus {
+  border-color: var(--accent-500);
+  outline: none;
+}
+
+.otp-input.filled {
+  border-color: var(--accent-500);
+  background: var(--accent-50);
+}
+
+.otp-input.error {
+  border-color: var(--error-500);
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+```
+
+## 18.6 DATE/TIME PICKERS
+
+```css
+.date-picker {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-2);
+  margin: var(--space-4) 0;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--text-sm);
+}
+
+.calendar-day:hover {
+  background: var(--neutral-100);
+}
+
+.calendar-day.selected {
+  background: var(--accent-500);
+  color: white;
+  font-weight: 600;
+}
+
+.calendar-day.today {
+  border: 2px solid var(--accent-500);
+}
+
+.calendar-day.disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.time-input {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.time-segment {
+  width: 50px;
+  text-align: center;
+}
+```
+
+## 18.7 SEARCH WITH AUTOCOMPLETE
+
+```css
+.search-autocomplete {
+  position: relative;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--surface-primary);
+  border: 1px solid var(--border-default);
+  border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: var(--z-dropdown);
+}
+
+.autocomplete-item {
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.selected {
+  background: var(--neutral-100);
+}
+
+.autocomplete-highlight {
+  background: var(--accent-200);
+  color: var(--accent-700);
+  font-weight: 500;
+}
+
+.autocomplete-meta {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+```
+
+═══════════════════════════════════════════════════════════════════════════════
+                          SECTION 19: CONTENT PATTERNS
+═══════════════════════════════════════════════════════════════════════════════
+
+## 19.1 IMAGE ASPECT RATIOS
+
+```css
+/* Common aspect ratio containers */
+.aspect-1\:1 { aspect-ratio: 1 / 1; }      /* Square: thumbnails, avatars */
+.aspect-4\:3 { aspect-ratio: 4 / 3; }      /* Standard: photos, cards */
+.aspect-16\:9 { aspect-ratio: 16 / 9; }    /* Widescreen: hero images, videos */
+.aspect-21\:9 { aspect-ratio: 21 / 9; }    /* Ultra-wide: banners */
+
+/* Image positioning within aspect containers */
+.aspect-container {
+  position: relative;
+  overflow: hidden;
+  background: var(--neutral-200);
+}
+
+.aspect-container img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;    /* Fill and crop */
+  /* OR use: object-fit: contain; to fit entire image */
+}
+```
+
+## 19.2 AVATAR SIZES
+
+```css
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--neutral-300);
+  font-weight: 600;
+  color: white;
+}
+
+.avatar-xs { width: 24px; height: 24px; font-size: 12px; }
+.avatar-sm { width: 32px; height: 32px; font-size: 14px; }
+.avatar-md { width: 40px; height: 40px; font-size: 16px; }
+.avatar-lg { width: 48px; height: 48px; font-size: 18px; }
+.avatar-xl { width: 64px; height: 64px; font-size: 24px; }
+.avatar-2xl { width: 80px; height: 80px; font-size: 32px; }
+
+.avatar-group {
+  display: flex;
+  margin: 0 calc(-1 * var(--space-1));
+}
+
+.avatar-group .avatar {
+  border: 2px solid var(--surface-primary);
+  margin: 0 calc(-1 * var(--space-1));
+}
+
+.avatar-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--success-500);
+  border: 2px solid white;
+}
+```
+
+## 19.3 BADGE & TAG SYSTEM
+
+```css
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge-primary {
+  background: var(--accent-100);
+  color: var(--accent-700);
+}
+
+.badge-success {
+  background: var(--success-100);
+  color: var(--success-700);
+}
+
+.badge-warning {
+  background: var(--warning-100);
+  color: var(--warning-700);
+}
+
+.badge-error {
+  background: var(--error-100);
+  color: var(--error-700);
+}
+
+.badge-neutral {
+  background: var(--neutral-200);
+  color: var(--text-primary);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--neutral-100);
+  border: 1px solid var(--border-default);
+  font-size: var(--text-sm);
+}
+
+.tag.removable {
+  cursor: pointer;
+  padding-right: var(--space-2);
+}
+
+.tag-remove-btn {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+```
+
+## 19.4 PRICING TABLES
+
+```css
+.pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pricing-row {
+  display: grid;
+  grid-template-columns: 200px repeat(auto-fit, minmax(200px, 1fr));
+  border-bottom: 1px solid var(--border-default);
+}
+
+.pricing-header {
+  background: var(--neutral-50);
+  font-weight: 600;
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.pricing-feature {
+  padding: var(--space-4);
+  display: flex;
+  align-items: center;
+  font-size: var(--text-sm);
+}
+
+.pricing-value {
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.pricing-highlight {
+  background: var(--accent-50);
+  box-shadow: inset 0 0 0 2px var(--accent-500);
+}
+
+.pricing-highlight .pricing-header {
+  background: var(--accent-500);
+  color: white;
+}
+
+.pricing-cta {
+  text-align: center;
+  padding: var(--space-4);
+}
+```
+
+## 19.5 FEATURE COMPARISON GRIDS
+
+```css
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 200px repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px;
+  background: var(--border-default);
+  padding: 1px;
+}
+
+.comparison-cell {
+  background: var(--surface-primary);
+  padding: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comparison-feature {
+  text-align: left;
+  font-weight: 500;
+  padding: var(--space-3);
+}
+
+.comparison-row:nth-child(odd) .comparison-cell {
+  background: var(--neutral-50);
+}
+
+.comparison-checkmark { color: var(--success-500); }
+.comparison-x { color: var(--error-500); }
+```
+
+## 19.6 TESTIMONIAL CARDS
+
+```css
+.testimonial-card {
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  background: var(--surface-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.testimonial-quote {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--text-primary);
+  font-style: italic;
+}
+
+.testimonial-quote::before {
+  content: '"';
+  font-size: var(--text-5xl);
+  color: var(--accent-500);
+  line-height: 0.5;
+}
+
+.testimonial-attribution {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.testimonial-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.testimonial-author {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.testimonial-role {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.testimonial-rating {
+  display: flex;
+  gap: 4px;
+}
+
+.star { color: var(--warning-500); }
+.star.empty { color: var(--neutral-300); }
+```
+
+## 19.7 TIMELINE & CHANGELOG
+
+```css
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding-left: var(--space-8);
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: var(--space-3);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border-default);
+}
+
+.timeline-item {
+  position: relative;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: calc(-1 * var(--space-8) + var(--space-1));
+  top: var(--space-1);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid var(--accent-500);
+}
+
+.timeline-content {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--neutral-50);
+}
+
+.timeline-date {
+  font-weight: 600;
+  color: var(--accent-700);
+  font-size: var(--text-sm);
+}
+
+.timeline-title {
+  font-weight: 600;
+  margin-top: var(--space-1);
+}
+
+.timeline-description {
+  margin-top: var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+```
+
+═══════════════════════════════════════════════════════════════════════════════
+                         SECTION 20: ERROR & EDGE CASES
+═══════════════════════════════════════════════════════════════════════════════
+
+## 20.1 ERROR PAGES (404, 500)
+
+```css
+.error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-6);
+  text-align: center;
+  background: linear-gradient(135deg, var(--neutral-50), var(--neutral-100));
+}
+
+.error-code {
+  font-size: var(--text-6xl);
+  font-weight: 700;
+  color: var(--error-500);
+  line-height: 1;
+}
+
+.error-title {
+  margin-top: var(--space-4);
+  font-size: var(--text-2xl);
+  font-weight: 600;
+}
+
+.error-description {
+  margin-top: var(--space-2);
+  color: var(--text-muted);
+  max-width: 400px;
+}
+
+.error-actions {
+  margin-top: var(--space-6);
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+}
+```
+
+## 20.2 OFFLINE STATES
+
+```css
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--warning-500);
+  color: white;
+  padding: var(--space-3);
+  text-align: center;
+  z-index: var(--z-sticky);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+.offline-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.offline-indicator::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.sync-indicator {
+  position: absolute;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+```
+
+## 20.3 PERMISSION DENIED SCREENS
+
+```css
+.permission-denied {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.permission-icon {
+  font-size: 64px;
+  margin-bottom: var(--space-4);
+  color: var(--error-500);
+}
+
+.permission-title {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+.permission-message {
+  color: var(--text-muted);
+  margin-bottom: var(--space-6);
+  max-width: 400px;
+}
+
+.permission-escalation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+```
+
+## 20.4 MAINTENANCE MODE
+
+```css
+.maintenance-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-6);
+  background: linear-gradient(135deg, var(--neutral-800), var(--neutral-900));
+  color: white;
+  text-align: center;
+}
+
+.maintenance-status {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  margin-bottom: var(--space-4);
+}
+
+.maintenance-timeline {
+  margin: var(--space-6) 0;
+  padding: var(--space-4);
+  background: rgb(255 255 255 / 0.1);
+  border-radius: var(--radius-lg);
+}
+
+.maintenance-eta {
+  font-size: var(--text-lg);
+  margin-top: var(--space-4);
+}
+
+.maintenance-newsletter {
+  margin-top: var(--space-6);
+  display: flex;
+  gap: var(--space-2);
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+```
+
+## 20.5 RATE LIMIT WARNINGS
+
+```css
+.rate-limit-banner {
+  padding: var(--space-4);
+  background: var(--warning-100);
+  border: 1px solid var(--warning-300);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rate-limit-icon {
+  font-size: 20px;
+  color: var(--warning-600);
+}
+
+.rate-limit-content {
+  flex: 1;
+}
+
+.rate-limit-title {
+  font-weight: 600;
+  color: var(--warning-900);
+}
+
+.rate-limit-details {
+  font-size: var(--text-sm);
+  color: var(--warning-700);
+  margin-top: var(--space-1);
+}
+
+.rate-limit-timer {
+  font-weight: 700;
+  color: var(--error-500);
+  font-size: var(--text-lg);
+}
+```
+
+## 20.6 SESSION TIMEOUT HANDLING
+
+```css
+.session-timeout-modal {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+}
+
+.timeout-warning {
+  background: var(--surface-primary);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  max-width: 400px;
+  text-align: center;
+}
+
+.timeout-countdown {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--error-500);
+  margin: var(--space-4) 0;
+  font-family: monospace;
+}
+
+.timeout-message {
+  color: var(--text-muted);
+  margin-bottom: var(--space-6);
+}
+
+.timeout-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+}
+```
+
+═══════════════════════════════════════════════════════════════════════════════
+                       SECTION 21: ACCESSIBILITY DEEP DIVE
+═══════════════════════════════════════════════════════════════════════════════
+
+## 21.1 SKIP LINKS
+
+```html
+<!-- Placement: At very top of body, hidden by default -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+```
+
+```css
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--accent-500);
+  color: white;
+  padding: var(--space-2) var(--space-4);
+  text-decoration: none;
+  z-index: var(--z-fixed);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+```
+
+## 21.2 LIVE REGIONS (ARIA-LIVE)
+
+```html
+<!-- Polite announcements: wait for natural pause -->
+<div aria-live="polite" aria-atomic="true" class="notification">
+  New message received
+</div>
+
+<!-- Assertive: interrupt immediately -->
+<div aria-live="assertive" role="alert">
+  Payment failed! Please try again.
+</div>
+
+<!-- Off: screen reader silent by default, updated on demand -->
+<div aria-live="off" aria-label="Loading status"></div>
+```
+
+## 21.3 SEMANTIC HTML & FORM LABELS
+
+```html
+<!-- Proper semantic structure -->
+<nav>Navigation landmarks</nav>
+<main id="main-content">Primary content</main>
+<aside>Secondary content</aside>
+
+<!-- Explicit label associations -->
+<label for="email">Email</label>
+<input id="email" type="email" required>
+
+<!-- Grouped form fields -->
+<fieldset>
+  <legend>Shipping address</legend>
+  <input type="text" placeholder="Street">
+  <input type="text" placeholder="City">
+</fieldset>
+```
+
+## 21.4 HIGH CONTRAST MODE
+
+```css
+/* Provide outlines instead of relying solely on color */
+.button {
+  border: 2px solid transparent;
+  background: var(--accent-500);
+  color: white;
+}
+
+.button:focus {
+  outline: 3px solid var(--accent-700);
+  outline-offset: 2px;
+}
+
+/* High contrast mode media query */
+@media (prefers-contrast: more) {
+  .button {
+    border-width: 3px;
+    border-color: var(--text-primary);
+  }
+}
+```
+
+## 21.5 FOCUS TRAPS (MODALS)
+
+```javascript
+const modal = document.querySelector('[role="dialog"]');
+const focusableElements = modal.querySelectorAll(
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+);
+const firstElement = focusableElements[0];
+const lastElement = focusableElements[focusableElements.length - 1];
+
+// Trap focus: prevent tabbing out
+modal.addEventListener('keydown', (e) => {
+  if (e.key === 'Tab') {
+    if (e.shiftKey && document.activeElement === firstElement) {
+      lastElement.focus();
+      e.preventDefault();
+    } else if (!e.shiftKey && document.activeElement === lastElement) {
+      firstElement.focus();
+      e.preventDefault();
+    }
+  }
+});
+
+// Restore focus when modal closes
+const returnFocus = document.activeElement;
+// ... modal closes
+returnFocus.focus();
+```
+
+## 21.6 KEYBOARD SHORTCUTS LEGEND
+
+```html
+<div class="keyboard-legend" role="complementary">
+  <h2>Keyboard Shortcuts</h2>
+  <ul>
+    <li><kbd>?</kbd> Open this menu</li>
+    <li><kbd>j</kbd> Next item</li>
+    <li><kbd>k</kbd> Previous item</li>
+    <li><kbd>Escape</kbd> Close dialog</li>
+  </ul>
+</div>
+```
+
+```css
+.keyboard-legend {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  background: var(--surface-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  z-index: var(--z-fixed);
+}
+
+kbd {
+  background: var(--neutral-100);
+  border: 1px solid var(--border-default);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 12px;
+}
+```
+
+═══════════════════════════════════════════════════════════════════════════════
+                      SECTION 22: PERFORMANCE UI PATTERNS
+═══════════════════════════════════════════════════════════════════════════════
+
+## 22.1 LAZY LOADING PATTERNS
+
+```css
+.lazy-image {
+  background: linear-gradient(90deg, var(--neutral-200), var(--neutral-100));
+  animation: shimmer 1.5s infinite;
+}
+
+.lazy-image.loaded {
+  animation: none;
+  background: none;
+}
+
+/* Fade-in on load */
+.lazy-image {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.lazy-image.loaded {
+  opacity: 1;
+}
+```
+
+```html
+<img
+  data-src="image.jpg"
+  src="data:image/svg+xml,%3Csvg %3E%3C/svg%3E"
+  alt="Description"
+  loading="lazy"
+  class="lazy-image"
+>
+```
+
+## 22.2 INFINITE SCROLL VS PAGINATION
+
+### Decision Tree
+```
+Large dataset (1000+ items)?
+├─ YES: Consider infinite scroll
+│       But: Requires good performance, accessible pagination alternative
+├─ NO: Use traditional pagination
+       Better for: SEO, accessibility, user control
+```
+
+## 22.3 OPTIMISTIC UI UPDATES
+
+```javascript
+// Show update immediately, revert if fails
+async function updateItem(id, value) {
+  const originalValue = item.value;
+  
+  // Optimistic update
+  item.value = value;
+  item.saving = true;
+  updateUI();
+  
+  try {
+    await api.updateItem(id, value);
+    item.saving = false;
+  } catch (error) {
+    // Rollback
+    item.value = originalValue;
+    item.error = true;
+  }
+  updateUI();
+}
+```
+
+## 22.4 DEBOUNCE & THROTTLE GUIDELINES
+
+```javascript
+// Debounce: Search input (wait 300ms after user stops typing)
+const debouncedSearch = debounce(searchAPI, 300);
+input.addEventListener('input', debouncedSearch);
+
+// Throttle: Resize handlers (max 1 update per 100ms)
+const throttledResize = throttle(recalculateLayout, 100);
+window.addEventListener('resize', throttledResize);
+
+// Intersection Observer: Efficient lazy loading
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      loadImage(entry.target);
+    }
+  });
+});
+
+document.querySelectorAll('.lazy-image').forEach(img => observer.observe(img));
+```
+
+═════════════════════════════════════════════════════════════════════════════════
+                    SECTION 23: PLATFORM-SPECIFIC GUIDELINES
+═════════════════════════════════════════════════════════════════════════════════
+
+## 23.1 iOS HUMAN INTERFACE GUIDELINES ALIGNMENT
+
+```css
+/* Safe area support for notched devices */
+.container {
+  padding: max(var(--space-4), env(safe-area-inset-top))
+           max(var(--space-4), env(safe-area-inset-right))
+           max(var(--space-4), env(safe-area-inset-bottom))
+           max(var(--space-4), env(safe-area-inset-left));
+}
+
+/* Minimum touch target: 44×44pt (iOS standard) */
+.button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: var(--space-3);
+}
+
+/* Status bar clearance (safe for notches) */
+body {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* iPhone-specific font scaling */
+@supports (padding: max(0px)) {
+  body {
+    font-size: clamp(14px, 4vw, 18px);
+  }
+}
+```
+
+### Haptic Feedback (iOS)
+```javascript
+// Provide haptic patterns
+const pattern = [10, 20, 10]; // Light-medium-light
+navigator.vibrate?.(pattern);
+
+// Light tap feedback
+navigator.vibrate?.(10);
+
+// Success pattern
+navigator.vibrate?.([10, 20, 10, 50, 10]);
+```
+
+## 23.2 MATERIAL DESIGN 3 ALIGNMENT
+
+```css
+/* Material elevation tokens */
+:root {
+  --material-elevation-0: none;
+  --material-elevation-1: 0 1px 2px rgba(0,0,0,0.12);
+  --material-elevation-2: 0 3px 1px rgba(0,0,0,0.12);
+  --material-elevation-3: 0 6px 3px rgba(0,0,0,0.12);
+  --material-elevation-4: 0 12px 6px rgba(0,0,0,0.12);
+  --material-elevation-5: 0 16px 12px rgba(0,0,0,0.12);
+}
+
+/* Material shape tokens */
+.shape-sm { border-radius: 4px; }
+.shape-md { border-radius: 12px; }
+.shape-lg { border-radius: 16px; }
+
+/* Material motion: Easing curves */
+@keyframes material-motion {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.component-appear {
+  animation: material-motion 0.225s cubic-bezier(0.4, 0, 0.2, 1);
+}
+```
+
+## 23.3 DESKTOP APP PATTERNS
+
+```css
+/* Title bar area (Windows/Linux) */
+.title-bar {
+  height: 32px;
+  background: var(--surface-secondary);
+  border-bottom: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-4);
+  -webkit-app-region: drag;
+  user-select: none;
+}
+
+/* Window controls (macOS-style) */
+.window-controls {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-4);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.window-control {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.window-control.close { background: #ff5f56; }
+.window-control.minimize { background: #ffbd2e; }
+.window-control.maximize { background: #27c93f; }
+
+/* Menu bar (Electron/Tauri) */
+.app-menu {
+  background: var(--surface-primary);
+  border-bottom: 1px solid var(--border-default);
+}
+```
+
+## 23.4 PWA INSTALL PROMPTS
+
+```javascript
+// Listen for install prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallPrompt();
+});
+
+// Show custom install UI
+function showInstallPrompt() {
+  const prompt = document.querySelector('.install-prompt');
+  prompt.style.display = 'flex';
+  
+  prompt.querySelector('button.install').addEventListener('click', () => {
+    deferredPrompt?.prompt();
+    deferredPrompt?.userChoice.then((result) => {
+      if (result.outcome === 'accepted') {
+        prompt.style.display = 'none';
+      }
+    });
+  });
+}
+```
+
+```css
+.install-prompt {
+  position: fixed;
+  bottom: var(--space-4);
+  left: var(--space-4);
+  right: var(--space-4);
+  background: var(--surface-elevated);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  z-index: var(--z-fixed);
+}
+
+@media (max-width: 512px) {
+  .install-prompt {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+```
+
+═════════════════════════════════════════════════════════════════════════════════
+                           SECTION 24: ICONOGRAPHY DETAILS
+═════════════════════════════════════════════════════════════════════════════════
+
+## 24.1 ICON SIZING SCALE
+
+```css
+/* Standardized icon sizes */
+.icon-xs { width: 12px; height: 12px; }    /* Micro badges, indicators */
+.icon-sm { width: 16px; height: 16px; }    /* Form inputs, small buttons */
+.icon-md { width: 20px; height: 20px; }    /* Standard UI elements */
+.icon-lg { width: 24px; height: 24px; }    /* Primary buttons, nav items */
+.icon-xl { width: 32px; height: 32px; }    /* Hero icons, large buttons */
+.icon-2xl { width: 48px; height: 48px; }   /* Feature highlights */
+.icon-3xl { width: 64px; height: 64px; }   /* Empty state illustrations */
+
+/* Responsive icon scaling */
+.icon {
+  width: clamp(16px, 5vw, 32px);
+  height: auto;
+  aspect-ratio: 1;
+}
+```
+
+## 24.2 ICON STROKE WIDTH CONSISTENCY
+
+```css
+/* Stroke width standard */
+.icon-thin { stroke-width: 1px; }      /* Fine detail icons */
+.icon-regular { stroke-width: 1.5px; } /* Standard system icons */
+.icon-bold { stroke-width: 2px; }      /* Heavy, prominent icons */
+
+/* SVG icon stroke */
+svg {
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+svg.filled {
+  fill: currentColor;
+  stroke: none;
+}
+```
+
+## 24.3 ICON + TEXT ALIGNMENT
+
+```css
+/* Horizontal alignment: icon before text */
+.icon-with-text {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.icon {
+  flex-shrink: 0;
+  /* Baseline alignment for text */
+  align-self: center;
+  margin-top: -2px; /* Fine-tune for visual balance */
+}
+
+/* Icon positioned absolutely with text */
+.input-with-icon {
+  position: relative;
+  padding-left: 36px;
+}
+
+.input-with-icon .icon {
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+}
+```
+
+## 24.4 RECOMMENDED ICON LIBRARIES
+
+```json
+{
+  "Material Icons": {
+    "url": "https://fonts.google.com/icons",
+    "sizes": [20, 24, 40, 48],
+    "best_for": "Google ecosystem, Material Design"
+  },
+  "Feather Icons": {
+    "url": "https://feathericons.com",
+    "sizes": "24px",
+    "best_for": "Minimal, clean aesthetic"
+  },
+  "Phosphor Icons": {
+    "url": "https://phosphoricons.com",
+    "sizes": "12-48px",
+    "best_for": "Variety, consistency, modern"
+  },
+  "Font Awesome": {
+    "url": "https://fontawesome.com",
+    "sizes": "flexible",
+    "best_for": "Comprehensive library, reliability"
+  },
+  "Heroicons": {
+    "url": "https://heroicons.com",
+    "sizes": [16, 20, 24],
+    "best_for": "Tailwind integration, simplicity"
+  }
+}
+```
+
+═════════════════════════════════════════════════════════════════════════════════
+                      SECTION 25: ADVANCED DATA VISUALIZATION
+═════════════════════════════════════════════════════════════════════════════════
+
+(Note: Section 14 covers basic data visualization. This section provides advanced patterns.)
+
+## 25.1 ADVANCED CHART COLOR PALETTES
+
+### Sequential Palettes (0→100%, light→dark)
+```css
+:root {
+  --sequential-light: #E3F2FD, #BBDEFB, #90CAF9, #64B5F6, #42A5F5;
+  --sequential-dark: #E8EAF6, #C5CAE9, #9FA8DA, #7986CB, #5C6BC0;
+}
+```
+
+### Diverging Palettes (+/-)
+```css
+:root {
+  /* Red (negative) ← White (neutral) → Green (positive) */
+  --diverging-palette:
+    #D73027 #F46D43 #FDAE61 #FEE090 #FFFFBF #E0F3F8 #ABD9E9 #74ADD1 #4575B4;
+}
+```
+
+## 25.2 DASHBOARD LAYOUT GRIDS
+
+```css
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-4);
+  padding: var(--space-6);
+}
+
+.dashboard-card {
+  grid-column: span 4;   /* Default: 1/3 width */
+  background: var(--surface-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+}
+
+.dashboard-card.span-6 { grid-column: span 6; }
+.dashboard-card.span-12 { grid-column: span 12; }
+
+/* Mobile: Full width */
+@media (max-width: 1024px) {
+  .dashboard-card { grid-column: span 6; }
+  .dashboard-card.span-6 { grid-column: span 12; }
+}
+
+@media (max-width: 512px) {
+  .dashboard-card { grid-column: span 12; }
+}
+```
+
+## 25.3 KPI CARD PATTERNS
+
+```css
+.kpi-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  background: linear-gradient(135deg, var(--accent-50), var(--accent-100));
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--accent-500);
+}
+
+.kpi-label {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.kpi-value {
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.kpi-change {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+}
+
+.kpi-change.positive {
+  color: var(--success-600);
+}
+
+.kpi-change.negative {
+  color: var(--error-600);
+}
+
+.kpi-trend {
+  width: 20px;
+  height: 20px;
+}
+```
+
+## 25.4 TABLE DESIGN (SORTING, FILTERING, PAGINATION)
+
+```css
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-header {
+  background: var(--neutral-50);
+  border-bottom: 2px solid var(--border-default);
+}
+
+.table-header-cell {
+  padding: var(--space-4);
+  text-align: left;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.table-header-cell:hover {
+  background: var(--neutral-100);
+}
+
+.sort-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: var(--space-2);
+}
+
+.table-row {
+  border-bottom: 1px solid var(--border-default);
+}
+
+.table-row:hover {
+  background: var(--neutral-50);
+}
+
+.table-row.selected {
+  background: var(--accent-50);
+}
+
+.table-cell {
+  padding: var(--space-4);
+}
+
+.table-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4);
+  border-top: 1px solid var(--border-default);
+}
+```
+
 ---
 
 # 🎯 QUICK REFERENCE CARD

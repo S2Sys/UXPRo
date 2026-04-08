@@ -209,6 +209,110 @@ Cards:
 - Subtle border or shadow
 
 ═══════════════════════════════════════════════════════════════════════════════
+MICRO-INTERACTIONS & FEEDBACK
+═══════════════════════════════════════════════════════════════════════════════
+
+- Skeleton loaders: Shimmer gradient animation at 1.5s interval
+- Pull-to-refresh: 60px trigger zone from top
+- Progress bars: Linear (4px height), circular (stroke-width 4px), step indicators
+- Swipe gestures: Mobile support with haptic feedback
+
+═══════════════════════════════════════════════════════════════════════════════
+NAVIGATION PATTERNS
+═══════════════════════════════════════════════════════════════════════════════
+
+- Breadcrumbs: Separator with current page styling
+- Tabs: Active underline (3px bottom border), scrollable on mobile
+- Sidebar: Collapsible with mini state (icon-only)
+- Bottom sheets: Mobile dismissal, snap points at 50%, 75%, 100%
+- Command palette (⌘K): Dark background, 600px max width, keyboard shortcuts
+
+═══════════════════════════════════════════════════════════════════════════════
+ADVANCED FORMS
+═══════════════════════════════════════════════════════════════════════════════
+
+- Multi-step wizards: Progress bar with step indicators
+- Inline editing: Hover to reveal edit controls
+- Auto-save indicators: Saving → Saved → Error states
+- File upload: Drag-drop zones with progress bars
+- OTP inputs: 44px × 44px, monospace, auto-advance
+- Date/time pickers: Calendar grid, preset ranges
+- Autocomplete search: Dropdown with keyboard navigation
+
+═══════════════════════════════════════════════════════════════════════════════
+CONTENT PATTERNS
+═══════════════════════════════════════════════════════════════════════════════
+
+- Image aspect ratios: 1:1 (square), 4:3, 16:9, 21:9 (cover/contain)
+- Avatars: 24px to 80px scale, initials or image
+- Badges: Color-coded (primary, success, warning, error, neutral)
+- Tags: Removable with X button or static
+- Pricing tables: Highlighted plan with accent colors
+- Feature grids: Checkmarks vs X marks
+- Timeline: Vertical layout with dates and milestones
+
+═══════════════════════════════════════════════════════════════════════════════
+ERROR & EDGE CASES
+═══════════════════════════════════════════════════════════════════════════════
+
+- 404/500 pages: Large error codes, helpful messaging, recovery actions
+- Offline states: Banner at top, sync indicator with pulse animation
+- Permission denied: Clear messaging with escalation paths
+- Maintenance mode: Dark background, timeline, email signup option
+- Rate limits: Countdown timer with retry guidance
+- Session timeout: Modal warning with re-authentication flow
+
+═══════════════════════════════════════════════════════════════════════════════
+ACCESSIBILITY DEEP DIVE
+═══════════════════════════════════════════════════════════════════════════════
+
+- Skip links: Visible on focus (top: 0), linked to #main-content
+- Live regions: aria-live="polite" for updates, aria-live="assertive" for alerts
+- Semantic HTML: <nav>, <main>, <article>, <fieldset>, <legend>
+- High contrast mode: 3px outlines, color not only indicator
+- Focus traps: Modals trap Tab/Shift-Tab, restore focus on close
+- Keyboard shortcuts: Discoverable legend, avoid conflicts
+
+═══════════════════════════════════════════════════════════════════════════════
+PERFORMANCE PATTERNS
+═══════════════════════════════════════════════════════════════════════════════
+
+- Lazy loading: Shimmer skeleton → fade-in on load
+- Infinite scroll vs pagination: Use pagination for SEO/accessibility
+- Optimistic updates: Show change immediately, rollback if fails
+- Debounce/throttle: Search (300ms), resize (100ms), scroll handlers
+- Intersection Observer: Efficient image/content lazy loading
+
+═══════════════════════════════════════════════════════════════════════════════
+PLATFORM-SPECIFIC PATTERNS
+═══════════════════════════════════════════════════════════════════════════════
+
+- iOS: Safe area insets, 44×44pt minimum touch targets, haptic feedback
+- Material Design 3: Elevation system, rounded shapes (4px-16px), easing curves
+- Desktop apps: Title bar (32px), window controls, Electron patterns
+- PWA: Install prompt timing, dismissal, custom UI
+
+═══════════════════════════════════════════════════════════════════════════════
+ICONOGRAPHY
+═══════════════════════════════════════════════════════════════════════════════
+
+- Sizes: 12px (micro) | 16px (small) | 20px (default) | 24px (large) | 32-64px (hero)
+- Stroke: 1px (thin) | 1.5px (regular) | 2px (bold)
+- Alignment: Center with text, use flex gap for spacing
+- Libraries: Phosphor, Feather, Material Icons, Heroicons
+
+═══════════════════════════════════════════════════════════════════════════════
+ADVANCED DATA VISUALIZATION
+═══════════════════════════════════════════════════════════════════════════════
+
+- Sequential palettes: Light to dark for data intensity
+- Diverging palettes: Red ← White → Green for +/- values
+- Dashboard grids: 12-column layout, responsive spans
+- KPI cards: Large value, comparison badges, trend indicators
+- Tables: Sortable headers, filter controls, pagination
+- Empty states: Illustrations, messaging, next steps
+
+═══════════════════════════════════════════════════════════════════════════════
 PRE-GENERATION CHECKLIST
 ═══════════════════════════════════════════════════════════════════════════════
 
