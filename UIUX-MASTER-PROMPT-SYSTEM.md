@@ -4337,4 +4337,1383 @@ Ask these questions before generating any UI:
 
 ---
 
+═══════════════════════════════════════════════════════════════════════════════
+
+## 28. Collaborative Component Patterns
+
+**Purpose:** Provide comprehensive patterns for real-time multi-user collaboration features including presence awareness, concurrent editing, communication, and conflict resolution.
+
+### 28.1 Presence Indicators
+
+**Purpose:** Display real-time user presence, status, and activity indicators for collaborative awareness.
+
+**Key Principles:**
+- Use avatar stacks for compact user display
+- Show status with clear visual indicators
+- Provide user identity and role information
+- Update presence in real-time without blocking UI
+
+```html
+<!-- Avatar Stack Presence Indicator -->
+<div class="presence-container" aria-label="Active collaborators">
+  <div class="avatar-stack">
+    <img 
+      src="user1.jpg" 
+      alt="Alice - Editing" 
+      class="avatar avatar-lg"
+      title="Alice - Editing"
+    />
+    <img 
+      src="user2.jpg" 
+      alt="Bob - Viewing" 
+      class="avatar avatar-lg"
+      title="Bob - Viewing"
+    />
+    <img 
+      src="user3.jpg" 
+      alt="Carol - Idle" 
+      class="avatar avatar-lg"
+      title="Carol - Idle"
+    />
+    <button 
+      class="avatar avatar-lg avatar-more"
+      aria-label="Show 3 more collaborators"
+      aria-expanded="false"
+    >
+      +3
+    </button>
+  </div>
+  
+  <div class="presence-list" role="status">
+    <div class="presence-item editing">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="user-name">Alice</span>
+      <span class="activity-label">Editing</span>
+    </div>
+    <div class="presence-item viewing">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="user-name">Bob</span>
+      <span class="activity-label">Viewing</span>
+    </div>
+    <div class="presence-item idle">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="user-name">Carol</span>
+      <span class="activity-label">Idle</span>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Avatar Stack */
+.avatar-stack {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: -8px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-primary);
+  object-fit: cover;
+  margin-left: -8px;
+  transition: transform var(--duration-fast) var(--easing-out);
+}
+
+.avatar:hover {
+  transform: translateY(-4px);
+  z-index: 10;
+}
+
+.avatar-lg {
+  width: 40px;
+  height: 40px;
+}
+
+.avatar-more {
+  background: var(--primary-500);
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Status Indicators */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.presence-item.editing .status-dot {
+  background: var(--success-500);
+  box-shadow: 0 0 6px var(--success-300);
+}
+
+.presence-item.viewing .status-dot {
+  background: var(--info-500);
+  box-shadow: 0 0 6px var(--info-300);
+}
+
+.presence-item.idle .status-dot {
+  background: var(--gray-400);
+}
+
+.presence-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.presence-item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+  animation: slideInFromTop var(--duration-normal) var(--easing-out);
+}
+
+.activity-label {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+</style>
+```
+
+### 28.2 Collaborative Editing UI
+
+**Purpose:** Visualize concurrent editing with cursor positions, selections, and edit indicators.
+
+**Key Principles:**
+- Show remote cursor positions with user colors
+- Highlight active selection ranges
+- Indicate edit state transitions
+- Prevent visual collision of UI elements
+
+```html
+<!-- Collaborative Editing Display -->
+<div class="editor-container" role="region" aria-label="Collaborative editor">
+  <div class="editor-content editable" contenteditable="true">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      <span class="remote-selection" style="--user-color: #FF6B6B;" title="Alice's selection" aria-label="Alice's selection">
+        Sed do eiusmod tempor
+      </span>
+      incididunt ut labore et dolore magna aliqua.
+    </p>
+  </div>
+  
+  <!-- Remote Cursor Indicators -->
+  <div class="remote-cursor" style="--user-color: #FF6B6B; top: 20px; left: 200px;">
+    <div class="cursor-line"></div>
+    <div class="cursor-label">Alice</div>
+  </div>
+  
+  <div class="remote-cursor" style="--user-color: #4ECDC4; top: 35px; left: 350px;">
+    <div class="cursor-line"></div>
+    <div class="cursor-label">Bob</div>
+  </div>
+  
+  <!-- Edit Indicator -->
+  <div class="edit-indicator editing" aria-live="polite">
+    <span class="indicator-dot"></span>
+    Editing in progress
+  </div>
+</div>
+
+<style>
+/* Editor Container */
+.editor-container {
+  position: relative;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  min-height: 200px;
+  font-family: 'Monaco', 'Courier New', monospace;
+  line-height: 1.6;
+}
+
+/* Remote Selection Highlighting */
+.remote-selection {
+  background: var(--user-color, #FF6B6B);
+  opacity: 0.2;
+  border-radius: 2px;
+  transition: opacity var(--duration-fast) var(--easing-in-out);
+}
+
+.remote-selection:hover {
+  opacity: 0.3;
+}
+
+/* Remote Cursor */
+.remote-cursor {
+  position: absolute;
+  pointer-events: none;
+  z-index: 100;
+  animation: fadeIn var(--duration-fast) var(--easing-out);
+}
+
+.cursor-line {
+  width: 2px;
+  height: 20px;
+  background: var(--user-color, #FF6B6B);
+  box-shadow: 0 0 4px var(--user-color, #FF6B6B);
+  animation: cursorBlink 1s var(--easing-in-out) infinite;
+}
+
+.cursor-label {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  background: var(--user-color, #FF6B6B);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@keyframes cursorBlink {
+  0%, 49%, 100% { opacity: 1; }
+  50%, 99% { opacity: 0; }
+}
+
+/* Edit Indicator */
+.edit-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: var(--info-50);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--info-700);
+  transition: all var(--duration-normal) var(--easing-in-out);
+}
+
+.indicator-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--info-500);
+  animation: pulse 2s var(--easing-in-out) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+</style>
+```
+
+### 28.3 Comment & Annotation Patterns
+
+**Purpose:** Enable threaded discussions and inline annotations with clear state indicators.
+
+**Key Principles:**
+- Support threaded comment conversations
+- Show resolved/active states
+- Enable inline margin notes
+- Provide editing and deletion capabilities
+
+```html
+<!-- Comment Thread -->
+<div class="comment-thread" role="region" aria-label="Comment thread">
+  <div class="comment-anchor" data-line="45"></div>
+  
+  <div class="comment-container">
+    <!-- Initial Comment -->
+    <div class="comment" data-comment-id="c1">
+      <div class="comment-header">
+        <img src="alice.jpg" alt="" class="comment-avatar" />
+        <div class="comment-metadata">
+          <span class="comment-author">Alice Chen</span>
+          <span class="comment-time">2 hours ago</span>
+          <span class="comment-badge resolved">Resolved</span>
+        </div>
+      </div>
+      
+      <p class="comment-body">
+        This section needs clearer examples. The patterns aren't intuitive enough.
+      </p>
+      
+      <div class="comment-actions">
+        <button aria-label="Reply to comment">Reply</button>
+        <button aria-label="Edit comment">Edit</button>
+        <button aria-label="Delete comment">Delete</button>
+      </div>
+    </div>
+    
+    <!-- Nested Reply -->
+    <div class="comment reply" data-comment-id="c2">
+      <div class="comment-header">
+        <img src="bob.jpg" alt="" class="comment-avatar" />
+        <div class="comment-metadata">
+          <span class="comment-author">Bob Smith</span>
+          <span class="comment-time">1 hour ago</span>
+        </div>
+      </div>
+      
+      <p class="comment-body">
+        Agreed. We should add more visual examples with annotations.
+      </p>
+      
+      <div class="comment-actions">
+        <button aria-label="Reply to comment">Reply</button>
+        <button aria-label="Edit comment">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Margin Annotation -->
+<div class="margin-annotation">
+  <div class="annotation-marker"></div>
+  <div class="annotation-tooltip">
+    <strong>Carol's note:</strong> Consider UX for mobile users
+    <button class="annotation-close" aria-label="Dismiss annotation">×</button>
+  </div>
+</div>
+
+<style>
+/* Comment Thread */
+.comment-thread {
+  padding: 12px;
+  border-left: 3px solid var(--border-active);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  animation: slideInFromLeft var(--duration-normal) var(--easing-out);
+}
+
+.comment-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comment {
+  padding: 12px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  animation: fadeIn var(--duration-normal) var(--easing-out);
+}
+
+.comment.reply {
+  margin-left: 16px;
+  border-left: 2px solid var(--primary-200);
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.comment-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-metadata {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.comment-author {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.comment-time {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.comment-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.comment-badge.resolved {
+  background: var(--success-100);
+  color: var(--success-700);
+}
+
+.comment-body {
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.comment-actions button {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--easing-in-out);
+}
+
+.comment-actions button:hover {
+  color: var(--primary-500);
+}
+
+/* Margin Annotation */
+.margin-annotation {
+  position: relative;
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.annotation-marker {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--warning-500);
+  cursor: pointer;
+  animation: pulse 2s var(--easing-in-out) infinite;
+}
+
+.annotation-tooltip {
+  padding: 8px 12px;
+  background: var(--warning-50);
+  border: 1px solid var(--warning-200);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--warning-700);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideInFromTop var(--duration-normal) var(--easing-out);
+}
+
+.annotation-close {
+  background: none;
+  border: none;
+  color: var(--warning-700);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+}
+</style>
+```
+
+### 28.4 Permission & Role UI
+
+**Purpose:** Visualize user roles, permissions, and restricted element states.
+
+**Key Principles:**
+- Use role badges for quick identification
+- Show restricted elements with clear indicators
+- Provide actionable feedback on permission requirements
+- Support multiple role levels
+
+```html
+<!-- User Role Indicators -->
+<div class="permission-container" role="region" aria-label="User roles and permissions">
+  
+  <!-- Role Badges -->
+  <div class="role-section">
+    <h3>Document Collaborators</h3>
+    <div class="role-list">
+      <div class="role-item owner">
+        <span class="role-badge">Owner</span>
+        <span class="user-info">Alice Chen</span>
+      </div>
+      <div class="role-item editor">
+        <span class="role-badge">Editor</span>
+        <span class="user-info">Bob Smith</span>
+      </div>
+      <div class="role-item viewer">
+        <span class="role-badge">Viewer</span>
+        <span class="user-info">Carol Davis</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Restricted Element -->
+  <div class="action-item" role="button" aria-label="Delete document (Restricted)">
+    <div class="action-content">
+      <span class="action-icon">🗑️</span>
+      <span class="action-label">Delete Document</span>
+    </div>
+    <div class="restriction-badge" aria-label="Requires Owner role">
+      <span class="lock-icon">🔒</span>
+      Owner only
+    </div>
+  </div>
+  
+  <!-- Permission Upgrade Prompt -->
+  <div class="permission-prompt" role="status" aria-live="polite">
+    <div class="prompt-icon">ℹ️</div>
+    <div class="prompt-content">
+      <p class="prompt-title">Upgrade needed</p>
+      <p class="prompt-message">
+        Contact the owner to enable editing permissions
+      </p>
+    </div>
+    <button class="prompt-action">Request access</button>
+  </div>
+  
+</div>
+
+<style>
+/* Permission Container */
+.permission-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+/* Role Section */
+.role-section h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.role-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.role-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast) var(--easing-in-out));
+}
+
+.role-item:hover {
+  background: var(--bg-primary);
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  min-width: 60px;
+  text-align: center;
+}
+
+.role-item.owner .role-badge {
+  background: var(--error-100);
+  color: var(--error-700);
+}
+
+.role-item.editor .role-badge {
+  background: var(--primary-100);
+  color: var(--primary-700);
+}
+
+.role-item.viewer .role-badge {
+  background: var(--gray-100);
+  color: var(--gray-700);
+}
+
+.user-info {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* Restricted Action Item */
+.action-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.action-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-icon {
+  font-size: 16px;
+}
+
+.action-label {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.restriction-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--error-50);
+  border-radius: var(--radius-sm);
+  color: var(--error-700);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.lock-icon {
+  font-size: 12px;
+}
+
+/* Permission Prompt */
+.permission-prompt {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: var(--info-50);
+  border: 1px solid var(--info-200);
+  border-radius: var(--radius-sm);
+  animation: slideInFromBottom var(--duration-normal) var(--easing-out);
+}
+
+.prompt-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.prompt-content {
+  flex: 1;
+}
+
+.prompt-title {
+  margin: 0 0 4px 0;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--info-700);
+}
+
+.prompt-message {
+  margin: 0;
+  font-size: 12px;
+  color: var(--info-600);
+}
+
+.prompt-action {
+  padding: 6px 12px;
+  background: var(--info-600);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-in-out));
+}
+
+.prompt-action:hover {
+  background: var(--info-700);
+}
+</style>
+```
+
+### 28.5 Activity Feeds & Timelines
+
+**Purpose:** Display real-time activity streams and collaborative event history with clear progression.
+
+**Key Principles:**
+- Show chronological activity with timestamps
+- Highlight important state changes
+- Enable filtering by activity type
+- Support real-time stream updates
+
+```html
+<!-- Activity Feed Timeline -->
+<div class="activity-feed" role="region" aria-label="Collaboration activity feed" aria-live="polite">
+  
+  <!-- Activity Timeline -->
+  <div class="timeline">
+    
+    <!-- Activity Item: Edit -->
+    <div class="timeline-item edit">
+      <div class="timeline-marker"></div>
+      <div class="timeline-content">
+        <div class="activity-header">
+          <img src="alice.jpg" alt="" class="activity-avatar" />
+          <div class="activity-info">
+            <span class="activity-user">Alice Chen</span>
+            <span class="activity-action">edited Section 3</span>
+            <time class="activity-timestamp">2 minutes ago</time>
+          </div>
+        </div>
+        <div class="activity-preview">
+          <div class="diff-line added">+ Added new paragraph about best practices</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Activity Item: Comment -->
+    <div class="timeline-item comment">
+      <div class="timeline-marker"></div>
+      <div class="timeline-content">
+        <div class="activity-header">
+          <img src="bob.jpg" alt="" class="activity-avatar" />
+          <div class="activity-info">
+            <span class="activity-user">Bob Smith</span>
+            <span class="activity-action">left a comment</span>
+            <time class="activity-timestamp">5 minutes ago</time>
+          </div>
+        </div>
+        <div class="comment-preview">"This needs clarification"</div>
+      </div>
+    </div>
+    
+    <!-- Activity Item: Shared -->
+    <div class="timeline-item shared">
+      <div class="timeline-marker"></div>
+      <div class="timeline-content">
+        <div class="activity-header">
+          <img src="carol.jpg" alt="" class="activity-avatar" />
+          <div class="activity-info">
+            <span class="activity-user">Carol Davis</span>
+            <span class="activity-action">shared document with</span>
+            <span class="activity-target">@design-team</span>
+            <time class="activity-timestamp">15 minutes ago</time>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- Load More -->
+  <button class="timeline-load-more" aria-label="Load more activity">
+    Show earlier activity
+  </button>
+  
+</div>
+
+<style>
+/* Activity Feed Container */
+.activity-feed {
+  padding: 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+  padding-left: 40px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 16px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border-default);
+}
+
+/* Timeline Item */
+.timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+  animation: slideInFromLeft var(--duration-normal) var(--easing-out);
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -32px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-secondary);
+  transition: all var(--duration-fast) var(--easing-in-out));
+}
+
+.timeline-item.edit .timeline-marker {
+  background: var(--primary-500);
+}
+
+.timeline-item.comment .timeline-marker {
+  background: var(--warning-500);
+}
+
+.timeline-item.shared .timeline-marker {
+  background: var(--success-500);
+}
+
+.timeline-item:hover .timeline-marker {
+  transform: scale(1.4);
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* Timeline Content */
+.timeline-content {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+}
+
+.activity-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.activity-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.activity-info {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+
+.activity-user {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.activity-action {
+  color: var(--text-secondary);
+}
+
+.activity-target {
+  color: var(--primary-600);
+  font-weight: 500;
+}
+
+.activity-timestamp {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* Activity Preview */
+.activity-preview {
+  margin-top: 8px;
+  padding: 8px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.diff-line {
+  padding: 2px 0;
+}
+
+.diff-line.added {
+  color: var(--success-700);
+}
+
+.diff-line.removed {
+  color: var(--error-700);
+}
+
+.comment-preview {
+  margin-top: 8px;
+  padding: 8px;
+  background: var(--gray-50);
+  border-left: 2px solid var(--gray-300);
+  border-radius: 2px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Load More Button */
+.timeline-load-more {
+  width: 100%;
+  padding: 10px;
+  margin-top: 16px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--primary-600);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-in-out));
+}
+
+.timeline-load-more:hover {
+  background: var(--primary-50);
+  border-color: var(--primary-300);
+}
+</style>
+```
+
+### 28.6 Conflict Resolution UI
+
+**Purpose:** Handle merge conflicts, change proposals, and multi-user approval workflows.
+
+**Key Principles:**
+- Display conflicting changes side-by-side
+- Provide clear merge decision options
+- Support version comparison
+- Show approval workflows
+
+```html
+<!-- Conflict Resolution Modal -->
+<div class="conflict-resolver" role="dialog" aria-label="Resolve editing conflict">
+  
+  <div class="conflict-header">
+    <h2>Editing Conflict</h2>
+    <p class="conflict-description">
+      Alice and Bob made conflicting changes to the same section.
+      Choose which version to keep.
+    </p>
+  </div>
+  
+  <!-- Conflict Comparison -->
+  <div class="conflict-comparison">
+    
+    <!-- Local Version -->
+    <div class="conflict-version yours">
+      <div class="version-label">
+        <span class="version-user">Your changes</span>
+        <span class="version-time">2 minutes ago</span>
+      </div>
+      <div class="version-content">
+        <p>This section requires comprehensive coverage of modern design patterns including spacing, typography, and interactive elements for optimal user experience.</p>
+      </div>
+    </div>
+    
+    <!-- Remote Version -->
+    <div class="conflict-version theirs">
+      <div class="version-label">
+        <span class="version-user">Alice's changes</span>
+        <span class="version-time">1 minute ago</span>
+      </div>
+      <div class="version-content">
+        <p>Design patterns must cover spacing, typography, and interactions comprehensively for an optimal user experience.</p>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- Resolution Options -->
+  <div class="resolution-options">
+    <button class="option-button keep-yours" aria-label="Keep your changes">
+      <span class="option-icon">✓</span>
+      <span class="option-title">Keep yours</span>
+      <span class="option-desc">Discard Alice's changes</span>
+    </button>
+    
+    <button class="option-button keep-theirs" aria-label="Accept their changes">
+      <span class="option-icon">✓</span>
+      <span class="option-title">Keep theirs</span>
+      <span class="option-desc">Discard your changes</span>
+    </button>
+    
+    <button class="option-button merge-both" aria-label="Merge both changes">
+      <span class="option-icon">⚡</span>
+      <span class="option-title">Merge both</span>
+      <span class="option-desc">Combine changes intelligently</span>
+    </button>
+  </div>
+  
+  <!-- Approval Workflow -->
+  <div class="approval-workflow">
+    <h3>Approval Required</h3>
+    <div class="approver-list">
+      <div class="approver approved">
+        <div class="approver-status"></div>
+        <div class="approver-info">
+          <span class="approver-name">Carol Davis</span>
+          <span class="approver-action">Approved</span>
+        </div>
+        <span class="approver-timestamp">1 hour ago</span>
+      </div>
+      <div class="approver pending">
+        <div class="approver-status"></div>
+        <div class="approver-info">
+          <span class="approver-name">David Lee</span>
+          <span class="approver-action">Awaiting response</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Actions -->
+  <div class="conflict-actions">
+    <button class="btn-secondary">Cancel</button>
+    <button class="btn-primary">Resolve Conflict</button>
+  </div>
+  
+</div>
+
+<style>
+/* Conflict Resolver */
+.conflict-resolver {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: slideInFromTop var(--duration-normal) var(--easing-out);
+}
+
+.conflict-header {
+  margin-bottom: 24px;
+}
+
+.conflict-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  color: var(--text-primary);
+}
+
+.conflict-description {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Conflict Comparison */
+.conflict-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.conflict-version {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.version-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-default);
+  font-size: 12px;
+}
+
+.version-user {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.version-time {
+  color: var(--text-muted);
+}
+
+.conflict-version.yours .version-label {
+  background: var(--primary-50);
+  border-bottom-color: var(--primary-200);
+}
+
+.conflict-version.theirs .version-label {
+  background: var(--warning-50);
+  border-bottom-color: var(--warning-200);
+}
+
+.version-content {
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+/* Resolution Options */
+.resolution-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.option-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-in-out));
+  font-size: 12px;
+}
+
+.option-button:hover {
+  border-color: var(--primary-500);
+  background: var(--primary-50);
+}
+
+.option-icon {
+  font-size: 18px;
+}
+
+.option-title {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.option-desc {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+/* Approval Workflow */
+.approval-workflow {
+  padding: 12px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: 24px;
+}
+
+.approval-workflow h3 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.approver-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.approver {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+
+.approver-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.approver.approved .approver-status {
+  background: var(--success-500);
+}
+
+.approver.pending .approver-status {
+  background: var(--warning-500);
+}
+
+.approver-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.approver-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.approver-action {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.approver-timestamp {
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* Conflict Actions */
+.conflict-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn-secondary,
+.btn-primary {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-in-out));
+  border: none;
+}
+
+.btn-secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+}
+
+.btn-secondary:hover {
+  background: var(--gray-200);
+}
+
+.btn-primary {
+  background: var(--primary-600);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-700);
+}
+</style>
+```
+
+---
+
+## 28.7 Best Practices for Collaborative Components
+
+### ✅ DO
+
+- Show real-time presence with minimal latency (update within 100ms)
+- Use avatar stacks for efficient user display (max 3 visible + count)
+- Provide clear visual distinction between own and remote changes
+- Include timestamps for all collaborative events
+- Use semantic HTML for accessible comment threads
+- Show user roles and permissions clearly before restricted actions
+- Batch animation updates to prevent UI jank
+- Provide keyboard navigation for all collaborative UI
+- Use aria-live regions for real-time activity updates
+- Display conflict resolution workflows with clear choices
+
+### ❌ DON'T
+
+- Block user interactions while waiting for remote updates
+- Show presence indicators without user consent
+- Make collaborative features mandatory (allow offline editing)
+- Use colors alone to convey role or permission information
+- Create animations that trigger on every collaborative event
+- Forget to handle offline/reconnection scenarios
+- Display conflicting information in rapid succession
+- Use abbreviations without tooltips in role badges
+- Implement cascading permission changes without confirmation
+- Show resolved comments without an option to view
+
+### Accessibility Considerations
+
+```html
+<!-- Accessible Collaborative Comment -->
+<article 
+  class="comment" 
+  role="article"
+  aria-label="Comment by Alice Chen about editing conflicts, posted 2 hours ago"
+>
+  <header>
+    <img 
+      src="alice.jpg" 
+      alt="Avatar for Alice Chen"
+      class="comment-avatar"
+    />
+    <div class="comment-meta">
+      <strong>Alice Chen</strong>
+      <span aria-label="Posted 2 hours ago">2h ago</span>
+    </div>
+  </header>
+  
+  <div class="comment-body" role="region" aria-label="Comment content">
+    This pattern improves clarity significantly.
+  </div>
+  
+  <div class="comment-actions" role="group" aria-label="Actions for this comment">
+    <button aria-label="Reply to comment by Alice Chen">Reply</button>
+    <button aria-label="Edit comment by Alice Chen">Edit</button>
+  </div>
+</article>
+```
+
+### Real-Time Update Strategy
+
+- Use WebSocket or Server-Sent Events for presence updates
+- Debounce cursor position updates (max 10 updates/second)
+- Queue activity events and batch them (max 500ms between batches)
+- Show loading indicators for operations exceeding 300ms
+- Gracefully handle network disconnections with reconnection UI
+- Preserve local state during temporary offline periods
+- Sync resolved conflicts immediately upon approval
+
+### Testing Collaborative Features
+
+- Test with 5+ simultaneous users on realistic network conditions
+- Verify presence indicators update within 100ms
+- Confirm conflict resolution works across browser tabs
+- Test with slow/unreliable network (use DevTools throttling)
+- Verify all collaborative UI is keyboard accessible
+- Test screen reader announcements for real-time updates
+- Validate touch interactions on mobile devices
+
+---
+
 This system provides 99% coverage for modern UI/UX design. Apply these rules consistently for professional, accessible, and beautiful interfaces.
