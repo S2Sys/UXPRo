@@ -1,4 +1,4 @@
-# 🎨 UI/UX MASTER PROMPT SYSTEM v2.0
+# 🎨 UI/UX MASTER PROMPT SYSTEM v2.3
 ## Universal Design Rules for AI Code Agents
 ### Compatible with: Claude Code, Cursor, Windsurf, Cline, Continue.dev, Copilot, and any LLM-powered coding assistant
 
