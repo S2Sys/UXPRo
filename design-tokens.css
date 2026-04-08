@@ -1,7 +1,7 @@
 /**
  * 🎨 UI/UX DESIGN SYSTEM - CSS VARIABLES
- * Version: 2.0
- * 
+ * Version: 2.2.0 (see VERSION.json for latest)
+ *
  * A complete design token system implementing:
  * - 60-30-10 color rule
  * - 8-point spacing grid
@@ -9,7 +9,13 @@
  * - WCAG 2.1 AA contrast ratios
  * - Dark mode support
  * - Responsive utilities
- * 
+ *
+ * LATEST VERSION: https://raw.githubusercontent.com/s2sys/uxpro/main/VERSION.json
+ * UPDATE GUIDE: https://github.com/s2sys/uxpro/blob/main/UPDATE_GUIDE.md
+ *
+ * Last Updated: 2026-04-08
+ * Compatibility: Claude Code 1.0+, Cursor 0.30+, Windsurf 1.0+, etc.
+ *
  * Usage: Import this file at the root of your project
  * @import 'design-tokens.css';
  */

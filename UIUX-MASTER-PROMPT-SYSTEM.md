@@ -3191,6 +3191,284 @@ svg.filled {
 }
 ```
 
+═════════════════════════════════════════════════════════════════════════════════
+               SECTION 26: SYSTEM UPDATES & MAINTENANCE
+═════════════════════════════════════════════════════════════════════════════════
+
+## 26.1 VERSION INFORMATION & CHECKING
+
+This design system uses **Semantic Versioning (MAJOR.MINOR.PATCH)**:
+
+- **MAJOR** (e.g., 2.0.0 → 3.0.0): Breaking changes requiring code updates
+- **MINOR** (e.g., 2.0.0 → 2.1.0): New features added, backward compatible
+- **PATCH** (e.g., 2.0.0 → 2.0.1): Bug fixes, typos, clarifications
+
+### Current Version
+Check `VERSION.json` in the repository for:
+- Current version number
+- Release date and last updated timestamp
+- List of sections included
+- Any breaking changes or deprecations
+
+### How to Check for Updates
+1. **Automated**: Fetch `VERSION.json` from the remote repository
+   ```bash
+   curl -s https://raw.githubusercontent.com/s2sys/uxpro/main/VERSION.json | jq '.version'
+   ```
+
+2. **Manual**: Visit https://github.com/s2sys/uxpro/blob/main/VERSION.json
+
+3. **In the Prompt**: Check line 1 of UIUX-MASTER-PROMPT-SYSTEM.md
+
+## 26.2 UPDATE PROCEDURES
+
+### Step 1: Compare Versions
+```bash
+# Your current version
+YOUR_VERSION="2.1.0"
+
+# Get latest from repository
+LATEST_VERSION=$(curl -s https://raw.githubusercontent.com/s2sys/uxpro/main/VERSION.json | jq -r '.version')
+
+# Check if update available
+if [ "$YOUR_VERSION" != "$LATEST_VERSION" ]; then
+  echo "Update available: $YOUR_VERSION → $LATEST_VERSION"
+fi
+```
+
+### Step 2: Review Breaking Changes
+Before updating, review `VERSION.json` for the `breakingChanges` array. Each entry includes:
+- What changed
+- Why it changed
+- Migration instructions
+- Before/after code examples
+
+### Step 3: Backup Current Version
+```bash
+# Backup your current files
+cp UIUX-SYSTEM-PROMPT.md UIUX-SYSTEM-PROMPT.md.backup-2.1.0
+cp design-tokens.css design-tokens.css.backup-2.1.0
+```
+
+### Step 4: Download Latest Files
+Download from GitHub's raw content URLs:
+```bash
+curl -O https://raw.githubusercontent.com/s2sys/uxpro/main/UIUX-SYSTEM-PROMPT.md
+curl -O https://raw.githubusercontent.com/s2sys/uxpro/main/design-tokens.css
+curl -O https://raw.githubusercontent.com/s2sys/uxpro/main/VERSION.json
+```
+
+### Step 5: Validate Changes
+```bash
+# See what changed
+diff -u UIUX-SYSTEM-PROMPT.md.backup-2.1.0 UIUX-SYSTEM-PROMPT.md
+
+# Check for new CSS variables
+grep --color=always "^--" design-tokens.css | sort
+```
+
+### Step 6: Test Thoroughly
+- [ ] Build your project without errors
+- [ ] UI components render correctly
+- [ ] Responsive design works (320px, 768px, 1280px)
+- [ ] Dark mode functioning
+- [ ] Keyboard navigation working
+- [ ] Screen reader compatible
+- [ ] Touch targets meet 44×44px minimum
+- [ ] Color contrast meets WCAG AA standards
+
+### Step 7: Commit and Deploy
+```bash
+git add UIUX-SYSTEM-PROMPT.md design-tokens.css VERSION.json
+git commit -m "chore: Update UXPRo to v${LATEST_VERSION}
+
+- [Describe major changes]
+- [List new features or fixes]
+
+Reviewed breaking changes: none | [list if any]
+Tested on: Chrome, Firefox, Safari, Edge"
+
+git push origin main
+```
+
+## 26.3 DESIGN TOKEN MAINTENANCE
+
+### When to Update Tokens
+
+**Breaking Changes (Major Version):**
+- Spacing grid change (e.g., 8px → 6px)
+- Color palette rework
+- Typography scale adjustment
+- Border radius system change
+
+**New Features (Minor Version):**
+- New color semantic (e.g., --info color)
+- New spacing value
+- New typography size
+- New shadow level
+
+**Clarifications (Patch Version):**
+- Typo fixes
+- Documentation improvements
+- No token changes
+
+### Token Update Process
+
+#### 1. Define New Tokens
+```css
+/* New semantic tokens (v2.2.0 example) */
+:root {
+  --color-info: #0EA5E9;
+  --color-info-50: #F0F9FF;
+  --color-info-100: #E0F2FE;
+  --color-info-200: #BAE6FD;
+  --color-info-300: #7DD3FC;
+  --color-info-400: #38BDF8;
+  --color-info-500: #0EA5E9;
+  --color-info-600: #0284C7;
+  --color-info-700: #0369A1;
+  --color-info-800: #075985;
+  --color-info-900: #0C3D66;
+}
+```
+
+#### 2. Validate Tokens
+```css
+/* Ensure contrast ratios meet WCAG AA */
+/* Verify color values are distinct from existing palette */
+/* Check spacing values maintain 8-point (or system) grid */
+/* Confirm all variants are visually consistent */
+```
+
+#### 3. Document Migrations
+For breaking changes, provide clear migration paths:
+```
+OLD TOKEN → NEW TOKEN
+--space-1: 4px → --space-0.5: 2px
+--space-2: 8px → --space-1: 4px
+--space-3: 12px → --space-2: 8px
+```
+
+#### 4. Test Component Compatibility
+- [ ] All components render with new tokens
+- [ ] Color contrast still meets WCAG AA
+- [ ] Spacing looks visually balanced
+- [ ] Dark mode colors work correctly
+- [ ] No visual regressions
+
+#### 5. Mark Deprecated Tokens
+For backwards compatibility, keep old tokens temporarily:
+```css
+/* DEPRECATED in v2.2.0 - Use --space-0.5 instead */
+/* Scheduled for removal in v3.0.0 */
+--old-space-1: 4px;
+```
+
+#### 6. Set Removal Date
+Document when old tokens will be removed:
+```
+DEPRECATED: 2026-04-08 (v2.2.0)
+REMOVAL DATE: 2026-10-08 (v3.0.0)
+DURATION: 6 months of backward compatibility
+```
+
+## 26.4 KEEPING DESIGN TOKENS FRESH
+
+### Regular Audit Schedule
+
+**Monthly Review:**
+- Check if tokens are actually being used
+- Identify unused tokens (candidates for removal)
+- Note any missing tokens that projects need
+
+**Quarterly Update:**
+- Analyze design direction from projects
+- Plan new tokens or refinements
+- Review WCAG compliance of all tokens
+- Test accessibility across all use cases
+
+**Semi-Annual Major Review:**
+- Compare design system to industry standards
+- Identify areas needing updates
+- Plan next MINOR or MAJOR version
+- Gather feedback from users
+
+### Design Token Maintenance Checklist
+
+Before releasing any token update:
+
+- [ ] All tokens have clear naming conventions
+- [ ] Color contrast verified (WCAG AA minimum)
+- [ ] Spacing maintains grid system
+- [ ] Typography scale is consistent (1.25 modular scale)
+- [ ] Tokens tested across light and dark modes
+- [ ] Responsive behavior validated
+- [ ] Documentation is accurate and complete
+- [ ] Deprecation warnings for old tokens
+- [ ] Migration guide provided
+- [ ] Tested with all components
+
+### Monitoring Token Usage
+
+Track which tokens are most/least used:
+```bash
+# Find all token references in CSS files
+grep -r "var(--" src/ | wc -l
+
+# Find unused tokens
+grep -r "var(--color-rare" src/ | wc -l  # If no results, token is unused
+```
+
+## 26.5 BREAKING CHANGES REFERENCE
+
+### Current Status: No Breaking Changes
+
+This is v2.1.0. The following apply:
+
+- ✅ All v2.0.0 tokens are still valid
+- ✅ All v2.0.0 CSS classes work unchanged  
+- ✅ All v2.0.0 component specs remain the same
+- ✅ Safe to update from v2.0.0 to v2.1.0
+
+### Historical Breaking Changes
+
+**Version 3.0.0 (Hypothetical, not released):**
+```
+CHANGE: Spacing grid changed from 8px to 6px
+REASON: Better alignment with 60px safe area on mobile
+IMPACT: All --space-* variables need recalculation
+MIGRATION: Multiply all space values by 0.75
+```
+
+### How to Handle Major Version Updates
+
+1. **Carefully read the breaking changes section**
+2. **Create a feature branch for the update**
+3. **Update one component at a time**
+4. **Test each component thoroughly**
+5. **Run your full test suite**
+6. **Get team review and approval**
+7. **Deploy with monitoring enabled**
+
+## 26.6 VERSIONING POLICY
+
+### Release Frequency
+- PATCH: As needed (bug fixes)
+- MINOR: Quarterly (new features)
+- MAJOR: Annually or when needed (breaking changes)
+
+### Support Windows
+- Current version: Full support
+- Previous MINOR: 6 months support (security/critical fixes)
+- Previous MAJOR: 12 months support
+- Older versions: Community support only
+
+### Deprecation Policy
+- Deprecate in version N
+- Remove in version N+1 (6+ months later)
+- Provide clear migration guide
+- Announce in release notes 3 months before removal
+
 ---
 
 # 🎯 QUICK REFERENCE CARD
