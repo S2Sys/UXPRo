@@ -313,6 +313,295 @@ ADVANCED DATA VISUALIZATION
 - Empty states: Illustrations, messaging, next steps
 
 ═══════════════════════════════════════════════════════════════════════════════
+SECTION 27: ANIMATION LIBRARY PATTERNS
+═══════════════════════════════════════════════════════════════════════════════
+
+Reusable, GPU-accelerated animation system for consistent motion design.
+
+### Core Animation System
+
+```css
+:root {
+  /* Animation timing tokens */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  
+  /* Easing functions */
+  --easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --spring-smooth: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --spring-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --spring-tight: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slideInFromTop {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes springScale {
+  from { opacity: 0; transform: scale(0.8); }
+  50% { transform: scale(1.05); }
+  to { opacity: 1; transform: scale(1); }
+}
+```
+
+### Performance Guidelines
+
+- **Only animate:** opacity and transform (GPU accelerated)
+- **Use will-change:** Only during active animations, remove when done
+- **Apply transform3d:** `transform: translate3d(0, 24px, 0)` for explicit GPU acceleration
+- **Reduce paint:** Keep animations contained with `contain: layout`
+- **Respect motion preference:** All animations instant with `prefers-reduced-motion: reduce`
+
+### Spring Physics Easing
+
+Spring curves create natural, playful motion:
+- `--spring-smooth`: Tight bounce-back, 0.34, 1.56, 0.64, 1
+- `--spring-bounce`: High friction oscillation, 0.68, -0.55, 0.265, 1.55
+- `--spring-tight`: Snappy tension, 0.175, 0.885, 0.32, 1.275
+
+### Stagger & Sequencing
+
+```css
+.stagger-item {
+  --stagger-delay: 0;
+  animation: slideInFromTop var(--duration-normal) var(--easing-out);
+  animation-delay: calc(var(--stagger-delay) * 50ms);
+}
+
+.list-item:nth-child(1) { --stagger-delay: 1; }
+.list-item:nth-child(2) { --stagger-delay: 2; }
+.list-item:nth-child(3) { --stagger-delay: 3; }
+```
+
+### Accessibility
+
+Always include:
+```css
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+```
+
+See Section 27 in UIUX-MASTER-PROMPT-SYSTEM.md for complete animation patterns, gesture handlers, and advanced composition techniques.
+
+═══════════════════════════════════════════════════════════════════════════════
+SECTION 28: COLLABORATIVE PATTERNS
+═══════════════════════════════════════════════════════════════════════════════
+
+Real-time multi-user features with presence awareness and concurrent editing.
+
+### Presence Indicators
+
+```html
+<div class="presence-container">
+  <div class="avatar-stack">
+    <img src="user1.jpg" class="avatar" title="Alice - Editing" />
+    <img src="user2.jpg" class="avatar" title="Bob - Viewing" />
+    <button class="avatar avatar-more">+3</button>
+  </div>
+  <div class="presence-list" role="status">
+    <div class="presence-item editing">
+      <span class="status-dot"></span>
+      <span class="user-name">Alice</span>
+      <span class="activity-label">Editing</span>
+    </div>
+  </div>
+</div>
+
+<style>
+.avatar-stack {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: -8px;
+}
+
+.avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-primary);
+  margin-left: -8px;
+  transition: transform var(--duration-fast);
+}
+
+.avatar:hover { transform: translateY(-4px); }
+
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.presence-item.editing .status-dot { background: var(--success-500); }
+.presence-item.viewing .status-dot { background: var(--info-500); }
+.presence-item.idle .status-dot { background: var(--gray-400); }
+</style>
+```
+
+### Cursor Tracking
+
+```css
+.remote-cursor {
+  position: absolute;
+  pointer-events: none;
+  animation: fadeIn var(--duration-fast);
+}
+
+.cursor-line {
+  width: 2px; height: 20px;
+  background: var(--user-color);
+  box-shadow: 0 0 4px var(--user-color);
+  animation: cursorBlink 1s ease-in-out infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 49%, 100% { opacity: 1; }
+  50%, 99% { opacity: 0; }
+}
+```
+
+### Comment Threading
+
+- Nested replies with visual indentation
+- Resolved/active state indicators
+- Inline margin annotations with markers
+- Edit/delete capabilities per comment
+
+### Permission UI
+
+Use role badges (Owner, Editor, Viewer) with visual distinction and clear restriction indicators for disabled actions.
+
+Design tokens: `--presence-editing`, `--presence-viewing`, `--presence-idle`, `--permission-restricted`
+
+See Section 28 in UIUX-MASTER-PROMPT-SYSTEM.md for complete collaborative patterns, conflict resolution, and real-time sync strategies.
+
+═══════════════════════════════════════════════════════════════════════════════
+SECTION 29: STATE MANAGEMENT PATTERNS
+═══════════════════════════════════════════════════════════════════════════════
+
+Sophisticated UI for state machines, async operations, and form state handling.
+
+### State Machine Workflow
+
+```html
+<nav class="workflow-steps" role="progressbar" aria-valuenow="2" aria-valuemax="4">
+  <div class="step" data-state="completed">
+    <div class="step-indicator">1</div>
+    <div class="step-label">Review</div>
+  </div>
+  <div class="step" data-state="active" aria-current="true">
+    <div class="step-indicator">2</div>
+    <div class="step-label">Processing</div>
+  </div>
+  <div class="step" data-state="blocked" aria-disabled="true">
+    <div class="step-indicator">3</div>
+    <div class="step-label">Shipping</div>
+  </div>
+</nav>
+
+<style>
+:root {
+  --state-pending: #E8E8E8;
+  --state-active: #0066CC;
+  --state-completed: #00AA44;
+  --state-blocked: #CC4400;
+}
+
+.step-indicator {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--state-pending);
+  transition: all var(--duration-normal);
+}
+
+.step[data-state="active"] .step-indicator {
+  background: var(--state-active);
+  color: white;
+  box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.2);
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+.step[data-state="completed"] .step-indicator {
+  background: var(--state-completed);
+  color: white;
+}
+
+.step[data-state="completed"] .step-indicator::after { content: '✓'; }
+</style>
+```
+
+### Async State Indicators
+
+Handle loading, success, and error states with clear visual feedback:
+
+```css
+.async-operation-card {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+}
+
+.operation-state-icon {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.operation-state-icon.loading {
+  background: var(--state-loading);
+  animation: pulse-icon 2s ease-in-out infinite;
+}
+
+.operation-state-icon.success {
+  background: var(--state-success);
+  animation: slideInIcon 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.operation-state-icon.error {
+  background: var(--state-error);
+}
+```
+
+### Form State Management
+
+- Track field state: pristine, modified, error
+- Show unsaved changes with visual indicators (modified dot)
+- Validate at field, section, and form levels
+- Display section completion status with icon feedback
+
+### Optimistic Updates
+
+Show changes immediately (with pending indicator) and rollback on failure. Use CSS tokens: `--state-pending`, `--state-success`, `--state-error`, `--state-loading`
+
+### Accessibility
+
+- All state changes announced via aria-live regions
+- Use semantic HTML: button, form, fieldset, progress
+- Color + icon + text for state indication
+- Keyboard navigation through transitions
+- Status updates with appropriate ARIA roles (status, alert)
+
+See Section 29 in UIUX-MASTER-PROMPT-SYSTEM.md for complete state machines, form persistence, undo/redo, and testing strategies.
+
+═══════════════════════════════════════════════════════════════════════════════
 PRE-GENERATION CHECKLIST
 ═══════════════════════════════════════════════════════════════════════════════
 
