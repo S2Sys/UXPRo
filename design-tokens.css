@@ -589,3 +589,68 @@
   --aspect-portrait: 3 / 4;
   --aspect-wide: 21 / 9;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 13: ANIMATION LIBRARY TOKENS (v2.3.0+)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─────────────────────────────────────────────────────────────────────────
+     13.1 SPRING ANIMATION PHYSICS
+     ───────────────────────────────────────────────────────────────────────── */
+  --spring-tight: 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --spring-smooth: 300ms cubic-bezier(0.23, 0.74, 0.23, 0.98);
+  --spring-bouncy: 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     13.2 ENTRANCE ANIMATIONS
+     ───────────────────────────────────────────────────────────────────────── */
+  --anim-slide-left: slide-in-left var(--spring-smooth) forwards;
+  --anim-slide-right: slide-in-right var(--spring-smooth) forwards;
+  --anim-fade-in: fade-in var(--duration-300) ease-out forwards;
+  --anim-scale-pop: scale-pop var(--spring-bouncy) forwards;
+
+  /* ───────────────────────────────────────────────────────────────────────
+     13.3 EXIT ANIMATIONS
+     ───────────────────────────────────────────────────────────────────────── */
+  --anim-fade-out: fade-out var(--duration-200) ease-in forwards;
+  --anim-slide-out-left: slide-out-left var(--spring-smooth) forwards;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     13.4 STATE CHANGE ANIMATIONS
+     ───────────────────────────────────────────────────────────────────────── */
+  --anim-pulse: pulse 2s var(--easing-out) infinite;
+  --anim-shimmer: shimmer 2s var(--easing-out) infinite;
+  --anim-spin: spin 1s linear infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 14: STATE MANAGEMENT UI TOKENS (v2.3.0+)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─────────────────────────────────────────────────────────────────────────
+     14.1 STATE INDICATORS
+     ───────────────────────────────────────────────────────────────────────── */
+  --state-pending: #F59E0B;    /* Amber - waiting for action */
+  --state-active: #10B981;     /* Green - in progress */
+  --state-completed: #06B6D4;  /* Cyan - successfully done */
+  --state-error: #EF4444;      /* Red - failed or error */
+  --state-disabled: #9CA3AF;   /* Gray - unavailable */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     14.2 COLLABORATION PRESENCE INDICATORS
+     ───────────────────────────────────────────────────────────────────────── */
+  --presence-editing: #6366F1;   /* Indigo - actively editing */
+  --presence-viewing: #14B8A6;   /* Teal - viewing only */
+  --presence-away: #A1A5B4;      /* Gray - idle or away */
+  --presence-offline: #9CA3AF;   /* Gray - offline */
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     14.3 SYNC STATUS INDICATORS
+     ───────────────────────────────────────────────────────────────────────── */
+  --sync-synced: #10B981;        /* Green - up to date */
+  --sync-syncing: #F59E0B;       /* Amber - sync in progress */
+  --sync-error: #EF4444;         /* Red - sync failed */
+  --sync-offline: #9CA3AF;       /* Gray - offline/unavailable */
+}
