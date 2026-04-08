@@ -3671,6 +3671,670 @@ Ask these questions before generating any UI:
 <!-- CSS-only animations where possible -->
 ```
 
+═════════════════════════════════════════════════════════════════════════════════
+               SECTION 27: ANIMATION LIBRARY PATTERNS
+═════════════════════════════════════════════════════════════════════════════════
+
+## 27.1 Animation Library Fundamentals
+
+**Purpose:** Establish a reusable, composable animation system that is declarable, queryable, and cancellable for consistent motion across the design system.
+
+**Key Principles:**
+- Animations are declared with CSS custom properties
+- All animations are composable (can be combined and layered)
+- Animation state is queryable via CSS variables
+- Animations can be cancelled and reset safely
+- All animations respect `prefers-reduced-motion` preference
+
+### Declarable Animation System
+
+```css
+:root {
+  /* Animation duration tokens */
+  --duration-instant: 0ms;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --duration-slower: 600ms;
+  
+  /* Animation easing tokens */
+  --easing-linear: linear;
+  --easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Animation states (queryable) */
+  --animation-state: running;
+  --animation-fill-mode: forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant: 0ms;
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+    --duration-slower: 0ms;
+    --animation-state: paused;
+  }
+}
+
+/* Base animation library */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Composable animation utility class */
+.animated {
+  animation-duration: var(--duration-normal);
+  animation-timing-function: var(--easing-in-out);
+  animation-fill-mode: var(--animation-fill-mode);
+  animation-play-state: var(--animation-state);
+}
+```
+
+---
+
+## 27.2 CSS Animation Composition
+
+**Purpose:** Demonstrate how to stack, sequence, and layer animations to create complex motion without JavaScript.
+
+**Key Principles:**
+- Animations can be stacked on a single element
+- Sequencing via animation-delay creates coherent flows
+- Layering parent and child animations creates depth
+- Multiple animations blend naturally with proper easing
+- Animation state must remain queryable
+
+### Stacking Animations
+
+```css
+/* Multiple animations on one element */
+.card-entrance {
+  animation: 
+    fadeIn var(--duration-normal) var(--easing-in-out),
+    slideInFromBottom var(--duration-normal) var(--easing-out) 0.1s;
+  animation-fill-mode: both;
+}
+
+/* Named animation with multiple properties */
+@keyframes complexEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.95);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.element-enter {
+  animation: complexEntrance var(--duration-slow) var(--easing-out);
+}
+
+/* Sequenced animations with delays */
+.list-item {
+  animation: slideInFromBottom var(--duration-normal) var(--easing-out);
+}
+
+.list-item:nth-child(1) { animation-delay: 0s; }
+.list-item:nth-child(2) { animation-delay: 0.05s; }
+.list-item:nth-child(3) { animation-delay: 0.1s; }
+.list-item:nth-child(4) { animation-delay: 0.15s; }
+
+/* Stagger animation generator */
+.stagger-item {
+  --stagger-delay: 0;
+  animation: slideInFromBottom var(--duration-normal) var(--easing-out);
+  animation-delay: calc(var(--stagger-delay) * 50ms);
+}
+```
+
+### Layered Parent-Child Animations
+
+```css
+/* Parent animation sets container motion */
+.modal {
+  animation: fadeIn var(--duration-normal) var(--easing-in-out);
+}
+
+/* Child animations offset from parent */
+.modal-content {
+  animation: slideInFromTop var(--duration-normal) var(--easing-out);
+  animation-delay: var(--duration-fast);
+}
+
+.modal-button {
+  animation: fadeIn var(--duration-normal) var(--easing-in-out);
+  animation-delay: var(--duration-slow);
+}
+
+/* Reverse animations for exit states */
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+
+@keyframes slideOutToBottom {
+  to {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.modal.exit {
+  animation: fadeOut var(--duration-normal) var(--easing-in-out);
+}
+
+.modal.exit .modal-content {
+  animation: slideOutToBottom var(--duration-normal) var(--easing-in);
+  animation-delay: 0;
+}
+```
+
+---
+
+## 27.3 Spring Physics Animations
+
+**Purpose:** Implement spring-like motion using cubic-bezier curves to create natural, playful animations.
+
+**Key Principles:**
+- Spring tension affects how tight/loose the animation feels
+- Friction controls the damping and bounce-out effect
+- Mass affects the acceleration and momentum
+- Cubic-bezier approximates spring physics without JavaScript
+- All spring values remain accessible via CSS tokens
+
+### Spring Easing Curves
+
+```css
+:root {
+  /* Spring easing tokens (cubic-bezier approximations) */
+  --spring-smooth: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --spring-bouncy: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --spring-tight: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --spring-elastic: cubic-bezier(0.6, 0.4, 0.2, 1.4);
+  
+  /* Spring physics parameters (for calculation) */
+  --spring-tension: 80;
+  --spring-friction: 12;
+  --spring-mass: 1;
+}
+
+/* Smooth spring entrance */
+@keyframes springIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.spring-entrance {
+  animation: springIn var(--duration-normal) var(--spring-smooth);
+}
+
+/* Bouncy spring animation */
+@keyframes springBounce {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-12px); }
+  100% { transform: translateX(0); }
+}
+
+.spring-bounce {
+  animation: springBounce var(--duration-normal) var(--spring-bouncy);
+}
+
+/* Tight spring (snappy) */
+@keyframes springScale {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.spring-scale {
+  animation: springScale var(--duration-slow) var(--spring-tight);
+}
+
+/* Elastic spring (stretchy) */
+@keyframes springElastic {
+  0% { transform: scaleX(1) scaleY(1); }
+  25% { transform: scaleX(0.95) scaleY(1.05); }
+  75% { transform: scaleX(1.05) scaleY(0.95); }
+  100% { transform: scaleX(1) scaleY(1); }
+}
+
+.spring-elastic {
+  animation: springElastic var(--duration-slow) var(--spring-elastic);
+}
+
+/* Shake animation (high friction) */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+.error-shake {
+  animation: shake var(--duration-fast) linear;
+}
+```
+
+---
+
+## 27.4 Gesture-Based Animations
+
+**Purpose:** Create animations that respond to touch and mouse gestures with momentum and physics.
+
+**Key Principles:**
+- Drag animations use transform for 60fps performance
+- Swipe animations continue with momentum
+- Touch interactions remain instantly responsive
+- Animations are GPU-accelerated via transform and opacity
+- Gesture states are managed with CSS classes
+
+### Drag Animations
+
+```css
+/* Draggable element base styles */
+.draggable {
+  cursor: grab;
+  transition: box-shadow var(--duration-fast);
+  touch-action: none;
+}
+
+.draggable:active {
+  cursor: grabbing;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Drag feedback indicator */
+@keyframes dragPulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.05); }
+}
+
+.draggable.dragging {
+  animation: dragPulse var(--duration-normal) ease-in-out infinite;
+  opacity: 0.9;
+}
+
+/* Drag snap-back animation */
+@keyframes snapBack {
+  from {
+    transform: translate(var(--drag-x), var(--drag-y));
+  }
+  to {
+    transform: translate(0, 0);
+  }
+}
+
+.draggable.snap-back {
+  animation: snapBack var(--duration-normal) var(--spring-smooth);
+  --drag-x: 0;
+  --drag-y: 0;
+}
+
+/* Swipe animation */
+@keyframes swipeOut {
+  to {
+    opacity: 0;
+    transform: translateX(var(--swipe-direction));
+  }
+}
+
+.swipeable.swiped {
+  animation: swipeOut var(--duration-normal) var(--easing-in);
+  --swipe-direction: 400px;
+}
+
+.swipeable.swiped.swipe-left {
+  --swipe-direction: -400px;
+}
+
+/* Momentum scroll animation */
+@keyframes momentum {
+  0% { transform: translateY(var(--momentum-start)); }
+  100% { transform: translateY(var(--momentum-end)); }
+}
+
+.momentum-scroll {
+  animation: momentum var(--duration-slow) cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --momentum-start: 0;
+  --momentum-end: 0;
+}
+
+/* Touch ripple effect */
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple-effect {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  animation: ripple var(--duration-slow) var(--easing-out);
+  pointer-events: none;
+}
+```
+
+---
+
+## 27.5 Performance-First Animation Patterns
+
+**Purpose:** Ensure animations remain smooth at 60fps on all devices through proper GPU acceleration and browser optimization.
+
+**Key Principles:**
+- Only animate opacity and transform for 60fps performance
+- Use `will-change` sparingly and remove when animation ends
+- Use `contain` for layout isolation
+- Prefer `requestAnimationFrame` alternatives (CSS animations)
+- GPU acceleration via transform3d explicitly
+- Reduce paint overhead with strategic property choices
+
+### GPU-Accelerated Animation
+
+```css
+/* Only animate GPU-friendly properties */
+.smooth-animation {
+  animation: slideInFromBottom var(--duration-normal) var(--easing-out);
+  will-change: transform, opacity;
+}
+
+/* After animation completes, remove will-change */
+.smooth-animation:not(:hover) {
+  will-change: auto;
+}
+
+/* Explicitly enable GPU acceleration */
+@keyframes gpuAccelerated {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.gpu-optimized {
+  animation: gpuAccelerated var(--duration-normal) var(--easing-out);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Layout containment for performance */
+.contained-animation {
+  contain: layout style paint;
+  animation: fadeIn var(--duration-normal) var(--easing-in-out);
+}
+
+/* Reduce paint operations with opacity */
+@keyframes fadeInOnly {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.light-animation {
+  animation: fadeInOnly var(--duration-normal) var(--easing-in-out);
+}
+
+/* Heavy animations isolated in containers */
+.animation-boundary {
+  contain: content;
+  overflow: hidden;
+}
+
+.animation-boundary .animate-children {
+  animation: slideInFromTop var(--duration-slow) var(--easing-out);
+  will-change: transform;
+}
+
+/* Composite layers for complex animations */
+.composite-animation {
+  animation: 
+    bgFade var(--duration-normal) var(--easing-in-out),
+    contentSlide var(--duration-normal) var(--easing-out) 0.1s;
+  will-change: background-color, transform;
+}
+
+@keyframes bgFade {
+  from { background-color: rgba(0, 0, 0, 0); }
+  to { background-color: rgba(0, 0, 0, 0.5); }
+}
+
+@keyframes contentSlide {
+  from { transform: translateY(24px); }
+  to { transform: translateY(0); }
+}
+
+/* Disable animations for low-power devices */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Frame-rate adaptive animations */
+@media (max-width: 768px) {
+  .heavy-animation {
+    --duration-normal: 350ms;
+    --duration-slow: 500ms;
+  }
+}
+```
+
+---
+
+## 27.6 Animation Timing Utilities
+
+**Purpose:** Manage animation queues, delays, batching, and debouncing for coordinated motion across components.
+
+**Key Principles:**
+- Animation delays create sequence and hierarchy
+- Batched animations improve perceived performance
+- Debouncing prevents animation thrashing
+- Stagger generators create elegant cascades
+- All timing is derived from design tokens
+
+### Animation Queueing System
+
+```css
+/* Base animation queue */
+.queue-1 { animation-delay: 0ms; }
+.queue-2 { animation-delay: 50ms; }
+.queue-3 { animation-delay: 100ms; }
+.queue-4 { animation-delay: 150ms; }
+.queue-5 { animation-delay: 200ms; }
+
+/* Dynamic stagger utility (use with CSS variable) */
+.stagger {
+  --queue-index: 0;
+  animation-delay: calc(var(--queue-index) * 50ms);
+}
+
+/* Fast animation batching */
+.batch-fast {
+  animation-duration: var(--duration-fast);
+  animation-delay: var(--batch-delay, 0);
+}
+
+/* Normal animation batching */
+.batch-normal {
+  animation-duration: var(--duration-normal);
+  animation-delay: var(--batch-delay, 0);
+}
+
+/* Slow animation batching */
+.batch-slow {
+  animation-duration: var(--duration-slow);
+  animation-delay: var(--batch-delay, 0);
+}
+
+/* Cascading list animations */
+.list-cascade li {
+  animation: slideInFromBottom var(--duration-normal) var(--easing-out);
+  --cascade-index: 0;
+  animation-delay: calc(var(--cascade-index) * 40ms);
+}
+
+.list-cascade li:nth-child(1) { --cascade-index: 1; }
+.list-cascade li:nth-child(2) { --cascade-index: 2; }
+.list-cascade li:nth-child(3) { --cascade-index: 3; }
+.list-cascade li:nth-child(4) { --cascade-index: 4; }
+.list-cascade li:nth-child(5) { --cascade-index: 5; }
+
+/* Debounce animation (prevents rapid re-animation) */
+.debounce-animation {
+  animation: slideInFromBottom var(--duration-normal) var(--easing-out);
+  animation-play-state: var(--play-state, running);
+}
+
+.debounce-animation.debouncing {
+  --play-state: paused;
+}
+
+/* Parallel animation batches */
+.parallel-batch-1 { animation-delay: 0ms; }
+.parallel-batch-1.offset { animation-delay: 100ms; }
+
+.parallel-batch-2 { animation-delay: 50ms; }
+.parallel-batch-2.offset { animation-delay: 150ms; }
+
+.parallel-batch-3 { animation-delay: 100ms; }
+.parallel-batch-3.offset { animation-delay: 200ms; }
+
+/* Animation state tracking */
+.animation-tracked {
+  animation: slideInFromBottom var(--duration-normal) var(--easing-out);
+  --animation-started: false;
+  --animation-completed: false;
+}
+
+.animation-tracked.started {
+  --animation-started: true;
+}
+
+.animation-tracked.completed {
+  --animation-completed: true;
+}
+
+/* Sequential group animations */
+.group-animate {
+  --group-delay: 0ms;
+}
+
+.group-animate .item-1 {
+  animation: fadeIn var(--duration-normal) var(--easing-in-out);
+  animation-delay: calc(var(--group-delay) + 0ms);
+}
+
+.group-animate .item-2 {
+  animation: fadeIn var(--duration-normal) var(--easing-in-out);
+  animation-delay: calc(var(--group-delay) + 100ms);
+}
+
+.group-animate .item-3 {
+  animation: fadeIn var(--duration-normal) var(--easing-in-out);
+  animation-delay: calc(var(--group-delay) + 200ms);
+}
+```
+
+---
+
+## 27.7 Best Practices for Animation Library Usage
+
+### ✅ DO
+
+- Use CSS custom properties for all timing and easing values
+- Test animations on actual devices, not just modern browsers
+- Always respect `prefers-reduced-motion` user preference
+- Limit animations to transform and opacity properties
+- Use `will-change` only during animation, remove afterwards
+- Provide meaningful animation delays for visual hierarchy
+- Combine multiple short animations instead of long ones
+- Test at 6x CPU throttle and on mobile devices
+- Document animation purpose and expected behavior
+- Keep animation duration under 600ms for UI feedback
+
+### ❌ DON'T
+
+- Animate layout properties (width, height, padding, margin)
+- Use animations that trigger layout recalculations
+- Forget to test with `prefers-reduced-motion: reduce`
+- Animate expensive properties (box-shadow, border-radius)
+- Create animations longer than 1000ms without good reason
+- Add animations that block user interactions
+- Use animation delays longer than 300ms for feedback
+- Animate on every scroll or resize event
+- Mix keyframe animations with transitions on same property
+- Ignore mobile performance impacts of animations
+
+### Testing Animation Performance
+
+```css
+/* Performance monitoring styles */
+.animation-monitor {
+  /* Use DevTools Performance tab to measure */
+  /* Target: 60fps (16.67ms per frame) */
+  /* Monitor: GPU utilization, paint time, composite time */
+}
+
+/* Safe animation benchmark */
+.benchmark-animation {
+  animation: slideInFromBottom var(--duration-normal) var(--easing-out);
+  /* Expected: <3ms paint time, <5ms composite time */
+  /* Should maintain 59-60fps on 2018-era mobile devices */
+}
+```
+
 ---
 
 This system provides 99% coverage for modern UI/UX design. Apply these rules consistently for professional, accessible, and beautiful interfaces.
