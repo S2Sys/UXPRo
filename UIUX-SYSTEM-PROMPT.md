@@ -1,4 +1,4 @@
-# 🚀 UIUX-SYSTEM-PROMPT.md
+# 🚀 UIUX-SYSTEM-PROMPT.md v2.3
 ## Ready-to-Paste Version for AI Coding Tools
 ## Works with: Claude Code, Cursor, Windsurf, Cline, Continue.dev, Copilot
 
