@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//^### 28/.[1-6]/{subsection=$0} /^<style>/{if\\(subsection ~ /28/.[1-6]/\\) count++} END {print \"HTML/**)",
+      "Bash(node -e \"const fs=require\\('fs'\\); const css=fs.readFileSync\\('design-tokens.css','utf8'\\); if\\(!css.includes\\('--spring-smooth'\\)\\){ console.log\\('ERROR: Animation tokens missing'\\); process.exit\\(1\\); } if\\(!css.includes\\('--state-pending'\\)\\){ console.log\\('ERROR: State tokens missing'\\); process.exit\\(1\\); } console.log\\('VALIDATION PASSED: All token sections present'\\); const lines=css.split\\('\\\\n'\\).length; console.log\\('File lines: '+lines\\);\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const data = JSON.parse\\(fs.readFileSync\\('VERSION.json', 'utf8'\\)\\); console.log\\('JSON validation: PASSED'\\); console.log\\(JSON.stringify\\(data, null, 2\\)\\)\")",
+      "Bash(wc -l UIUX-*.md design-tokens.css IMPLEMENTATION_SUMMARY.md)",
+      "Bash(gh pr create --title 'UXPRo v2.3.0: Animation, Collaboration, and State Management Patterns' --body ':*)",
+      "Read(//s/Code101/New folder/UXPRo/**)"
+    ]
+  }
+}
