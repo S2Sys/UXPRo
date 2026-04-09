@@ -654,3 +654,143 @@
   --sync-error: #EF4444;         /* Red - sync failed */
   --sync-offline: #9CA3AF;       /* Gray - offline/unavailable */
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION 15: FORM BUILDER TOKENS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─────────────────────────────────────────────────────────────────────────
+     15.1 FORM STEP/WIZARD INDICATOR TOKENS
+     ───────────────────────────────────────────────────────────────────────── */
+  --form-step-indicator-bg: var(--neutral-200);
+  --form-step-indicator-text: var(--neutral-600);
+
+  --form-step-current-bg: var(--accent-500);
+  --form-step-current-text: #FFFFFF;
+  --form-step-current-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.1);
+
+  --form-progress-bar-height: 4px;
+  --form-progress-bar-bg: var(--neutral-200);
+  --form-progress-bar-fill: var(--accent-500);
+  --form-progress-duration: 300ms;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     15.2 VALIDATION STATE TOKENS - ERROR
+     ───────────────────────────────────────────────────────────────────────── */
+  --form-error-bg: var(--error-50);
+  --form-error-border: var(--error-500);
+  --form-error-text: var(--error-700);
+  --form-error-icon: var(--error-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     15.3 VALIDATION STATE TOKENS - WARNING
+     ───────────────────────────────────────────────────────────────────────── */
+  --form-warning-bg: var(--warning-50);
+  --form-warning-border: var(--warning-500);
+  --form-warning-text: var(--warning-700);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     15.4 VALIDATION STATE TOKENS - SUCCESS
+     ───────────────────────────────────────────────────────────────────────── */
+  --form-success-bg: var(--success-50);
+  --form-success-border: var(--success-500);
+  --form-success-text: var(--success-700);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     15.5 CONDITIONAL VISIBILITY & ANIMATION TOKENS
+     ───────────────────────────────────────────────────────────────────────── */
+  --form-transition-duration: 300ms;
+  --form-transition-easing: cubic-bezier(0.23, 0.74, 0.23, 0.98);
+  --form-conditional-opacity-hidden: 0;
+  --form-conditional-opacity-visible: 1;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     15.6 DYNAMIC FIELD ADD/REMOVE BUTTON TOKENS
+     ───────────────────────────────────────────────────────────────────────── */
+  --form-field-add-btn-bg: var(--accent-500);
+  --form-field-add-btn-text: #FFFFFF;
+  --form-field-add-btn-hover-bg: var(--accent-600);
+
+  --form-field-remove-btn-bg: var(--error-500);
+  --form-field-remove-btn-text: #FFFFFF;
+  --form-field-remove-btn-hover-bg: var(--error-600);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     15.7 DYNAMIC FIELD GROUP LAYOUT TOKENS
+     ───────────────────────────────────────────────────────────────────────── */
+  --form-group-border: 1px solid var(--border-default);
+  --form-group-spacing: var(--space-4);
+  --form-group-padding: var(--space-4);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     15.8 ERROR SUMMARY/MESSAGE TOKENS
+     ───────────────────────────────────────────────────────────────────────── */
+  --form-error-summary-bg: var(--error-50);
+  --form-error-summary-border: var(--error-500);
+  --form-error-summary-text: var(--error-700);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SECTION 15: FORM BUILDER TOKENS - DARK MODE
+   ───────────────────────────────────────────────────────────────────────── */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Form step/wizard indicators - dark mode */
+    --form-step-indicator-bg: var(--neutral-700);
+    --form-step-indicator-text: var(--neutral-300);
+
+    --form-step-current-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+
+    /* Validation state tokens - dark mode */
+    --form-error-bg: rgba(239, 68, 68, 0.1);
+    --form-error-border: var(--error-600);
+    --form-error-text: var(--error-200);
+    --form-error-icon: var(--error-400);
+
+    --form-warning-bg: rgba(245, 158, 11, 0.1);
+    --form-warning-border: var(--warning-600);
+    --form-warning-text: var(--warning-200);
+
+    --form-success-bg: rgba(34, 197, 94, 0.1);
+    --form-success-border: var(--success-600);
+    --form-success-text: var(--success-200);
+
+    /* Dynamic field buttons - dark mode */
+    --form-field-add-btn-text: var(--neutral-50);
+
+    --form-field-remove-btn-text: var(--neutral-50);
+
+    /* Dynamic field group - dark mode */
+    --form-group-border: 1px solid var(--border-default);
+
+    /* Error summary - dark mode */
+    --form-error-summary-bg: rgba(239, 68, 68, 0.1);
+    --form-error-summary-border: var(--error-600);
+    --form-error-summary-text: var(--error-200);
+  }
+}
+
+/* Manual dark mode class for form builder tokens */
+[data-theme="dark"] {
+  --form-step-indicator-bg: var(--neutral-700);
+  --form-step-indicator-text: var(--neutral-300);
+  --form-step-current-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+  --form-error-bg: rgba(239, 68, 68, 0.1);
+  --form-error-border: var(--error-600);
+  --form-error-text: var(--error-200);
+  --form-error-icon: var(--error-400);
+  --form-warning-bg: rgba(245, 158, 11, 0.1);
+  --form-warning-border: var(--warning-600);
+  --form-warning-text: var(--warning-200);
+  --form-success-bg: rgba(34, 197, 94, 0.1);
+  --form-success-border: var(--success-600);
+  --form-success-text: var(--success-200);
+  --form-field-add-btn-text: var(--neutral-50);
+  --form-field-remove-btn-text: var(--neutral-50);
+  --form-group-border: 1px solid var(--border-default);
+  --form-error-summary-bg: rgba(239, 68, 68, 0.1);
+  --form-error-summary-border: var(--error-600);
+  --form-error-summary-text: var(--error-200);
+}
