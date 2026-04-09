@@ -1,10 +1,10 @@
-# UXPRo System Prompt for Claude Code
+# UXPro System Prompt for Claude Code
 
-Welcome to the UXPRo design system prompts. This guide will help you integrate world-class UI/UX design standards into your Claude Code workflow.
+Welcome to the UXPro design system prompts. This guide will help you integrate world-class UI/UX design standards into your Claude Code workflow.
 
 ## What You're Getting
 
-The UXPRo system prompt is a comprehensive design ruleset covering:
+The UXPro system prompt is a comprehensive design ruleset covering:
 - Core design laws (60-30-10 color theory, contrast, typography)
 - Responsive design and mobile-first approaches
 - Interaction states and accessibility standards
@@ -24,10 +24,10 @@ Select and copy everything in the **System Prompt Content** section below (start
 3. Look for "System Prompt" or "Custom Instructions" section
 
 ### Step 3: Paste the Prompt
-Paste the copied content into the system prompt field. This will apply the UXPRo design system to all your code generation in Claude Code.
+Paste the copied content into the system prompt field. This will apply the UXPro design system to all your code generation in Claude Code.
 
 ### Step 4: Save and Start Coding
-Save the settings and start writing your prompts. Claude Code will now apply UXPRo design principles automatically.
+Save the settings and start writing your prompts. Claude Code will now apply UXPro design principles automatically.
 
 ## Alternative Installation Methods
 
@@ -64,7 +64,7 @@ Every time you generate UI code, Claude Code will enforce:
 
 ## Need More Info?
 
-This system prompt is based on the full UXPRo design system documentation. For advanced patterns, see:
+This system prompt is based on the full UXPro design system documentation. For advanced patterns, see:
 - Section 27: Animation Library Patterns
 - Section 28: Collaborative Patterns
 - Section 29: State Management Patterns

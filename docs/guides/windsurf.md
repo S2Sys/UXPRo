@@ -6,7 +6,7 @@
 
 ## Overview
 
-Windsurf is an advanced AI code editor featuring agentic coding capabilities with real-time error detection and fixing. It's specifically designed for complex refactoring tasks and large-scale code transformations, making it ideal for implementing and maintaining the UXPRo design system.
+Windsurf is an advanced AI code editor featuring agentic coding capabilities with real-time error detection and fixing. It's specifically designed for complex refactoring tasks and large-scale code transformations, making it ideal for implementing and maintaining the UXPro design system.
 
 ## Prerequisites
 
@@ -113,9 +113,9 @@ Create `windsurf.json`:
 Create `.windsurf/system-prompt-config.md`:
 
 ```markdown
-# UXPRo System Prompt Configuration
+# UXPro System Prompt Configuration
 
-This file configures how Windsurf uses the UXPRo system prompt.
+This file configures how Windsurf uses the UXPro system prompt.
 
 ## Loading Instructions
 
@@ -131,7 +131,7 @@ This file configures how Windsurf uses the UXPRo system prompt.
 
 - Agentic coding uses system prompt for context
 - Error detection references design patterns
-- Refactoring suggestions follow UXPRo conventions
+- Refactoring suggestions follow UXPro conventions
 - Generated code adheres to system specifications
 
 ## Custom Rules
@@ -157,7 +157,7 @@ Open or create `.windsurf/agentic-config.json`:
       "systemPromptContext": "core/UIUX-SYSTEM-PROMPT.md"
     },
     "codeGeneration": {
-      "style": "UXPRo",
+      "style": "UXPro",
       "testGeneration": true,
       "documentationGeneration": true
     }
@@ -187,7 +187,7 @@ Test the installation:
 
 1. Open a code file in your project
 2. Press `Ctrl+Shift+A` (Windows/Linux) or `Cmd+Shift+A` (macOS)
-3. Type: "Analyze this file against UXPRo guidelines"
+3. Type: "Analyze this file against UXPro guidelines"
 4. Windsurf should provide agentic analysis
 
 Verify agentic features:
@@ -195,7 +195,7 @@ Verify agentic features:
 1. Introduce a coding error intentionally
 2. Windsurf should detect it automatically
 3. Use the "Fix with AI" suggestion
-4. Verify it follows UXPRo patterns
+4. Verify it follows UXPro patterns
 
 ## Configuration Details
 
@@ -241,7 +241,7 @@ core/UIUX-SYSTEM-PROMPT.md
 1. **Check AI Model:**
    - Open Settings
    - Verify Claude 3.5 Sonnet is selected
-   - Test with "What is UXPRo?"
+   - Test with "What is UXPro?"
 
 2. **Verify Agentic Features:**
    - Open a component file
@@ -251,7 +251,7 @@ core/UIUX-SYSTEM-PROMPT.md
 3. **Test System Prompt:**
    - Select a code block
    - Press `Ctrl+Shift+A` or `Cmd+Shift+A`
-   - Ask: "Does this follow UXPRo patterns?"
+   - Ask: "Does this follow UXPro patterns?"
    - Should reference system prompt
 
 4. **Check Error Detection:**
@@ -262,7 +262,7 @@ core/UIUX-SYSTEM-PROMPT.md
 5. **Test Auto-Fix:**
    - Right-click on detected error
    - Select "Fix with Windsurf"
-   - Verify fix aligns with UXPRo guidelines
+   - Verify fix aligns with UXPro guidelines
 
 ## Common Workflows
 
@@ -270,14 +270,14 @@ core/UIUX-SYSTEM-PROMPT.md
 
 1. Select a function or file
 2. Press `Ctrl+Shift+A` or `Cmd+Shift+A`
-3. Type: "Refactor this to follow UXPRo component patterns"
+3. Type: "Refactor this to follow UXPro component patterns"
 4. Review suggested changes
 5. Apply with one click
 
 ### Implement Component from Design
 
 1. Open `.windsurf` and activate agentic mode
-2. Type task: "Create a Button component based on UXPRo specifications"
+2. Type task: "Create a Button component based on UXPro specifications"
 3. Windsurf generates full component with:
    - Props interface
    - JSDoc comments
@@ -373,7 +373,7 @@ Create `.windsurf/rules.json`:
       "pattern": "components/**/*.tsx",
       "rules": [
         "Must include PropTypes",
-        "Must follow UXPRo naming conventions",
+        "Must follow UXPro naming conventions",
         "Must include accessibility attributes"
       ]
     },
@@ -397,7 +397,7 @@ Configure multiple projects:
 {
   "workspaces": [
     {
-      "name": "UXPRo Core",
+      "name": "UXPro Core",
       "path": ".",
       "systemPrompt": "core/UIUX-SYSTEM-PROMPT.md"
     },
@@ -438,7 +438,7 @@ Add to `.windsurf/windsurf.json`:
 - [Windsurf Documentation](https://docs.windsurf.ai/)
 - [Agentic Coding Guide](https://docs.windsurf.ai/features/agentic-coding)
 - [System Prompt Configuration](https://docs.windsurf.ai/configuration/system-prompt)
-- [UXPRo System Prompt](../../core/UIUX-SYSTEM-PROMPT.md)
+- [UXPro System Prompt](../../core/UIUX-SYSTEM-PROMPT.md)
 - [Project README](../../README.md)
 
 ## Support
@@ -447,4 +447,4 @@ For issues related to:
 - **Windsurf:** Visit [Windsurf Support](https://support.windsurf.ai/)
 - **Agentic Features:** Check documentation at docs.windsurf.ai
 - **API Issues:** See [Anthropic Support](https://support.anthropic.com/)
-- **UXPRo Integration:** Review this guide or contact your team
+- **UXPro Integration:** Review this guide or contact your team

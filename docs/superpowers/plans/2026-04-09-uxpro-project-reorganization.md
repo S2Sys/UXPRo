@@ -1,10 +1,10 @@
-# UXPRo Project Reorganization Implementation Plan
+# UXPro Project Reorganization Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Reorganize UXPRo project structure from flat root directory to a well-organized structure with installation guides, examples, and clear documentation that makes it obvious how to install and use UXPRo on any platform.
+**Goal:** Reorganize UXPro project structure from flat root directory to a well-organized structure with installation guides, examples, and clear documentation that makes it obvious how to install and use UXPro on any platform.
 
-**Architecture:** Create `docs/`, `examples/`, `guides/`, and `setup/` directories. Move core design system files to `core/`. Create platform-specific installation guides for Claude Code, Cursor, Windsurf, and Cline. Add example implementations showing how to use UXPRo patterns.
+**Architecture:** Create `docs/`, `examples/`, `guides/`, and `setup/` directories. Move core design system files to `core/`. Create platform-specific installation guides for Claude Code, Cursor, Windsurf, and Cline. Add example implementations showing how to use UXPro patterns.
 
 **Tech Stack:** Markdown documentation, bash setup scripts, plain HTML/CSS examples.
 
@@ -28,7 +28,7 @@
 ## Target Structure
 
 ```
-UXPRo/
+UXPro/
 ├── README.md (high-level overview only)
 ├── VERSION.json
 ├── LICENSE
@@ -99,20 +99,20 @@ UXPRo/
 - [ ] **Step 1: Create all directories**
 
 ```bash
-mkdir -p "s:/Code101/New folder/UXPRo/core"
-mkdir -p "s:/Code101/New folder/UXPRo/docs/guides"
-mkdir -p "s:/Code101/New folder/UXPRo/docs/superpowers/plans"
-mkdir -p "s:/Code101/New folder/UXPRo/examples/components"
-mkdir -p "s:/Code101/New folder/UXPRo/examples/patterns"
-mkdir -p "s:/Code101/New folder/UXPRo/examples/full-apps"
-mkdir -p "s:/Code101/New folder/UXPRo/setup"
-mkdir -p "s:/Code101/New folder/UXPRo/templates"
+mkdir -p "s:/Code101/New folder/UXPro/core"
+mkdir -p "s:/Code101/New folder/UXPro/docs/guides"
+mkdir -p "s:/Code101/New folder/UXPro/docs/superpowers/plans"
+mkdir -p "s:/Code101/New folder/UXPro/examples/components"
+mkdir -p "s:/Code101/New folder/UXPro/examples/patterns"
+mkdir -p "s:/Code101/New folder/UXPro/examples/full-apps"
+mkdir -p "s:/Code101/New folder/UXPro/setup"
+mkdir -p "s:/Code101/New folder/UXPro/templates"
 ```
 
 - [ ] **Step 2: Verify directories created**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && find . -maxdepth 3 -type d | sort
+cd "s:/Code101/New folder/UXPro" && find . -maxdepth 3 -type d | sort
 ```
 
 Expected: All directories listed above should exist.
@@ -120,7 +120,7 @@ Expected: All directories listed above should exist.
 - [ ] **Step 3: Commit**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && git add -A && git commit -m "chore: create project directory structure"
+cd "s:/Code101/New folder/UXPro" && git add -A && git commit -m "chore: create project directory structure"
 ```
 
 ---
@@ -138,7 +138,7 @@ cd "s:/Code101/New folder/UXPRo" && git add -A && git commit -m "chore: create p
 - [ ] **Step 1: Move files**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo"
+cd "s:/Code101/New folder/UXPro"
 mv UIUX-MASTER-PROMPT-SYSTEM.md core/
 mv UIUX-SYSTEM-PROMPT.md core/
 mv design-tokens.css core/
@@ -148,7 +148,7 @@ mv cursorrules-windsurfrules.md templates/
 - [ ] **Step 2: Verify files moved**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && ls -lh core/ templates/ | grep -E "UIUX|design-tokens|cursorrules"
+cd "s:/Code101/New folder/UXPro" && ls -lh core/ templates/ | grep -E "UIUX|design-tokens|cursorrules"
 ```
 
 Expected: All files should be in their new locations.
@@ -156,7 +156,7 @@ Expected: All files should be in their new locations.
 - [ ] **Step 3: Commit**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && git add -A && git commit -m "chore: move core design files to core/ directory"
+cd "s:/Code101/New folder/UXPro" && git add -A && git commit -m "chore: move core design files to core/ directory"
 ```
 
 ---
@@ -173,7 +173,7 @@ cd "s:/Code101/New folder/UXPRo" && git add -A && git commit -m "chore: move cor
 - [ ] **Step 1: Move files**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo"
+cd "s:/Code101/New folder/UXPro"
 mv CHANGELOG.md docs/
 mv UPDATE_GUIDE.md docs/
 mv IMPLEMENTATION_SUMMARY.md docs/
@@ -182,13 +182,13 @@ mv IMPLEMENTATION_SUMMARY.md docs/
 - [ ] **Step 2: Verify files moved**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && ls -lh docs/ | grep -E "CHANGELOG|UPDATE_GUIDE|IMPLEMENTATION"
+cd "s:/Code101/New folder/UXPro" && ls -lh docs/ | grep -E "CHANGELOG|UPDATE_GUIDE|IMPLEMENTATION"
 ```
 
 - [ ] **Step 3: Commit**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && git add -A && git commit -m "chore: move documentation to docs/ directory"
+cd "s:/Code101/New folder/UXPro" && git add -A && git commit -m "chore: move documentation to docs/ directory"
 ```
 
 ---
@@ -209,7 +209,7 @@ cd "s:/Code101/New folder/UXPRo" && git add -A && git commit -m "chore: move doc
 ```markdown
 # Installation Guides
 
-UXPRo works with all major AI-powered code editors. Choose your platform below for step-by-step instructions.
+UXPro works with all major AI-powered code editors. Choose your platform below for step-by-step instructions.
 
 ## Supported Platforms
 
@@ -225,7 +225,7 @@ UXPRo works with all major AI-powered code editors. Choose your platform below f
 1. Choose your platform above
 2. Copy the system prompt content
 3. Paste into your tool's settings
-4. Start using UXPRo patterns immediately
+4. Start using UXPro patterns immediately
 
 ## What You'll Get
 
@@ -245,9 +245,9 @@ UXPRo works with all major AI-powered code editors. Choose your platform below f
 - [ ] **Step 2: Create docs/guides/claude-code.md**
 
 ```markdown
-# Installing UXPRo in Claude Code
+# Installing UXPro in Claude Code
 
-Claude Code is Anthropic's official coding assistant extension. Follow these steps to add UXPRo to your custom instructions.
+Claude Code is Anthropic's official coding assistant extension. Follow these steps to add UXPro to your custom instructions.
 
 ## Installation Steps
 
@@ -260,7 +260,7 @@ Claude Code is Anthropic's official coding assistant extension. Follow these ste
 1. Look for **"Custom Instructions"** or **"System Instructions"**
 2. Click the text area or **"Edit"** button
 
-### Step 3: Copy UXPRo System Prompt
+### Step 3: Copy UXPro System Prompt
 1. Open `core/UIUX-SYSTEM-PROMPT.md` in your editor
 2. Select **all content** (Ctrl+A or Cmd+A)
 3. Copy it (Ctrl+C or Cmd+C)
@@ -273,11 +273,11 @@ Claude Code is Anthropic's official coding assistant extension. Follow these ste
 ### Step 5: Restart Claude Code
 1. Close and reopen Claude Code
 2. Start a new conversation to test
-3. Ask Claude to generate a UI component - it will follow UXPRo patterns
+3. Ask Claude to generate a UI component - it will follow UXPro patterns
 
 ## Verification
 
-Ask Claude Code to generate a simple button component. It should follow these UXPRo rules:
+Ask Claude Code to generate a simple button component. It should follow these UXPro rules:
 - ✅ Use WCAG 2.1 AA contrast (4.5:1 minimum)
 - ✅ Use 8-point spacing grid
 - ✅ Use 1.25 modular scale typography
@@ -290,10 +290,10 @@ Ask Claude Code to generate a simple button component. It should follow these UX
 - Try restarting VS Code/Claude Code completely
 - Check that content doesn't exceed character limit
 
-**Claude not following UXPRo rules?**
+**Claude not following UXPro rules?**
 - Start a **new conversation** after pasting instructions
 - Previous conversations won't have access to updated instructions
-- Prepend requests with: "Follow all UXPRo design rules for this..."
+- Prepend requests with: "Follow all UXPro design rules for this..."
 
 ## Next Steps
 
@@ -305,9 +305,9 @@ Ask Claude Code to generate a simple button component. It should follow these UX
 - [ ] **Step 3: Create docs/guides/cursor.md**
 
 ```markdown
-# Installing UXPRo in Cursor
+# Installing UXPro in Cursor
 
-Cursor is an AI-first code editor built on VS Code. Add UXPRo using `.cursorrules` file.
+Cursor is an AI-first code editor built on VS Code. Add UXPro using `.cursorrules` file.
 
 ## Installation Steps (Method 1: .cursorrules File - Recommended)
 
@@ -316,7 +316,7 @@ Cursor is an AI-first code editor built on VS Code. Add UXPRo using `.cursorrule
 2. Create a new file called `.cursorrules`
 3. Leave the file empty for now
 
-### Step 2: Copy UXPRo Content
+### Step 2: Copy UXPro Content
 1. Open `core/UIUX-SYSTEM-PROMPT.md`
 2. Select all content (Ctrl+A or Cmd+A)
 3. Copy (Ctrl+C or Cmd+C)
@@ -337,7 +337,7 @@ Cursor is an AI-first code editor built on VS Code. Add UXPRo using `.cursorrule
 1. Click **Settings** (gear icon, bottom right)
 2. Go to **Cursor Settings** → **General**
 3. Look for **"Rules"** or **"Custom Rules"**
-4. Paste UXPRo content there
+4. Paste UXPro content there
 5. Save and restart Cursor
 
 ## Verification
@@ -380,9 +380,9 @@ Generate a form component in Cursor. Should include:
 - [ ] **Step 4: Create docs/guides/windsurf.md**
 
 ```markdown
-# Installing UXPRo in Windsurf
+# Installing UXPro in Windsurf
 
-Windsurf is Codeium's AI-powered code editor. Add UXPRo via `.windsurfrules` file.
+Windsurf is Codeium's AI-powered code editor. Add UXPro via `.windsurfrules` file.
 
 ## Installation Steps (Method 1: .windsurfrules File - Recommended)
 
@@ -391,7 +391,7 @@ Windsurf is Codeium's AI-powered code editor. Add UXPRo via `.windsurfrules` fil
 2. Create a new file called `.windsurfrules`
 3. Leave empty for now
 
-### Step 2: Copy UXPRo Content
+### Step 2: Copy UXPro Content
 1. Open `core/UIUX-SYSTEM-PROMPT.md`
 2. Select all (Ctrl+A or Cmd+A)
 3. Copy (Ctrl+C or Cmd+C)
@@ -403,7 +403,7 @@ Windsurf is Codeium's AI-powered code editor. Add UXPRo via `.windsurfrules` fil
 
 ### Step 4: Test
 1. Ask Windsurf to generate a UI component
-2. It will follow UXPRo rules automatically
+2. It will follow UXPro rules automatically
 3. Verify WCAG 2.1 AA compliance
 
 ## Installation Steps (Method 2: Windsurf Settings)
@@ -412,7 +412,7 @@ Windsurf is Codeium's AI-powered code editor. Add UXPRo via `.windsurfrules` fil
 1. Click **Settings** (gear icon)
 2. Navigate to **Windsurf Settings**
 3. Find **"Rules"** or **"Guidelines"** section
-4. Paste UXPRo content
+4. Paste UXPro content
 5. Restart Windsurf
 
 ## Verification
@@ -445,9 +445,9 @@ Ask Windsurf to create a responsive card component. Check:
 - [ ] **Step 5: Create docs/guides/cline.md**
 
 ```markdown
-# Installing UXPRo in Cline
+# Installing UXPro in Cline
 
-Cline is a VS Code extension that brings Claude to your editor. Add UXPRo via settings.
+Cline is a VS Code extension that brings Claude to your editor. Add UXPro via settings.
 
 ## Installation Steps
 
@@ -456,7 +456,7 @@ Cline is a VS Code extension that brings Claude to your editor. Add UXPRo via se
 2. Press `Ctrl+,` (or `Cmd+,` on Mac) to open Settings
 3. Search for **"Cline"** to see Cline settings
 
-### Step 2: Copy UXPRo System Prompt
+### Step 2: Copy UXPro System Prompt
 1. Open `core/UIUX-SYSTEM-PROMPT.md`
 2. Select all content (Ctrl+A)
 3. Copy (Ctrl+C)
@@ -466,21 +466,21 @@ Cline is a VS Code extension that brings Claude to your editor. Add UXPRo via se
 2. Look for Cline's custom instructions field
 3. Click the text area
 
-### Step 4: Paste UXPRo Content
-1. Paste UXPRo content (Ctrl+V)
+### Step 4: Paste UXPro Content
+1. Paste UXPro content (Ctrl+V)
 2. Save (VS Code auto-saves most settings)
 3. Restart Cline or VS Code if changes don't apply immediately
 
 ### Alternative: cline_instructions.md
 Some Cline versions use a `cline_instructions.md` file:
 1. Create `cline_instructions.md` in your project root
-2. Copy UXPRo system prompt content into it
+2. Copy UXPro system prompt content into it
 3. Restart Cline
 
 ## Verification
 
 Use Cline's chat or code generation:
-1. Ask: "Generate a form component following all UXPRo rules"
+1. Ask: "Generate a form component following all UXPro rules"
 2. Check output for:
    - ✅ WCAG 2.1 AA contrast
    - ✅ Semantic HTML
@@ -507,7 +507,7 @@ Use Cline's chat or code generation:
 **Instructions not applying?**
 - Start a new Cline chat/task after updating
 - Previous conversations won't use new instructions
-- Be explicit: "Follow all UXPRo design rules..."
+- Be explicit: "Follow all UXPro design rules..."
 
 ## Next Steps
 
@@ -519,7 +519,7 @@ Use Cline's chat or code generation:
 - [ ] **Step 6: Commit all guides**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && git add docs/guides/ && git commit -m "docs: add platform-specific installation guides"
+cd "s:/Code101/New folder/UXPro" && git add docs/guides/ && git commit -m "docs: add platform-specific installation guides"
 ```
 
 ---
@@ -537,21 +537,21 @@ cd "s:/Code101/New folder/UXPRo" && git add docs/guides/ && git commit -m "docs:
 - [ ] **Step 1: Create examples/README.md**
 
 ```markdown
-# UXPRo Examples
+# UXPro Examples
 
-This folder contains complete, copy-paste ready examples demonstrating UXPRo patterns and best practices.
+This folder contains complete, copy-paste ready examples demonstrating UXPro patterns and best practices.
 
 ## Organization
 
 ### [components/](./components/)
-Individual UI components showing UXPRo rules in action:
+Individual UI components showing UXPro rules in action:
 - Form inputs, buttons, modals
 - Cards, badges, tooltips
 - Navigation elements
 - Focus states and hover effects
 
 ### [patterns/](./patterns/)
-Common design patterns using UXPRo:
+Common design patterns using UXPro:
 - Responsive grid layouts
 - Dark mode implementation
 - Animation libraries
@@ -571,11 +571,11 @@ Complete application examples:
 2. **Copy the HTML/CSS** from the example file
 3. **Paste into your project**
 4. **Customize** colors, spacing, or content as needed
-5. **Verify** it meets UXPRo rules (WCAG 2.1 AA, spacing grid, etc.)
+5. **Verify** it meets UXPro rules (WCAG 2.1 AA, spacing grid, etc.)
 
 ## All Examples Follow
 
-✅ UXPRo design system rules (Sections 1-29)
+✅ UXPro design system rules (Sections 1-29)
 ✅ WCAG 2.1 AA accessibility standards
 ✅ 8-point spacing grid system
 ✅ 1.25 modular scale typography
@@ -596,10 +596,10 @@ Or copy specific tokens you need.
 
 ## Contributing Examples
 
-Found a great UXPRo pattern? Add it here:
+Found a great UXPro pattern? Add it here:
 1. Create an HTML file in appropriate subfolder
 2. Include complete HTML and CSS
-3. Add comments explaining UXPRo rules being demonstrated
+3. Add comments explaining UXPro rules being demonstrated
 4. Update the README in that subfolder
 5. Submit a pull request
 
@@ -615,7 +615,7 @@ Found a great UXPRo pattern? Add it here:
 ```markdown
 # Component Examples
 
-Individual UI components demonstrating UXPRo rules and best practices.
+Individual UI components demonstrating UXPro rules and best practices.
 
 ## Components Included
 
@@ -671,7 +671,7 @@ See `core/design-tokens.css` for:
 ```markdown
 # Pattern Examples
 
-Common design patterns implementing multiple UXPRo components and rules together.
+Common design patterns implementing multiple UXPro components and rules together.
 
 ## Patterns Included
 
@@ -735,7 +735,7 @@ The `dark-mode.html` pattern shows:
 ```markdown
 # Full App Examples
 
-Complete application layouts demonstrating how to build production-ready UIs using UXPRo patterns.
+Complete application layouts demonstrating how to build production-ready UIs using UXPro patterns.
 
 ## Applications Included
 
@@ -799,7 +799,7 @@ Check what components are used in each app:
 
 ## Performance Considerations
 
-All examples follow UXPRo performance rules:
+All examples follow UXPro performance rules:
 - No layout-shift animations
 - GPU acceleration (transform/opacity)
 - Semantic HTML (fast rendering)
@@ -813,13 +813,13 @@ All examples follow UXPRo performance rules:
 - Use admin panel as CMS foundation
 - Combine patterns for custom layouts
 - Reference the full design system for details
-- Add your own components following UXPRo rules
+- Add your own components following UXPro rules
 ```
 
 - [ ] **Step 5: Commit examples structure**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && git add examples/ && git commit -m "docs: add examples directory structure"
+cd "s:/Code101/New folder/UXPro" && git add examples/ && git commit -m "docs: add examples directory structure"
 ```
 
 ---
@@ -837,11 +837,11 @@ cd "s:/Code101/New folder/UXPRo" && git add examples/ && git commit -m "docs: ad
 ```markdown
 # Setup Scripts
 
-Quick setup scripts to get UXPRo integrated into your projects automatically.
+Quick setup scripts to get UXPro integrated into your projects automatically.
 
 ## Scripts Available
 
-- **quick-start.sh** - Explains how to set up UXPRo manually with 30-second steps
+- **quick-start.sh** - Explains how to set up UXPro manually with 30-second steps
 - Platform-specific install scripts (coming in future versions)
 
 ## Running Setup Scripts
@@ -902,7 +902,7 @@ If scripts don't work for your setup:
 - Run one of the setup scripts
 - Follow platform-specific installation guide
 - Copy examples to your project
-- Start using UXPRo patterns!
+- Start using UXPro patterns!
 ```
 
 - [ ] **Step 2: Create setup/quick-start.sh**
@@ -910,19 +910,19 @@ If scripts don't work for your setup:
 ```bash
 #!/bin/bash
 
-# UXPRo Quick Start Setup Script
-# This script helps you set up UXPRo in your project
+# UXPro Quick Start Setup Script
+# This script helps you set up UXPro in your project
 
 echo "======================================"
-echo "  UXPRo Quick Start Setup"
+echo "  UXPro Quick Start Setup"
 echo "======================================"
 echo ""
 
-# Get the UXPRo root directory
+# Get the UXPro root directory
 UXPRO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PROJECT_ROOT="${PWD}"
 
-echo "UXPRo location: $UXPRO_ROOT"
+echo "UXPro location: $UXPRO_ROOT"
 echo "Project location: $PROJECT_ROOT"
 echo ""
 
@@ -1056,7 +1056,7 @@ echo "Questions? See docs/"
 - [ ] **Step 3: Make script executable and test**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && chmod +x setup/quick-start.sh && ls -la setup/quick-start.sh
+cd "s:/Code101/New folder/UXPro" && chmod +x setup/quick-start.sh && ls -la setup/quick-start.sh
 ```
 
 Expected: Script shows `-rwxr-xr-x` (executable)
@@ -1064,7 +1064,7 @@ Expected: Script shows `-rwxr-xr-x` (executable)
 - [ ] **Step 4: Commit**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && git add setup/ && git commit -m "docs: add setup scripts and documentation"
+cd "s:/Code101/New folder/UXPro" && git add setup/ && git commit -m "docs: add setup scripts and documentation"
 ```
 
 ---
@@ -1081,23 +1081,23 @@ cd "s:/Code101/New folder/UXPRo" && git add setup/ && git commit -m "docs: add s
 - [ ] **Step 1: Create templates/.cursorrules**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo/templates"
+cd "s:/Code101/New folder/UXPro/templates"
 cp ../core/UIUX-SYSTEM-PROMPT.md .cursorrules
 ```
 
 - [ ] **Step 2: Create templates/.windsurfrules**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo/templates"
+cd "s:/Code101/New folder/UXPro/templates"
 cp ../core/UIUX-SYSTEM-PROMPT.md .windsurfrules
 ```
 
 - [ ] **Step 3: Create templates/claude.md**
 
 ```markdown
-# UXPRo System Prompt for Claude Code
+# UXPro System Prompt for Claude Code
 
-This file contains the UXPRo design system prompt for use in Claude Code's Custom Instructions.
+This file contains the UXPro design system prompt for use in Claude Code's Custom Instructions.
 
 ## How to Use
 
@@ -1112,7 +1112,7 @@ This file contains the UXPRo design system prompt for use in Claude Code's Custo
 
 ## What You're Getting
 
-This system prompt teaches Claude to follow all UXPRo design principles:
+This system prompt teaches Claude to follow all UXPro design principles:
 - ✅ 29 comprehensive design sections
 - ✅ WCAG 2.1 AA accessibility
 - ✅ Production-ready patterns
@@ -1129,7 +1129,7 @@ This system prompt teaches Claude to follow all UXPRo design principles:
 - [ ] **Step 4: Commit templates**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && git add templates/ && git commit -m "chore: add platform-specific templates"
+cd "s:/Code101/New folder/UXPro" && git add templates/ && git commit -m "chore: add platform-specific templates"
 ```
 
 ---
@@ -1144,13 +1144,13 @@ cd "s:/Code101/New folder/UXPRo" && git add templates/ && git commit -m "chore: 
 - [ ] **Step 1: Read current README.md**
 
 ```bash
-head -100 "s:/Code101/New folder/UXPRo/README.md"
+head -100 "s:/Code101/New folder/UXPro/README.md"
 ```
 
 - [ ] **Step 2: Create new simplified README.md**
 
 ```markdown
-# UXPRo: Universal UI/UX Design System
+# UXPro: Universal UI/UX Design System
 
 [![Version](https://img.shields.io/badge/version-2.3.0-blue)](./VERSION.json)
 [![Compatibility](https://img.shields.io/badge/works%20with-Claude%20Code%2C%20Cursor%2C%20Windsurf%2C%20Cline-green)](./docs/guides/)
@@ -1168,7 +1168,7 @@ Works with: **Claude Code** • **Cursor** • **Windsurf** • **Cline** • **
 1. **Pick your platform:** See [Installation Guides](./docs/guides/)
 2. **Copy the system prompt** from `core/UIUX-SYSTEM-PROMPT.md`
 3. **Paste into your AI tool's settings**
-4. **Done!** Start using UXPRo patterns
+4. **Done!** Start using UXPro patterns
 
 Detailed instructions for each platform: [Installation Guides](./docs/guides/)
 
@@ -1222,14 +1222,14 @@ Detailed instructions for each platform: [Installation Guides](./docs/guides/)
 
 ## 💡 Learning Path
 
-1. **Start here:** [Installation Guides](./docs/guides/) - Get UXPRo running
+1. **Start here:** [Installation Guides](./docs/guides/) - Get UXPro running
 2. **Try examples:** [Examples folder](./examples/) - See patterns in action
 3. **Go deep:** [Full design system](./core/UIUX-MASTER-PROMPT-SYSTEM.md) - Learn all 29 sections
 4. **Reference:** [CSS tokens](./core/design-tokens.css) - Use in your projects
 
 ---
 
-## 📋 What You Can Do With UXPRo
+## 📋 What You Can Do With UXPro
 
 - ✅ Generate UI components that follow WCAG 2.1 AA
 - ✅ Build responsive layouts for all screen sizes (320px-1536px+)
@@ -1274,7 +1274,7 @@ MIT License - See [LICENSE](./LICENSE) file
 - [ ] **Step 3: Replace old README**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && mv README.md README.old.md && cat > README.md << 'EOF'
+cd "s:/Code101/New folder/UXPro" && mv README.md README.old.md && cat > README.md << 'EOF'
 # [Paste the new README content from Step 2 above]
 EOF
 ```
@@ -1282,7 +1282,7 @@ EOF
 - [ ] **Step 4: Verify and commit**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && git add README.md && git commit -m "docs: reorganize and simplify README for clarity"
+cd "s:/Code101/New folder/UXPro" && git add README.md && git commit -m "docs: reorganize and simplify README for clarity"
 ```
 
 ---
@@ -1297,7 +1297,7 @@ cd "s:/Code101/New folder/UXPRo" && git add README.md && git commit -m "docs: re
 - [ ] **Step 1: Create .gitignore**
 
 ```bash
-cat > "s:/Code101/New folder/UXPRo/.gitignore" << 'EOF'
+cat > "s:/Code101/New folder/UXPro/.gitignore" << 'EOF'
 # Dependencies
 node_modules/
 .venv/
@@ -1336,7 +1336,7 @@ EOF
 - [ ] **Step 2: Commit**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && git add .gitignore && git commit -m "chore: add .gitignore"
+cd "s:/Code101/New folder/UXPro" && git add .gitignore && git commit -m "chore: add .gitignore"
 ```
 
 ---
@@ -1346,30 +1346,30 @@ cd "s:/Code101/New folder/UXPRo" && git add .gitignore && git commit -m "chore: 
 **Files:**
 - Create: `CONTRIBUTING.md`
 
-**Goal:** Guide contributors on how to add to UXPRo.
+**Goal:** Guide contributors on how to add to UXPro.
 
 - [ ] **Step 1: Create CONTRIBUTING.md**
 
 ```markdown
-# Contributing to UXPRo
+# Contributing to UXPro
 
-UXPRo is community-driven! We welcome contributions that improve the design system.
+UXPro is community-driven! We welcome contributions that improve the design system.
 
 ## Types of Contributions
 
 ### 🐛 Bug Reports
-Found an issue? [Open an issue](https://github.com/S2Sys/UXPRo/issues) with:
+Found an issue? [Open an issue](https://github.com/S2Sys/UXPro/issues) with:
 - What you tried
 - What happened
 - What you expected
 - Screenshots if relevant
 
 ### ✨ New Patterns
-Found a great UXPRo pattern? Submit it:
+Found a great UXPro pattern? Submit it:
 1. Fork the repository
 2. Create a branch: `git checkout -b feature/new-pattern-name`
 3. Add your pattern to appropriate `examples/` folder
-4. Include comments explaining UXPRo rules
+4. Include comments explaining UXPro rules
 5. Update the folder's README.md
 6. Submit a pull request
 
@@ -1381,7 +1381,7 @@ Help clarify or expand documentation:
 
 ### 🎨 Design System Rules
 Suggest new rules or improvements:
-1. [Open an issue](https://github.com/S2Sys/UXPRo/issues)
+1. [Open an issue](https://github.com/S2Sys/UXPro/issues)
 2. Explain the rule and why it matters
 3. Provide examples
 4. Discuss with maintainers
@@ -1394,12 +1394,12 @@ Suggest new rules or improvements:
 - Ensure your contribution follows WCAG 2.1 AA standards
 
 ### When Contributing
-- **Follow the design system** - All contributions must follow UXPRo rules
+- **Follow the design system** - All contributions must follow UXPro rules
 - **Semantic HTML** - Use proper semantic elements
 - **CSS only** - Pure CSS, no framework dependencies
 - **Accessibility first** - Include ARIA labels, semantic HTML, keyboard nav
 - **Mobile-first** - Design for 320px+
-- **Comments** - Explain UXPRo rules you're demonstrating
+- **Comments** - Explain UXPro rules you're demonstrating
 
 ### Commit Messages
 - `feat: add new pattern` - New feature
@@ -1410,7 +1410,7 @@ Suggest new rules or improvements:
 ## File Organization
 
 ```
-UXPRo/
+UXPro/
 ├── core/              # Design system files (don't modify lightly)
 ├── docs/
 │   ├── guides/        # Platform installation guides
@@ -1428,7 +1428,7 @@ UXPRo/
 5. Push to your fork
 6. Submit a pull request with:
    - Clear description of what changed
-   - Why this change improves UXPRo
+   - Why this change improves UXPro
    - Any breaking changes (rare!)
 
 ## Code of Conduct
@@ -1441,18 +1441,18 @@ UXPRo/
 ## Questions?
 
 - Check [docs/](./docs/) for help
-- [Open an issue](https://github.com/S2Sys/UXPRo/issues) to discuss
+- [Open an issue](https://github.com/S2Sys/UXPro/issues) to discuss
 - Check [examples/](./examples/) for patterns
 
 ---
 
-Thank you for contributing to UXPRo! 🙏
+Thank you for contributing to UXPro! 🙏
 ```
 
 - [ ] **Step 2: Commit**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && git add CONTRIBUTING.md && git commit -m "docs: add contribution guidelines"
+cd "s:/Code101/New folder/UXPro" && git add CONTRIBUTING.md && git commit -m "docs: add contribution guidelines"
 ```
 
 ---
@@ -1469,12 +1469,12 @@ cd "s:/Code101/New folder/UXPRo" && git add CONTRIBUTING.md && git commit -m "do
 ```markdown
 # Project Structure
 
-This document explains the organization of UXPRo and where to find what you need.
+This document explains the organization of UXPro and where to find what you need.
 
 ## Directory Layout
 
 ```
-UXPRo/
+UXPro/
 ├── README.md                          # Start here - overview and quick links
 ├── LICENSE                            # MIT License
 ├── VERSION.json                       # Version metadata
@@ -1489,7 +1489,7 @@ UXPRo/
 ├── docs/                              # Documentation
 │   ├── README.md                      # Documentation overview
 │   ├── CHANGELOG.md                   # Version history
-│   ├── UPDATE_GUIDE.md                # How to update UXPRo
+│   ├── UPDATE_GUIDE.md                # How to update UXPro
 │   ├── IMPLEMENTATION_SUMMARY.md      # v2.3.0 implementation details
 │   ├── PROJECT_STRUCTURE.md           # This file
 │   ├── guides/                        # Platform-specific installation guides
@@ -1538,16 +1538,16 @@ UXPRo/
 - UIUX-SYSTEM-PROMPT.md - Condensed version for copying into AI tools
 - design-tokens.css - CSS variables for colors, spacing, typography, etc.
 
-**Use:** Reference for understanding UXPRo principles and copying into your AI tool.
+**Use:** Reference for understanding UXPro principles and copying into your AI tool.
 
 ### 📖 Documentation
 **Location:** `docs/`
 - CHANGELOG.md - See what changed in each version
-- UPDATE_GUIDE.md - How to update UXPRo
+- UPDATE_GUIDE.md - How to update UXPro
 - guides/ - Step-by-step installation for each platform
 - guides/README.md - Navigation to all platform guides
 
-**Use:** Learn how to install, update, and use UXPRo on your platform.
+**Use:** Learn how to install, update, and use UXPro on your platform.
 
 ### 💡 Examples
 **Location:** `examples/`
@@ -1559,10 +1559,10 @@ UXPRo/
 
 ### ⚙️ Setup
 **Location:** `setup/`
-- quick-start.sh - Automated script to set up UXPRo
+- quick-start.sh - Automated script to set up UXPro
 - README.md - Manual setup instructions
 
-**Use:** Quick initialization of UXPRo in your project.
+**Use:** Quick initialization of UXPro in your project.
 
 ### 📋 Templates
 **Location:** `templates/`
@@ -1574,7 +1574,7 @@ UXPRo/
 
 ## How to Navigate
 
-### "I want to install UXPRo"
+### "I want to install UXPro"
 → Start with [README.md](./README.md)
 → Then go to [docs/guides/](./docs/guides/) for your platform
 
@@ -1590,7 +1590,7 @@ UXPRo/
 → Copy from [core/UIUX-SYSTEM-PROMPT.md](./core/UIUX-SYSTEM-PROMPT.md)
 → Or use templates in [templates/](./templates/)
 
-### "I want to update UXPRo"
+### "I want to update UXPro"
 → See [docs/UPDATE_GUIDE.md](./docs/UPDATE_GUIDE.md)
 
 ### "I want to contribute"
@@ -1641,7 +1641,7 @@ Feel free to:
 - [ ] **Step 2: Commit**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && git add docs/PROJECT_STRUCTURE.md && git commit -m "docs: add project structure reference"
+cd "s:/Code101/New folder/UXPro" && git add docs/PROJECT_STRUCTURE.md && git commit -m "docs: add project structure reference"
 ```
 
 ---
@@ -1656,26 +1656,26 @@ cd "s:/Code101/New folder/UXPRo" && git add docs/PROJECT_STRUCTURE.md && git com
 - [ ] **Step 1: Verify directory structure**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && find . -type f -name "*.md" -o -name "*.css" -o -name "*.json" | grep -v ".git" | sort
+cd "s:/Code101/New folder/UXPro" && find . -type f -name "*.md" -o -name "*.css" -o -name "*.json" | grep -v ".git" | sort
 ```
 
 - [ ] **Step 2: List file locations**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && echo "=== Core Files ===" && ls -lh core/ && echo "" && echo "=== Documentation ===" && ls -lh docs/ && echo "" && echo "=== Examples ===" && ls -lh examples/ && echo "" && echo "=== Setup ===" && ls -lh setup/ && echo "" && echo "=== Templates ===" && ls -lh templates/
+cd "s:/Code101/New folder/UXPro" && echo "=== Core Files ===" && ls -lh core/ && echo "" && echo "=== Documentation ===" && ls -lh docs/ && echo "" && echo "=== Examples ===" && ls -lh examples/ && echo "" && echo "=== Setup ===" && ls -lh setup/ && echo "" && echo "=== Templates ===" && ls -lh templates/
 ```
 
 - [ ] **Step 3: Final commit message**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && git log --oneline -15
+cd "s:/Code101/New folder/UXPro" && git log --oneline -15
 ```
 
 - [ ] **Step 4: Create final status summary**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && cat > REORGANIZATION_COMPLETE.txt << 'EOF'
-UXPRo Project Reorganization Complete!
+cd "s:/Code101/New folder/UXPro" && cat > REORGANIZATION_COMPLETE.txt << 'EOF'
+UXPro Project Reorganization Complete!
 
 New Structure:
 ✅ core/ - Design system files (MASTER, SYSTEM-PROMPT, tokens)
@@ -1711,14 +1711,14 @@ cat REORGANIZATION_COMPLETE.txt
 - [ ] **Step 5: Final commit**
 
 ```bash
-cd "s:/Code101/New folder/UXPRo" && git add REORGANIZATION_COMPLETE.txt && git commit -m "docs: project reorganization complete"
+cd "s:/Code101/New folder/UXPro" && git add REORGANIZATION_COMPLETE.txt && git commit -m "docs: project reorganization complete"
 ```
 
 ---
 
 ## Summary
 
-All 12 tasks complete! The UXPRo project is now reorganized with:
+All 12 tasks complete! The UXPro project is now reorganized with:
 
 **Organization:**
 - ✅ Dedicated `core/` directory for design system

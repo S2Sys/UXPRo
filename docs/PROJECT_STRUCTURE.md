@@ -1,11 +1,11 @@
 # Project Structure
 
-Welcome to the UXPRo project! This document explains how the project is organized, what each directory contains, and where to find what you're looking for.
+Welcome to the UXPro project! This document explains how the project is organized, what each directory contains, and where to find what you're looking for.
 
 ## Directory Layout
 
 ```
-UXPRo/
+UXPro/
 ├── core/                           # Design system core files
 │   ├── UIUX-SYSTEM-PROMPT.md       # Quick-reference system prompt (all rules, one file)
 │   ├── UIUX-MASTER-PROMPT-SYSTEM.md # Complete detailed guidelines (29 sections)
@@ -69,7 +69,7 @@ This is where the actual design system lives. Users install from here.
 - **design-tokens.css** - CSS variables for consistent colors, spacing, and typography across projects.
 - **VERSION.json** - Tracks the current version (e.g., 2.3.0) and metadata.
 
-**Who uses it:** End users, developers integrating UXPRo into their projects
+**Who uses it:** End users, developers integrating UXPro into their projects
 
 ### `/docs` - Project Documentation
 Guides, changelogs, and project information for users and contributors.
@@ -114,8 +114,8 @@ Reusable templates for different editor configurations.
 - `cursorrules-windsurfrules.md` - Config templates for Cursor/Windsurf
 
 ### Root Files
-- `README.md` - Main entry point. What is UXPRo, quick start, key links
-- `CONTRIBUTING.md` - How to contribute back to UXPRo
+- `README.md` - Main entry point. What is UXPro, quick start, key links
+- `CONTRIBUTING.md` - How to contribute back to UXPro
 - `VERSION.json` - Current version number and metadata
 - `LICENSE` - MIT License terms
 
@@ -232,7 +232,7 @@ The project follows consistent naming patterns:
 
 ## What Not to Modify
 
-These files are core to UXPRo and should be left as-is unless you're contributing a bugfix:
+These files are core to UXPro and should be left as-is unless you're contributing a bugfix:
 
 ### Core System Prompts
 - `core/UIUX-SYSTEM-PROMPT.md` - Contains the actual design rules used by AI tools
@@ -311,7 +311,7 @@ These items are meant to be modified, extended, and adapted for your needs:
 ### Contributing
 - **Report issues** via GitHub issues if something needs fixing
 - **Submit PRs** with improvements to examples, guides, or documentation
-- **Share your implementations** - Show how you used UXPRo
+- **Share your implementations** - Show how you used UXPro
 - **Suggest enhancements** - Use GitHub discussions
 
 **What maintainers review:**
@@ -331,4 +331,4 @@ These items are meant to be modified, extended, and adapted for your needs:
 
 For questions, check the [CONTRIBUTING.md](../CONTRIBUTING.md) and the [UPDATE_GUIDE.md](./UPDATE_GUIDE.md).
 
-**Happy designing with UXPRo!**
+**Happy designing with UXPro!**

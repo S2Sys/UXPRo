@@ -122,18 +122,18 @@ Create `.continue/commands.json`:
   "commands": [
     {
       "name": "uxpro-review",
-      "prompt": "Review this code against UXPRo design patterns and suggest improvements",
-      "description": "Review code for UXPRo compliance"
+      "prompt": "Review this code against UXPro design patterns and suggest improvements",
+      "description": "Review code for UXPro compliance"
     },
     {
       "name": "uxpro-component",
-      "prompt": "Generate a component following UXPRo specifications and include TypeScript types, JSDoc, and accessibility attributes",
-      "description": "Generate UXPRo component"
+      "prompt": "Generate a component following UXPro specifications and include TypeScript types, JSDoc, and accessibility attributes",
+      "description": "Generate UXPro component"
     },
     {
       "name": "uxpro-test",
-      "prompt": "Generate comprehensive tests for this code that verify UXPRo compliance",
-      "description": "Generate UXPRo tests"
+      "prompt": "Generate comprehensive tests for this code that verify UXPro compliance",
+      "description": "Generate UXPro tests"
     }
   ]
 }
@@ -146,7 +146,7 @@ Create `.continue/commands.json`:
 3. Press Tab to trigger autocomplete
 4. Should see Claude-powered suggestions
 5. Click Continue icon to open chat
-6. Type: "What is UXPRo?"
+6. Type: "What is UXPro?"
 7. Should reference system prompt content
 
 ## Installation Steps (JetBrains)
@@ -254,7 +254,7 @@ core/UIUX-SYSTEM-PROMPT.md
    - Should respond immediately
 
 2. **Verify System Prompt:**
-   - Ask: "What are the UXPRo accessibility guidelines?"
+   - Ask: "What are the UXPro accessibility guidelines?"
    - Should cite content from system prompt
 
 3. **Test Autocomplete:**
@@ -283,7 +283,7 @@ core/UIUX-SYSTEM-PROMPT.md
 ### Generate Code with /edit
 
 1. Open Continue chat
-2. Type: `/edit Generate a Button component with UXPRo styling`
+2. Type: `/edit Generate a Button component with UXPro styling`
 3. Continue creates component in editor
 4. Review and accept changes
 
@@ -305,7 +305,7 @@ core/UIUX-SYSTEM-PROMPT.md
 
 1. Select code block
 2. Open Continue chat
-3. Type: "Refactor this to follow UXPRo patterns"
+3. Type: "Refactor this to follow UXPro patterns"
 4. Continue suggests improvements
 5. Use /edit to apply changes
 
@@ -403,7 +403,7 @@ Share configuration with git:
 
 ```bash
 git add .continue/config.json .continue/commands.json
-git commit -m "Add Continue.dev configuration for UXPRo"
+git commit -m "Add Continue.dev configuration for UXPro"
 ```
 
 ## Troubleshooting
@@ -461,9 +461,9 @@ git commit -m "Add Continue.dev configuration for UXPRo"
 1. **Install Extension:** Complete for your IDE
 2. **Add API Key:** Configure Anthropic API
 3. **Create Config:** Set up `.continue/config.json`
-4. **Set System Prompt:** Add UXPRo system prompt
+4. **Set System Prompt:** Add UXPro system prompt
 5. **Try Autocomplete:** Test tab completion
-6. **Create Commands:** Add custom UXPRo commands
+6. **Create Commands:** Add custom UXPro commands
 7. **Share Config:** Add to version control
 
 ## Additional Resources
@@ -472,7 +472,7 @@ git commit -m "Add Continue.dev configuration for UXPRo"
 - [Continue Documentation](https://docs.continue.dev/)
 - [GitHub Repository](https://github.com/continuedev/continue)
 - [Configuration Guide](https://docs.continue.dev/customization/config)
-- [UXPRo System Prompt](../../core/UIUX-SYSTEM-PROMPT.md)
+- [UXPro System Prompt](../../core/UIUX-SYSTEM-PROMPT.md)
 - [Project README](../../README.md)
 
 ## Support

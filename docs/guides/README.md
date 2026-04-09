@@ -1,6 +1,6 @@
-# Installation Guides for UXPRo
+# Installation Guides for UXPro
 
-This directory contains platform-specific installation guides for integrating the UXPRo system prompt into various AI-powered development environments.
+This directory contains platform-specific installation guides for integrating the UXPro system prompt into various AI-powered development environments.
 
 ## Available Guides
 
@@ -44,14 +44,14 @@ This directory contains platform-specific installation guides for integrating th
 
 Choose your platform above and follow the step-by-step installation guide. Each guide includes:
 - **Installation Steps** - How to set up the tool
-- **Configuration** - How to integrate UXPRo system prompt
+- **Configuration** - How to integrate UXPro system prompt
 - **Verification** - How to confirm it's working
 - **Troubleshooting** - Common issues and solutions
 - **Next Steps** - What to do after installation
 
-## What is UXPRo?
+## What is UXPro?
 
-UXPRo is a comprehensive system prompt that guides AI assistants through professional UI/UX design and development workflows. It includes:
+UXPro is a comprehensive system prompt that guides AI assistants through professional UI/UX design and development workflows. It includes:
 
 - Design system documentation
 - Component patterns and best practices

@@ -60,7 +60,7 @@ Create `.copilot/config.json` in project root:
     "inlineSuggestions": true
   },
   "projectContext": {
-    "description": "UXPRo - Comprehensive UI/UX Design System",
+    "description": "UXPro - Comprehensive UI/UX Design System",
     "includePaths": [
       "core/",
       "src/",
@@ -74,13 +74,13 @@ Create `.copilot/config.json` in project root:
       "build/"
     ]
   },
-  "customInstructions": "Use UXPRo design patterns. Include TypeScript types. Add JSDoc comments. Follow accessibility standards."
+  "customInstructions": "Use UXPro design patterns. Include TypeScript types. Add JSDoc comments. Follow accessibility standards."
 }
 ```
 
 ### Step 5: Set Custom Instructions
 
-To guide Copilot toward UXPRo patterns:
+To guide Copilot toward UXPro patterns:
 
 1. Open VS Code Settings (Ctrl+, or Cmd+,)
 2. Search "Copilot"
@@ -88,8 +88,8 @@ To guide Copilot toward UXPRo patterns:
 4. Add instructions:
 
 ```
-You are assisting with the UXPRo design system project. Follow these guidelines:
-- Reference the UXPRo design system at core/UIUX-SYSTEM-PROMPT.md
+You are assisting with the UXPro design system project. Follow these guidelines:
+- Reference the UXPro design system at core/UIUX-SYSTEM-PROMPT.md
 - Include TypeScript types in all code
 - Add comprehensive JSDoc comments
 - Prioritize accessibility (WCAG 2.1 AA)
@@ -100,7 +100,7 @@ You are assisting with the UXPRo design system project. Follow these guidelines:
 ### Step 6: Verify Installation
 
 1. Open Copilot Chat (Ctrl+Shift+I or Cmd+Shift+I)
-2. Type: "What is the UXPRo design system?"
+2. Type: "What is the UXPro design system?"
 3. Copilot should provide general information
 4. Try: "Generate a Button component"
 5. Check that suggestions follow your project patterns
@@ -139,9 +139,9 @@ Create `.copilot/config.json`:
     "codeCompletion": true
   },
   "projectContext": {
-    "description": "UXPRo Design System",
+    "description": "UXPro Design System",
     "includePaths": ["core/", "src/", "components/"],
-    "customInstructions": "Follow UXPRo patterns. Include types. Add JSDoc."
+    "customInstructions": "Follow UXPro patterns. Include types. Add JSDoc."
   }
 }
 ```
@@ -166,9 +166,9 @@ Create `.copilot/config.json`:
 
 While Copilot doesn't directly load system prompts like Claude, you can:
 
-1. Reference UXPRo in comments:
+1. Reference UXPro in comments:
    ```javascript
-   // Generate Button component following UXPRo patterns
+   // Generate Button component following UXPro patterns
    ```
 
 2. Use Copilot Chat with full context:
@@ -190,7 +190,7 @@ While Copilot doesn't directly load system prompts like Claude, you can:
 Create `.copilot/copilot-instructions.md`:
 
 ```markdown
-# UXPRo Project Guidelines for Copilot
+# UXPro Project Guidelines for Copilot
 
 ## Code Generation Rules
 
@@ -200,7 +200,7 @@ Create `.copilot/copilot-instructions.md`:
 4. **Accessibility**: Implement WCAG 2.1 AA standards
 5. **Documentation**: Include JSDoc for all functions
 6. **Testing**: Generate unit and integration tests
-7. **Styling**: Use CSS modules or Tailwind following UXPRo
+7. **Styling**: Use CSS modules or Tailwind following UXPro
 
 ## Example Component
 
@@ -248,7 +248,7 @@ Always generate components similar to this structure:
 ### Generate Component
 
 1. Open Copilot Chat (Ctrl+Shift+I or Alt+/)
-2. Type: "Generate a CardComponent for UXPRo with types and documentation"
+2. Type: "Generate a CardComponent for UXPro with types and documentation"
 3. Review suggestion
 4. Copy to your file
 
@@ -281,7 +281,7 @@ Always generate components similar to this structure:
 
 2. **Include Context:**
    - Reference patterns in your codebase
-   - Example: `// Following UXPRo patterns, create...`
+   - Example: `// Following UXPro patterns, create...`
 
 3. **Be Specific:**
    - Include requirements: accessibility, styling, props
@@ -385,7 +385,7 @@ Consider using alongside:
 
 1. **Install Extension:** Complete installation for your IDE
 2. **Authenticate:** Connect GitHub account
-3. **Set Instructions:** Add custom UXPRo guidelines
+3. **Set Instructions:** Add custom UXPro guidelines
 4. **Try Completion:** Generate sample code
 5. **Explore Chat:** Use Copilot Chat for complex tasks
 6. **Refine Instructions:** Adjust as needed
@@ -397,7 +397,7 @@ Consider using alongside:
 - [Copilot Documentation](https://docs.github.com/en/copilot)
 - [VS Code Copilot Guide](https://code.visualstudio.com/docs/copilot/overview)
 - [Best Practices Guide](https://github.blog/2023-05-17-how-to-use-github-copilot-effectively/)
-- [UXPRo System Prompt](../../core/UIUX-SYSTEM-PROMPT.md)
+- [UXPro System Prompt](../../core/UIUX-SYSTEM-PROMPT.md)
 - [Project README](../../README.md)
 
 ## Support
@@ -406,7 +406,7 @@ For issues related to:
 - **GitHub Copilot:** Visit [GitHub Support](https://github.com/support)
 - **Subscriptions:** See [Copilot Pricing](https://github.com/features/copilot#pricing)
 - **IDE Issues:** Check VS Code or JetBrains documentation
-- **UXPRo Integration:** Review this guide or contact your team
+- **UXPro Integration:** Review this guide or contact your team
 
 ## Note on Model Limitations
 

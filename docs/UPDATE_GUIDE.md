@@ -1,8 +1,8 @@
-# UXPRo Update Guide
+# UXPro Update Guide
 
 ## Quick Start: Check for Updates (1 Minute)
 
-1. Find the `VERSION.json` file in the [UXPRo GitHub repository](https://github.com/s2sys/uxpro)
+1. Find the `VERSION.json` file in the [UXPro GitHub repository](https://github.com/s2sys/uxpro)
 2. Check the `version` field
 3. Compare it with your local version (check the prompt file or `VERSION.json` in your project)
 4. If numbers don't match, download the latest files from the repository
@@ -11,7 +11,7 @@
 
 ## Understanding Version Numbers
 
-UXPRo uses **Semantic Versioning (SemVer)**: `MAJOR.MINOR.PATCH`
+UXPro uses **Semantic Versioning (SemVer)**: `MAJOR.MINOR.PATCH`
 
 ### MAJOR Version (e.g., 1.0.0 → 2.0.0)
 **What it means:** Breaking changes that require updates to your code
@@ -111,7 +111,7 @@ diff -u UIUX-SYSTEM-PROMPT.md.backup UIUX-SYSTEM-PROMPT.md
 #### Step 6: Commit Changes
 ```bash
 git add UIUX-SYSTEM-PROMPT.md design-tokens.css VERSION.json
-git commit -m "chore: Update UXPRo to v2.1.0
+git commit -m "chore: Update UXPro to v2.1.0
 
 - Add 10 new design sections (micro-interactions through advanced visualization)
 - Update design tokens with new color palettes

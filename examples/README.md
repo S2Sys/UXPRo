@@ -1,15 +1,15 @@
-# UXPRo Examples
+# UXPro Examples
 
-Welcome to the UXPRo examples directory! This folder contains practical, working examples demonstrating the UXPRo design system in action.
+Welcome to the UXPro examples directory! This folder contains practical, working examples demonstrating the UXPro design system in action.
 
 ## Overview
 
-These examples showcase how to implement UXPRo design rules, components, patterns, and full applications. Each example is production-ready and fully compliant with WCAG 2.1 AA accessibility standards.
+These examples showcase how to implement UXPro design rules, components, patterns, and full applications. Each example is production-ready and fully compliant with WCAG 2.1 AA accessibility standards.
 
 ## What's Included
 
 ### 📦 Components
-Basic UI components built with UXPRo design rules.
+Basic UI components built with UXPro design rules.
 
 - **form-example.html** - Complete form with inputs, labels, error states, and validation feedback
 - Form field patterns
@@ -41,7 +41,7 @@ Complete application layouts and interfaces.
 
 **Learn:** Complex layouts, navigation, information hierarchy, complete UI systems
 
-## Key UXPRo Rules Demonstrated
+## Key UXPro Rules Demonstrated
 
 Every example includes these critical design system rules:
 
@@ -157,7 +157,7 @@ Open any HTML file in your browser to see the example in action. View the source
 
 ### 2. **Copy & Customize**
 - Copy entire components or patterns into your project
-- Update colors and spacing to match your brand (if using UXPRo elsewhere)
+- Update colors and spacing to match your brand (if using UXPro elsewhere)
 - Keep all ARIA labels and semantic HTML
 - Maintain accessibility features
 
@@ -248,7 +248,7 @@ Example:
 ### Q: Can I use these examples in my project?
 **A:** Absolutely! All examples are production-ready. Copy, modify, and use them freely.
 
-### Q: Do I need to include the full UXPRo design system?
+### Q: Do I need to include the full UXPro design system?
 **A:** No. These examples are self-contained with all necessary tokens and styles included.
 
 ### Q: How do I adapt these for my brand?
@@ -276,13 +276,13 @@ Example:
 
 If you need examples for specific patterns not included here:
 
-1. Check the [main UXPRo documentation](../README.md)
+1. Check the [main UXPro documentation](../README.md)
 2. Review the complete [UIUX-MASTER-PROMPT-SYSTEM.md](../core/UIUX-MASTER-PROMPT-SYSTEM.md)
 3. See [CONTRIBUTING.md](../CONTRIBUTING.md) for contribution guidelines
 
 ## Resources
 
-- [Main UXPRo README](../README.md) - Overview and quick start
+- [Main UXPro README](../README.md) - Overview and quick start
 - [UIUX-SYSTEM-PROMPT.md](../core/UIUX-SYSTEM-PROMPT.md) - Design system rules
 - [UIUX-MASTER-PROMPT-SYSTEM.md](../core/UIUX-MASTER-PROMPT-SYSTEM.md) - Complete 29-section system
 - [UPDATE_GUIDE.md](../UPDATE_GUIDE.md) - Version tracking and updates

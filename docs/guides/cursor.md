@@ -127,7 +127,7 @@ If Cursor doesn't auto-load from file path:
 
 1. Create a test prompt:
    - Press `Ctrl+K` (Windows/Linux) or `Cmd+K` (macOS)
-   - Type: "What is the UXPRo design system?"
+   - Type: "What is the UXPro design system?"
    - Press Enter
 
 2. Cursor should respond with information from the system prompt
@@ -176,7 +176,7 @@ If using custom instructions directly:
 
 2. **Test AI Features:**
    - Press `Ctrl+K` or `Cmd+K`
-   - Ask: "Explain the accessibility guidelines in UXPRo"
+   - Ask: "Explain the accessibility guidelines in UXPro"
    - Should reference system prompt content
 
 3. **Verify System Prompt:**
@@ -187,7 +187,7 @@ If using custom instructions directly:
 4. **Check File References:**
    - Navigate to a component file
    - Press `Ctrl+K` or `Cmd+K`
-   - Ask: "How does this file fit into the UXPRo design system?"
+   - Ask: "How does this file fit into the UXPro design system?"
    - Should provide context-aware response
 
 ## Common Workflows
@@ -196,7 +196,7 @@ If using custom instructions directly:
 
 1. Open Cursor in your project
 2. Press `Ctrl+K` or `Cmd+K`
-3. Type: "Generate a Button component following UXPRo design patterns"
+3. Type: "Generate a Button component following UXPro design patterns"
 4. Review and accept the generated code
 
 ### Fix Code with AI
@@ -295,7 +295,7 @@ Add `.cursorconfig` to version control:
 
 ```bash
 git add .cursorconfig
-git commit -m "Add Cursor configuration for UXPRo"
+git commit -m "Add Cursor configuration for UXPro"
 ```
 
 Team members can now clone and use the same configuration.
@@ -313,12 +313,12 @@ Team members can now clone and use the same configuration.
 - [Cursor Official Documentation](https://docs.cursor.sh/)
 - [Cursor Settings Guide](https://docs.cursor.sh/settings)
 - [Cursor API Integration](https://docs.cursor.sh/chat/custom-models)
-- [UXPRo System Prompt](../../core/UIUX-SYSTEM-PROMPT.md)
+- [UXPro System Prompt](../../core/UIUX-SYSTEM-PROMPT.md)
 - [Project README](../../README.md)
 
 ## Support
 
 For issues related to:
 - **Cursor:** Visit [support.cursor.sh](https://support.cursor.sh/) or use in-app help
-- **UXPRo Integration:** Review this guide or contact your project team
+- **UXPro Integration:** Review this guide or contact your project team
 - **API Issues:** Check [Anthropic Support](https://support.anthropic.com/)

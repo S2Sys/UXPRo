@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ################################################################################
-# UXPRo Quick Start Setup Script
+# UXPro Quick Start Setup Script
 #
-# This script automates the setup of the UXPRo design system for AI coding
+# This script automates the setup of the UXPro design system for AI coding
 # assistants (Claude Code, Cursor, Windsurf, Cline, etc.)
 #
 # Features:
@@ -44,7 +44,7 @@ detect_os() {
 print_header() {
     echo ""
     echo -e "${CYAN}╔════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║                   UXPRo Quick Start Setup                   ║${NC}"
+    echo -e "${CYAN}║                   UXPro Quick Start Setup                   ║${NC}"
     echo -e "${CYAN}║            Automated Setup for AI Design System             ║${NC}"
     echo -e "${CYAN}╚════════════════════════════════════════════════════════════╝${NC}"
     echo ""
@@ -79,7 +79,7 @@ print_info() {
 
 # Auto-detect project root
 detect_project_root() {
-    # Try to find UXPRo root by looking for VERSION.json
+    # Try to find UXPro root by looking for VERSION.json
     if [[ -f "VERSION.json" ]]; then
         echo "$(pwd)"
     elif [[ -f "setup/README.md" ]]; then
@@ -444,24 +444,24 @@ main() {
 
     if [[ -z "$DETECTED_ROOT" ]]; then
         print_section "Project Detection"
-        print_error "Could not auto-detect UXPRo root directory"
-        print_info "Please make sure you run this script from the UXPRo directory"
+        print_error "Could not auto-detect UXPro root directory"
+        print_info "Please make sure you run this script from the UXPro directory"
         echo ""
-        read -p "Enter the path to UXPRo root: " UXPRO_ROOT
+        read -p "Enter the path to UXPro root: " UXPRO_ROOT
     else
         UXPRO_ROOT="$DETECTED_ROOT"
-        print_info "Detected UXPRo root: $UXPRO_ROOT"
+        print_info "Detected UXPro root: $UXPRO_ROOT"
     fi
 
     # Validate paths
     if ! validate_uxpro_root "$UXPRO_ROOT"; then
         print_section "Error"
-        print_error "Invalid UXPRo root: $UXPRO_ROOT"
+        print_error "Invalid UXPro root: $UXPRO_ROOT"
         print_info "This directory should contain VERSION.json, core/, and setup/ directories"
         exit 1
     fi
 
-    print_success "UXPRo root validated: $UXPRO_ROOT"
+    print_success "UXPro root validated: $UXPRO_ROOT"
     echo ""
 
     # Show menu

@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UXPRo Form Example - Contact Form</title>
+  <title>UXPro Form Example - Contact Form</title>
   <style>
     /* ============================================================================
-       UXPRo Design Tokens - CSS Variables
+       UXPro Design Tokens - CSS Variables
        ============================================================================ */
     :root {
       /* Light Mode Colors */
@@ -149,7 +149,7 @@
       margin-bottom: var(--space-6);
     }
 
-    /* UXPRo RULE: Form labels positioned above inputs */
+    /* UXPro RULE: Form labels positioned above inputs */
     .form-label {
       display: block;
       font-size: var(--text-sm);
@@ -159,8 +159,8 @@
       /* ACCESSIBILITY: Visible label linked to input via htmlFor */
     }
 
-    /* UXPRo RULE: Input height minimum 44px (touch target) */
-    /* UXPRo RULE: Border 1px solid, rounded 6px (md) */
+    /* UXPro RULE: Input height minimum 44px (touch target) */
+    /* UXPro RULE: Border 1px solid, rounded 6px (md) */
     .form-input,
     .form-select,
     .form-textarea {
@@ -176,14 +176,14 @@
       min-height: 44px; /* TOUCH TARGET */
     }
 
-    /* UXPRo RULE: Hover state */
+    /* UXPro RULE: Hover state */
     .form-input:hover,
     .form-select:hover,
     .form-textarea:hover {
       border-color: var(--border-strong);
     }
 
-    /* UXPRo RULE: Focus state - visible outline (2px solid accent, 2px offset) */
+    /* UXPro RULE: Focus state - visible outline (2px solid accent, 2px offset) */
     .form-input:focus,
     .form-select:focus,
     .form-textarea:focus {
@@ -192,7 +192,7 @@
       box-shadow: 0 0 0 3px var(--color-accent-light);
     }
 
-    /* UXPRo RULE: Disabled state - 50% opacity */
+    /* UXPro RULE: Disabled state - 50% opacity */
     .form-input:disabled,
     .form-select:disabled,
     .form-textarea:disabled {
@@ -231,7 +231,7 @@
       margin-top: var(--space-2);
       font-weight: 500;
       line-height: 1.4;
-      /* UXPRo RULE: Error color must have 4.5:1 contrast */
+      /* UXPro RULE: Error color must have 4.5:1 contrast */
     }
 
     /* Success text - shown when validation passes */
@@ -286,7 +286,7 @@
       cursor: pointer;
     }
 
-    /* UXPRo RULE: Touch target minimum 44px (checkbox/radio + label) */
+    /* UXPro RULE: Touch target minimum 44px (checkbox/radio + label) */
     .form-checkbox input[type="checkbox"],
     .form-radio input[type="radio"] {
       width: 20px;
@@ -313,8 +313,8 @@
       flex-wrap: wrap;
     }
 
-    /* UXPRo RULE: Button height minimum 44px (touch target) */
-    /* UXPRo RULE: Button hierarchy - primary filled, secondary outlined */
+    /* UXPro RULE: Button height minimum 44px (touch target) */
+    /* UXPro RULE: Button hierarchy - primary filled, secondary outlined */
     .form-button {
       padding: var(--space-3) var(--space-6);
       font-size: var(--text-base);

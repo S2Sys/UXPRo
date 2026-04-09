@@ -3280,7 +3280,7 @@ grep --color=always "^--" design-tokens.css | sort
 ### Step 7: Commit and Deploy
 ```bash
 git add UIUX-SYSTEM-PROMPT.md design-tokens.css VERSION.json
-git commit -m "chore: Update UXPRo to v${LATEST_VERSION}
+git commit -m "chore: Update UXPro to v${LATEST_VERSION}
 
 - [Describe major changes]
 - [List new features or fixes]

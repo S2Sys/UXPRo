@@ -1,6 +1,6 @@
-# Contributing to UXPRo
+# Contributing to UXPro
 
-Thank you for your interest in contributing to UXPRo! We welcome contributions from the community to help make this design system better for everyone. Whether you're fixing bugs, adding new patterns, improving documentation, or enhancing the design system, your help is appreciated.
+Thank you for your interest in contributing to UXPro! We welcome contributions from the community to help make this design system better for everyone. Whether you're fixing bugs, adding new patterns, improving documentation, or enhancing the design system, your help is appreciated.
 
 ## Types of Contributions
 
@@ -21,7 +21,7 @@ Expand our library of reusable components and interaction patterns.
 - Real-world use cases and applications
 
 ### Documentation Improvements
-Help us make UXPRo easier to understand and use.
+Help us make UXPro easier to understand and use.
 - Platform guides and setup instructions
 - Usage examples and code samples
 - Clarifications to existing guidelines
@@ -42,7 +42,7 @@ Before you start contributing, please review these guidelines to ensure quality 
 
 ### Design System Compliance
 
-All contributions must follow the UXPRo design system:
+All contributions must follow the UXPro design system:
 - **Color Rules** - Use semantic color tokens from `core/design-tokens.css`
 - **Typography** - Follow established font sizes, weights, and line heights
 - **Spacing** - Adhere to the 8-point grid system
@@ -123,7 +123,7 @@ git commit -m "feat: add semantic spacing tokens for gaps and margins"
 Here's where different types of contributions go:
 
 ```
-UXPRo/
+UXPro/
 ├── core/                              # Core design system
 │   ├── UIUX-SYSTEM-PROMPT.md         # Quick reference
 │   ├── UIUX-MASTER-PROMPT-SYSTEM.md  # Complete guidelines (29 sections)
@@ -205,8 +205,8 @@ Follow these steps to contribute:
 ### 1. Fork the Repository
 ```bash
 # Click "Fork" on GitHub
-git clone https://github.com/YOUR-USERNAME/UXPRo.git
-cd UXPRo
+git clone https://github.com/YOUR-USERNAME/UXPro.git
+cd UXPro
 ```
 
 ### 2. Create a Feature Branch
@@ -304,6 +304,6 @@ We're here to help! Reach out in these ways:
 
 ---
 
-Thank you for contributing to UXPRo! Your help makes this design system better for everyone. Happy coding!
+Thank you for contributing to UXPro! Your help makes this design system better for everyone. Happy coding!
 
 **Quick Links:** [README](./README.md) • [System Prompt](./core/UIUX-SYSTEM-PROMPT.md) • [Examples](./examples/) • [Setup](./setup/README.md) • [Issues](./docs/) • [Updates](./docs/UPDATE_GUIDE.md)

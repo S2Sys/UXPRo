@@ -1,6 +1,6 @@
-# UXPRo Patterns Examples
+# UXPro Patterns Examples
 
-This directory contains common UI/UX patterns built with the UXPRo design system.
+This directory contains common UI/UX patterns built with the UXPro design system.
 
 ## Overview
 
@@ -20,7 +20,7 @@ Patterns are reusable solutions to common UI problems. Each example demonstrates
 - Multi-row and multi-column arrangements
 - Alignment and distribution techniques
 
-#### UXPRo Rules Applied
+#### UXPro Rules Applied
 - ✅ Mobile-first approach (base: 320px)
 - ✅ Responsive breakpoints: sm (480px), md (768px), lg (1024px), xl (1280px), 2xl (1536px)
 - ✅ 8-point spacing grid (gaps and padding use multiples of 8)
@@ -297,7 +297,7 @@ function ResponsiveGrid({ columns = 3, gap = 16, children }) {
 
 ### CSS Framework Integration
 If using Tailwind, Bootstrap, or similar:
-- Match breakpoints to UXPRo values
+- Match breakpoints to UXPro values
 - Use responsive utilities (md:, lg:, etc.)
 - Maintain semantic column widths
 - Keep 8-point spacing grid alignment

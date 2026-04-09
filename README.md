@@ -1,4 +1,4 @@
-# UXPRo: Universal UI/UX Design System
+# UXPro: Universal UI/UX Design System
 
 [![Version](https://img.shields.io/badge/version-2.3.0-blue)](./core/VERSION.json)
 [![Compatibility](https://img.shields.io/badge/compatible%20with-Claude%20Code%2C%20Cursor%2C%20Windsurf%2C%20Cline-green)](./docs/guides/)
@@ -79,7 +79,7 @@ Or jump to the **[setup guide](./setup/README.md)** for automated setup.
 
 ## 💡 What You Can Do
 
-With UXPRo, you can:
+With UXPro, you can:
 
 - Generate accessible UI components that pass WCAG audits
 - Create responsive designs that work across all screen sizes (320px+)
@@ -120,7 +120,7 @@ With UXPRo, you can:
 
 ## 📄 License
 
-UXPRo is provided as-is for use with AI coding assistants. Feel free to use and modify for your projects.
+UXPro is provided as-is for use with AI coding assistants. Feel free to use and modify for your projects.
 
 ---
 

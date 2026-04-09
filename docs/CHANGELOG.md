@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the UXPRo Design System will be documented in this file.
+All notable changes to the UXPro Design System will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -484,7 +484,7 @@ Tested and documented for:
 
 ### Added
 
-- Initial release of UXPRo Design System
+- Initial release of UXPro Design System
 - Basic design guidelines and principles
 - Foundation for AI-powered UI/UX generation
 

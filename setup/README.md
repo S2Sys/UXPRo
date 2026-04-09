@@ -1,6 +1,6 @@
-# UXPRo Setup Guide
+# UXPro Setup Guide
 
-Welcome! This guide will help you set up the UXPRo design system in your project. Choose between **automated setup** (recommended) or **manual setup** (30 seconds).
+Welcome! This guide will help you set up the UXPro design system in your project. Choose between **automated setup** (recommended) or **manual setup** (30 seconds).
 
 ## 🚀 Quick Setup Options
 
@@ -71,7 +71,7 @@ Choose your tool:
 For web projects using CSS, copy the design tokens file to your project:
 
 ```bash
-# From the UXPRo directory
+# From the UXPro directory
 cp core/design-tokens.css /path/to/your/project/src/
 ```
 
@@ -184,10 +184,10 @@ bash setup/quick-start.sh
 **Problem:** Auto-detected paths are incorrect
 
 **Solution:**
-1. Run script from the project root: `cd /path/to/UXPRo && bash setup/quick-start.sh`
+1. Run script from the project root: `cd /path/to/UXPro && bash setup/quick-start.sh`
 2. Or manually set the paths:
    ```bash
-   UXPRO_ROOT=/path/to/UXPRo bash setup/quick-start.sh
+   UXPRO_ROOT=/path/to/UXPro bash setup/quick-start.sh
    ```
 
 ### Different Results on Windows vs Mac/Linux

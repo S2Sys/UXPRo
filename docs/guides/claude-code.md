@@ -61,7 +61,7 @@ Edit `.claude-code.json` and add the following configuration:
 {
   "version": "1.0.0",
   "systemPrompt": "./core/UIUX-SYSTEM-PROMPT.md",
-  "projectName": "UXPRo",
+  "projectName": "UXPro",
   "codeContext": {
     "includePaths": [
       "core/",
@@ -86,7 +86,7 @@ Edit `.claude-code.json` and add the following configuration:
 
 ### Step 4: Integrate the System Prompt
 
-Copy the UXPRo system prompt into your Claude Code initialization:
+Copy the UXPro system prompt into your Claude Code initialization:
 
 ```bash
 claude-code init --system-prompt-file core/UIUX-SYSTEM-PROMPT.md
@@ -119,7 +119,7 @@ This should load the project context and respond with information about the syst
 
 ### System Prompt Integration
 
-The UXPRo system prompt is located at:
+The UXPro system prompt is located at:
 ```
 core/UIUX-SYSTEM-PROMPT.md
 ```
@@ -278,12 +278,12 @@ claude-code init --config .claude-code.dev.json --system-prompt-file core/DEV-SY
 
 - [Anthropic API Documentation](https://docs.anthropic.com/)
 - [Claude Code Repository](https://github.com/anthropic/claude-code)
-- [UXPRo System Prompt](../../core/UIUX-SYSTEM-PROMPT.md)
+- [UXPro System Prompt](../../core/UIUX-SYSTEM-PROMPT.md)
 - [Project README](../../README.md)
 
 ## Support
 
 For issues related to:
 - **Claude Code:** Check [Anthropic's support](https://support.anthropic.com/)
-- **UXPRo Integration:** Review this guide or contact your project team
+- **UXPro Integration:** Review this guide or contact your project team
 - **API Keys:** Visit [console.anthropic.com](https://console.anthropic.com/)

@@ -1,6 +1,6 @@
 # v2.3.0 Implementation Summary
 
-This document summarizes the complete implementation of UXPRo v2.3.0, including three new comprehensive design system sections, extended tokens, and updated documentation.
+This document summarizes the complete implementation of UXPro v2.3.0, including three new comprehensive design system sections, extended tokens, and updated documentation.
 
 ## What Was Added
 

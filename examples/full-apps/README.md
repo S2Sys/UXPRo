@@ -1,6 +1,6 @@
-# UXPRo Full App Examples
+# UXPro Full App Examples
 
-This directory contains complete, production-ready application layouts demonstrating the UXPRo design system at scale.
+This directory contains complete, production-ready application layouts demonstrating the UXPro design system at scale.
 
 ## Overview
 
@@ -22,7 +22,7 @@ Full app examples show how to integrate multiple patterns, components, and desig
 - Responsive multi-breakpoint behavior
 - Dark mode support
 
-#### UXPRo Rules Applied
+#### UXPro Rules Applied
 - ✅ Full responsive design (320px to 1536px+)
 - ✅ Z-index scale (sticky: 200, modal: 500, etc.)
 - ✅ 8-point spacing grid throughout

@@ -107,7 +107,7 @@ Or via Command Palette:
 
 1. Open any code file in VS Code
 2. Click Cline icon in Activity Bar
-3. Start a conversation: "What design patterns are in UXPRo?"
+3. Start a conversation: "What design patterns are in UXPro?"
 4. Cline should respond with context from the system prompt
 
 ## Installation Steps (JetBrains IDEs)
@@ -175,7 +175,7 @@ Create `.cline-config.json` in project root:
 
 1. Right-click any file in project
 2. Select "Cline: Ask about this file"
-3. Type: "Explain how this fits into UXPRo"
+3. Type: "Explain how this fits into UXPro"
 4. Cline responds with context
 
 ## Configuration Details
@@ -214,13 +214,13 @@ core/UIUX-SYSTEM-PROMPT.md
 
 2. **Verify System Prompt:**
    - Open Cline chat
-   - Ask: "What accessibility standards are in UXPRo?"
+   - Ask: "What accessibility standards are in UXPro?"
    - Should reference system prompt content
 
 3. **Test File Context:**
    - Open a component file
    - Right-click → "Cline: Ask about this file"
-   - Ask: "Does this follow UXPRo patterns?"
+   - Ask: "Does this follow UXPro patterns?"
    - Should analyze the file
 
 4. **Check Model:**
@@ -233,7 +233,7 @@ core/UIUX-SYSTEM-PROMPT.md
 ### Code Generation with Context
 
 1. Click Cline in Activity Bar (VS Code) or Tool Window (JetBrains)
-2. Type: "Generate a Card component following UXPRo specifications"
+2. Type: "Generate a Card component following UXPro specifications"
 3. Cline creates component with types, docs, and examples
 4. Review and accept changes
 
@@ -241,7 +241,7 @@ core/UIUX-SYSTEM-PROMPT.md
 
 1. Select problematic code
 2. Right-click → "Cline: Refactor Selection"
-3. Or open Cline and paste code with "Refactor this to follow UXPRo patterns"
+3. Or open Cline and paste code with "Refactor this to follow UXPro patterns"
 4. Cline suggests improvements
 5. Accept changes or iterate
 
@@ -249,7 +249,7 @@ core/UIUX-SYSTEM-PROMPT.md
 
 1. Open Cline
 2. Ask: "Explain the folder structure of this project"
-3. Or: "What components are missing from UXPRo specification?"
+3. Or: "What components are missing from UXPro specification?"
 4. Cline analyzes and provides summary
 
 ### Generate Tests
@@ -291,7 +291,7 @@ core/UIUX-SYSTEM-PROMPT.md
 **Solution:**
 1. Verify system prompt is set correctly
 2. Include more context in your question
-3. Ask Cline to "Use the UXPRo system prompt for this"
+3. Ask Cline to "Use the UXPro system prompt for this"
 4. Check that include paths are correct in config
 
 ### Issue: "Response is slow or times out"
@@ -329,7 +329,7 @@ Add to `.cline-config.json`:
   "customInstructions": {
     "general": "Always prioritize accessibility and performance",
     "codeStyle": "Use TypeScript strict mode",
-    "naming": "Follow UXPRo naming conventions"
+    "naming": "Follow UXPro naming conventions"
   }
 }
 ```
@@ -338,7 +338,7 @@ Add to `.cline-config.json`:
 
 1. Open Cline chat
 2. Paste multiple file contents with labels
-3. Ask: "Refactor these files to work together following UXPRo patterns"
+3. Ask: "Refactor these files to work together following UXPro patterns"
 4. Cline suggests coordinated changes
 
 ### Team Configuration
@@ -347,7 +347,7 @@ Share configuration with team:
 
 ```bash
 git add .cline-config.json
-git commit -m "Add Cline configuration for UXPRo"
+git commit -m "Add Cline configuration for UXPro"
 ```
 
 Team members can clone and use same setup.
@@ -368,7 +368,7 @@ Team members can clone and use same setup.
 
 1. **Install Extension:** Complete installation for your IDE
 2. **Configure API:** Add your Anthropic API key
-3. **Set System Prompt:** Configure UXPRo system prompt
+3. **Set System Prompt:** Configure UXPro system prompt
 4. **Try Examples:** Start with simple queries before complex tasks
 5. **Customize Shortcuts:** Set up keyboard shortcuts for efficiency
 6. **Share with Team:** Add config to version control
@@ -379,7 +379,7 @@ Team members can clone and use same setup.
 - [Cline Documentation](https://github.com/cline/cline/wiki)
 - [VS Code Extension Docs](https://marketplace.visualstudio.com/items?itemName=saoudrizwan.cline)
 - [JetBrains Plugin Docs](https://plugins.jetbrains.com/plugin/22707-cline)
-- [UXPRo System Prompt](../../core/UIUX-SYSTEM-PROMPT.md)
+- [UXPro System Prompt](../../core/UIUX-SYSTEM-PROMPT.md)
 - [Project README](../../README.md)
 
 ## Support
@@ -389,4 +389,4 @@ For issues related to:
 - **VS Code Integration:** See [VS Code docs](https://code.visualstudio.com/docs)
 - **JetBrains Integration:** See [JetBrains docs](https://www.jetbrains.com/help/)
 - **API Keys:** Visit [console.anthropic.com](https://console.anthropic.com/)
-- **UXPRo Integration:** Review this guide or contact your team
+- **UXPro Integration:** Review this guide or contact your team

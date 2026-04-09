@@ -1,10 +1,10 @@
-# UXPRo Components Examples
+# UXPro Components Examples
 
-This directory contains foundational UI component examples built with the UXPRo design system.
+This directory contains foundational UI component examples built with the UXPro design system.
 
 ## Overview
 
-Components are the building blocks of user interfaces. Each example demonstrates a complete, working component with all UXPRo design rules applied.
+Components are the building blocks of user interfaces. Each example demonstrates a complete, working component with all UXPro design rules applied.
 
 ## Components Included
 
@@ -22,7 +22,7 @@ Components are the building blocks of user interfaces. Each example demonstrates
 - Disabled states
 - Focus indicators
 
-#### UXPRo Rules Applied
+#### UXPro Rules Applied
 - ✅ Input height: 44px minimum (44×44px touch target)
 - ✅ 8-point spacing grid for labels, inputs, and helper text
 - ✅ WCAG 2.1 AA contrast (4.5:1 for labels and error text)
@@ -239,7 +239,7 @@ All components adapt to dark mode:
 
 ## Animation & Interactions
 
-All animations follow UXPRo rules:
+All animations follow UXPro rules:
 
 - **Durations:** 200ms normal (fast user feedback)
 - **Easing:** ease-out (default cubic-bezier(0, 0, 0.2, 1))
