@@ -7681,4 +7681,832 @@ All state management UIs should follow these guidelines:
 
 ---
 
+## SECTION 30: FORM BUILDER PATTERNS
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Dynamic forms are essential for modern web applications. This section covers comprehensive patterns for building flexible, accessible, and maintainable form systems. From basic conditional field visibility to advanced multi-step wizards with complex dependencies, these patterns scale from simple contact forms to enterprise-grade data collection systems.
+
+### 30.1 Basic Dynamic Forms: Conditional Field Visibility
+
+**Purpose:** Show or hide form fields based on user selections without page refresh. This fundamental pattern improves UX by reducing cognitive load and displaying only relevant fields.
+
+**Key Principles:**
+- Use CSS transitions for smooth visibility changes
+- Preserve form data when hiding fields
+- Clear error states when fields are hidden
+- Announce visibility changes to screen readers
+- Maintain keyboard focus management
+
+**HTML Structure with Conditional Sections:**
+
+```html
+<form id="deliveryForm">
+  <div class="form-group">
+    <div class="checkbox-group">
+      <input 
+        type="checkbox" 
+        id="shipToDifferent" 
+        aria-label="Ship to different address"
+        aria-describedby="shipToDifferent-help"
+      >
+      <label for="shipToDifferent">Ship to different address</label>
+    </div>
+    <small id="shipToDifferent-help">If unchecked, shipping address same as billing</small>
+  </div>
+
+  <fieldset id="addressSection" class="conditional-section hidden" aria-hidden="true">
+    <legend>Shipping Address</legend>
+    <div class="form-group">
+      <label for="street">Street Address *</label>
+      <input type="text" id="street" name="street" required>
+    </div>
+    <div class="form-group">
+      <label for="city">City *</label>
+      <input type="text" id="city" name="city" required>
+    </div>
+    <div class="form-group">
+      <label for="zipCode">ZIP Code *</label>
+      <input type="text" id="zipCode" name="zipCode" pattern="^\d{5}(-\d{4})?$">
+    </div>
+  </fieldset>
+
+  <div class="form-group">
+    <label for="email">Email *</label>
+    <input type="email" id="email" name="email" required>
+  </div>
+  <button type="submit">Submit Order</button>
+</form>
+```
+
+**CSS for Smooth Transitions:**
+
+```css
+.conditional-section {
+  max-height: 1000px;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 300ms ease, max-height 300ms ease;
+  margin-bottom: 24px;
+}
+
+.conditional-section.hidden {
+  max-height: 0;
+  opacity: 0;
+  margin-bottom: 0;
+  pointer-events: none;
+}
+
+.conditional-section fieldset {
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  padding: 16px;
+  background: #F9FAFB;
+}
+```
+
+**JavaScript Toggle with Accessibility:**
+
+```javascript
+const checkbox = document.getElementById('shipToDifferent');
+const section = document.getElementById('addressSection');
+const requiredFields = section.querySelectorAll('input[required]');
+
+function toggleAddressSection() {
+  if (checkbox.checked) {
+    section.classList.remove('hidden');
+    section.setAttribute('aria-hidden', 'false');
+    requiredFields.forEach(field => {
+      field.setAttribute('required', '');
+      field.setAttribute('aria-required', 'true');
+    });
+    announceStatus('Shipping address fields now visible');
+  } else {
+    section.classList.add('hidden');
+    section.setAttribute('aria-hidden', 'true');
+    requiredFields.forEach(field => {
+      field.removeAttribute('required');
+      field.value = '';
+    });
+    announceStatus('Shipping address fields hidden');
+  }
+}
+
+function announceStatus(message) {
+  const ann = document.createElement('div');
+  ann.setAttribute('role', 'status');
+  ann.setAttribute('aria-live', 'polite');
+  ann.className = 'sr-only';
+  ann.textContent = message;
+  document.body.appendChild(ann);
+  setTimeout(() => ann.remove(), 1000);
+}
+
+checkbox.addEventListener('change', toggleAddressSection);
+```
+
+**Accessibility Features:**
+- `aria-hidden` toggles with visibility
+- `aria-required` added/removed with required attribute
+- Screen reader announcements via aria-live region
+- Hidden fields don't prevent form submission
+- Focus management preserved during transitions
+- Labels clearly associated with inputs
+
+**Mobile Considerations:**
+- Touch targets 48x48px minimum
+- Fieldset container uses full width
+- Transitions use GPU acceleration (transform preferred)
+- No hover-only visual indicators
+- Font size 16px+ prevents iOS zoom
+
+---
+
+### 30.2 Advanced Form Systems: Multi-Step Wizards
+
+**Purpose:** Create sophisticated multi-step forms with validation, progress tracking, and complex field interdependencies. Essential for lengthy data collection processes.
+
+**Key Components:**
+
+**Progress Indicator with Step Badges:**
+
+```html
+<div class="progress-bar">
+  <div class="progress-fill" id="progressFill" style="width: 33%"></div>
+</div>
+
+<div class="steps-indicator">
+  <div class="step-badge active" data-step="1" aria-current="step">
+    <div class="step-number">1</div>
+    <span class="step-label">Personal</span>
+  </div>
+  <div class="step-badge" data-step="2">
+    <div class="step-number">2</div>
+    <span class="step-label">Address</span>
+  </div>
+  <div class="step-badge" data-step="3">
+    <div class="step-number">3</div>
+    <span class="step-label">Review</span>
+  </div>
+</div>
+<div style="text-align: center; font-size: 13px;">Step <span id="currentStep">1</span> of 3</div>
+```
+
+**Step Content Areas:**
+
+```html
+<div class="step-content active" data-step="1" role="region" aria-label="Step 1: Personal Information">
+  <h2>Personal Information</h2>
+  <div class="form-group">
+    <label for="firstName">First Name *</label>
+    <input type="text" id="firstName" name="firstName" required aria-describedby="firstName-error">
+    <div class="error-message" id="firstName-error" role="alert"></div>
+  </div>
+  <!-- Additional fields -->
+</div>
+
+<div class="step-content" data-step="2" role="region" aria-label="Step 2: Address Information">
+  <h2>Address</h2>
+  <div class="form-group">
+    <label for="country">Country *</label>
+    <select id="country" name="country" required>
+      <option value="">Select country</option>
+      <option value="US">United States</option>
+      <option value="CA">Canada</option>
+      <option value="UK">United Kingdom</option>
+      <option value="AU">Australia</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="state">State/Province *</label>
+    <select id="state" name="state" required disabled>
+      <option value="">Select state first</option>
+    </select>
+  </div>
+</div>
+
+<div class="step-content" data-step="3" role="region" aria-label="Step 3: Review">
+  <h2>Review Information</h2>
+  <div id="reviewContent"></div>
+</div>
+```
+
+**Country → State Dependency Logic:**
+
+```javascript
+const wizard = {
+  currentStep: 1,
+  data: {},
+  states: {
+    'US': ['California', 'Texas', 'New York', 'Florida'],
+    'CA': ['Ontario', 'Quebec', 'British Columbia'],
+    'UK': ['England', 'Scotland', 'Wales'],
+    'AU': ['New South Wales', 'Victoria', 'Queensland']
+  }
+};
+
+document.getElementById('country').addEventListener('change', function() {
+  const country = this.value;
+  const stateSelect = document.getElementById('state');
+  stateSelect.innerHTML = '<option value="">Select state</option>';
+  
+  if (country && wizard.states[country]) {
+    wizard.states[country].forEach(state => {
+      const option = document.createElement('option');
+      option.value = state;
+      option.textContent = state;
+      stateSelect.appendChild(option);
+    });
+    stateSelect.disabled = false;
+    announceChange(`States for ${country} loaded`);
+  } else {
+    stateSelect.disabled = true;
+  }
+});
+```
+
+**Step Navigation & Validation:**
+
+```javascript
+function validateStep(step) {
+  const fields = document.querySelectorAll(`[data-step="${step}"] input[required], [data-step="${step}"] select[required]`);
+  let isValid = true;
+
+  fields.forEach(field => {
+    if (!field.value.trim()) {
+      isValid = false;
+      field.classList.add('error');
+      const errorEl = document.getElementById(`${field.id}-error`);
+      if (errorEl) {
+        errorEl.textContent = 'This field is required';
+      }
+    } else {
+      field.classList.remove('error');
+    }
+  });
+  return isValid;
+}
+
+function showStep(step) {
+  document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+  document.querySelector(`[data-step="${step}"]`).classList.add('active');
+  
+  document.querySelectorAll('.step-badge').forEach(badge => badge.classList.remove('active'));
+  document.querySelector(`[data-step="${step}"].step-badge`).classList.add('active');
+  document.querySelector(`[data-step="${step}"].step-badge`).setAttribute('aria-current', 'step');
+  
+  document.getElementById('currentStep').textContent = step;
+  document.getElementById('progressFill').style.width = `${(step / 3) * 100}%`;
+  
+  document.getElementById('prevBtn').disabled = step === 1;
+  document.getElementById('nextBtn').textContent = step === 3 ? 'Submit' : 'Next';
+}
+
+document.getElementById('nextBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  if (validateStep(wizard.currentStep)) {
+    wizard.currentStep++;
+    showStep(wizard.currentStep);
+  } else {
+    announceStatus('Please fix errors before continuing');
+  }
+});
+```
+
+**CSS for Multi-Step Layout:**
+
+```css
+.step-content {
+  display: none;
+  animation: fadeIn 300ms ease;
+}
+
+.step-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-badge.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.step-badge.completed {
+  background: #D1E7DD;
+  color: #0F5132;
+}
+```
+
+**Accessibility:**
+- Progress bar with aria-valuenow tracking
+- Step region labels for screen readers
+- Error announcements with role="alert"
+- Validation messages before navigation allowed
+- Review content dynamically generated
+- All transitions announced
+
+---
+
+### 30.3 Field Arrays: Add/Remove Dynamic Fields
+
+**Purpose:** Allow users to add and remove repeated field groups (phone numbers, emails, skills). Critical for variable-length data collection.
+
+**Field Array Implementation:**
+
+```html
+<fieldset id="phoneFieldset" class="field-array">
+  <legend>Contact Phone Numbers</legend>
+  <div class="field-items">
+    <div class="field-item">
+      <input type="tel" name="phone" placeholder="(555) 000-0000" aria-label="Phone number 1" required>
+      <button type="button" class="btn-remove" aria-label="Remove phone 1" disabled>Remove</button>
+    </div>
+  </div>
+  <button type="button" class="btn-add-field" aria-label="Add another phone number">+ Add Phone</button>
+</fieldset>
+```
+
+**CSS for Field Items:**
+
+```css
+.field-array { border: none; padding: 0; margin: 0; }
+
+.field-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.field-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.field-item input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+}
+
+.btn-remove {
+  padding: 10px 16px;
+  background: #EF4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-remove:disabled {
+  background: #D1D5DB;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn-add-field {
+  padding: 10px 16px;
+  background: #10B981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+```
+
+**JavaScript Array Management:**
+
+```javascript
+const fieldArray = document.getElementById('phoneFieldset');
+const fieldItems = fieldArray.querySelector('.field-items');
+const addBtn = fieldArray.querySelector('.btn-add-field');
+let fieldCount = 1;
+
+function updateRemoveButtons() {
+  const items = fieldItems.querySelectorAll('.field-item');
+  items.forEach((item, index) => {
+    const btn = item.querySelector('.btn-remove');
+    btn.disabled = items.length === 1;
+    btn.setAttribute('aria-label', `Remove phone ${index + 1}`);
+    item.querySelector('input').setAttribute('aria-label', `Phone number ${index + 1}`);
+  });
+}
+
+addBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  const newItem = document.createElement('div');
+  newItem.className = 'field-item';
+  fieldCount++;
+  newItem.innerHTML = `
+    <input type="tel" name="phone" placeholder="(555) 000-0000" aria-label="Phone ${fieldCount}">
+    <button type="button" class="btn-remove" aria-label="Remove phone ${fieldCount}">Remove</button>
+  `;
+  fieldItems.appendChild(newItem);
+  
+  newItem.querySelector('.btn-remove').addEventListener('click', (e) => {
+    e.preventDefault();
+    newItem.remove();
+    updateRemoveButtons();
+  });
+  
+  updateRemoveButtons();
+  announceChange(`Phone field ${fieldCount} added`);
+});
+
+fieldArray.querySelectorAll('.btn-remove').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    btn.closest('.field-item').remove();
+    updateRemoveButtons();
+  });
+});
+
+updateRemoveButtons();
+```
+
+**Accessibility:**
+- Dynamic labels updated with count
+- Announce additions to screen readers
+- Remove button disabled when only one item
+- Proper fieldset/legend semantic structure
+- Focus management on new items
+- aria-label patterns consistent
+
+**Mobile Considerations:**
+- Remove button 48x48px touch target
+- Field row breaks to column on small screens
+- Add button full-width on mobile
+- Smooth animations for remove transitions
+- Touch-friendly spacing between items
+
+---
+
+### 30.4 Custom Validation & Error Summaries
+
+**Purpose:** Implement pattern matching, cross-field validation, and centralized error summaries. Essential for complex business rules and clear error reporting.
+
+**Validation Patterns Reference:**
+
+```javascript
+const validators = {
+  username: (value) => {
+    if (!value) return 'Username required';
+    if (!/^[a-zA-Z0-9]{4,20}$/.test(value)) {
+      return 'Must be 4-20 alphanumeric characters';
+    }
+    return null;
+  },
+  
+  password: (value) => {
+    if (!value) return 'Password required';
+    if (value.length < 8) return 'Minimum 8 characters';
+    if (!/[A-Z]/.test(value)) return 'Include uppercase letter';
+    if (!/[0-9]/.test(value)) return 'Include number';
+    if (!/[!@#$%^&*]/.test(value)) return 'Include special character';
+    return null;
+  },
+  
+  'match:password': (value) => {
+    const password = document.getElementById('password').value;
+    if (value !== password) return 'Passwords do not match';
+    return null;
+  },
+  
+  email: (value) => {
+    if (!value) return 'Email required';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Invalid email format';
+    return null;
+  },
+  
+  phone: (value) => {
+    if (!value) return 'Phone required';
+    if (!/^[\d\-\(\)\s]{10,}$/.test(value)) return 'Invalid phone format';
+    return null;
+  },
+  
+  zipCode: (value) => {
+    if (!value) return 'ZIP code required';
+    if (!/^\d{5}(-\d{4})?$/.test(value)) return 'Format: 12345 or 12345-6789';
+    return null;
+  }
+};
+```
+
+**Error Summary HTML:**
+
+```html
+<div id="errorSummary" class="error-summary" role="region" aria-live="polite" aria-labelledby="errorTitle">
+  <h3 id="errorTitle">Form Errors</h3>
+  <ul id="errorList"></ul>
+</div>
+
+<form id="validationForm">
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input 
+      type="text" 
+      id="username" 
+      data-validate="username"
+      aria-describedby="username-requirements username-error"
+    >
+    <small id="username-requirements">4-20 characters, alphanumeric only</small>
+    <div class="error-message" id="username-error" role="alert"></div>
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input 
+      type="password" 
+      id="password" 
+      data-validate="password"
+      aria-describedby="password-requirements password-error"
+    >
+    <small id="password-requirements">Min 8 chars, 1 uppercase, 1 number, 1 special</small>
+    <div class="error-message" id="password-error" role="alert"></div>
+  </div>
+  
+  <button type="submit">Create Account</button>
+</form>
+```
+
+**Error Summary Update Logic:**
+
+```javascript
+function updateErrorSummary() {
+  const form = document.getElementById('validationForm');
+  const errorSummary = document.getElementById('errorSummary');
+  const errorList = document.getElementById('errorList');
+  const errors = [];
+
+  form.querySelectorAll('[data-validate]').forEach(field => {
+    const validatorKey = field.dataset.validate;
+    const validator = validators[validatorKey];
+    
+    if (validator) {
+      const error = validator(field.value);
+      if (error) {
+        errors.push({
+          fieldId: field.id,
+          label: document.querySelector(`label[for="${field.id}"]`).textContent,
+          message: error
+        });
+        field.classList.add('invalid');
+        const errorEl = document.getElementById(`${field.id}-error`);
+        if (errorEl) errorEl.textContent = error;
+      } else {
+        field.classList.remove('invalid');
+      }
+    }
+  });
+
+  errorList.textContent = '';
+  if (errors.length > 0) {
+    errorSummary.classList.add('visible');
+    errors.forEach(err => {
+      const li = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = '#';
+      link.textContent = `${err.label}: ${err.message}`;
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById(err.fieldId).focus();
+      });
+      li.appendChild(link);
+      errorList.appendChild(li);
+    });
+  } else {
+    errorSummary.classList.remove('visible');
+  }
+}
+
+form.querySelectorAll('[data-validate]').forEach(field => {
+  field.addEventListener('blur', updateErrorSummary);
+  field.addEventListener('input', updateErrorSummary);
+});
+```
+
+**Error Summary CSS:**
+
+```css
+.error-summary {
+  padding: 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  display: none;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+}
+
+.error-summary.visible {
+  display: block;
+}
+
+.error-summary h3 {
+  margin: 0 0 12px 0;
+  color: #991B1B;
+  font-size: 16px;
+}
+
+.error-summary ul {
+  list-style: none;
+  padding: 0;
+}
+
+.error-summary a {
+  color: #991B1B;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+input.invalid {
+  border-color: #DC2626;
+  background: #FEF2F2;
+}
+
+.error-message {
+  color: #DC2626;
+  font-size: 13px;
+  margin-top: 4px;
+  display: none;
+}
+
+.error-message:not(:empty) {
+  display: block;
+}
+```
+
+**Accessibility:**
+- Error summary with aria-live="polite" region
+- Error links focus relevant field when clicked
+- Field-level errors with role="alert"
+- aria-describedby links fields to requirements and errors
+- Clear validation rules provided upfront
+- Requirements shown even before validation
+
+---
+
+### 30.5 Accessibility Best Practices for Dynamic Forms
+
+**ARIA Requirements Checklist:**
+- Every input needs `<label>` or `aria-label`
+- Error messages linked via `aria-describedby`
+- Status updates in `aria-live="polite"` regions
+- Required fields marked with `required` attribute and `aria-required="true"`
+- Progress indicators use `aria-valuenow`, `aria-valuemin`, `aria-valuemax`
+- Step indicators use `aria-current="step"`
+- Conditional sections use `aria-hidden="true"` when hidden
+- Visibility changes announced via live regions
+- Error state changes announced with `role="alert"`
+
+**Semantic HTML Requirements:**
+- Form fields within `<form>` element (not generic divs)
+- Related fields grouped in `<fieldset>` with `<legend>`
+- All fields have associated `<label>` elements
+- Use semantic input types: email, tel, number, date
+- Error containers with `role="alert"` for immediate announcement
+- Progress bars with role="progressbar" attributes
+- Navigation buttons clearly labeled
+
+**Keyboard Navigation Standards:**
+- All interactive elements accessible via Tab key
+- Logical tab order: left-to-right, top-to-bottom
+- Hidden fields excluded from tab order (aria-hidden or display: none)
+- Tab key moves to next field, Shift+Tab to previous
+- Enter submits single-input forms
+- Escape closes modals/dropdowns
+- Focus indicators clearly visible (never use outline: none)
+
+**Screen Reader Testing with:**
+- NVDA (Windows free screen reader)
+- JAWS (Windows commercial, most used)
+- VoiceOver (Mac built-in, iOS)
+- Test form labels are announced
+- Test error messages read immediately
+- Test field visibility changes communicated
+- Test progress updates announced
+- Test form submission confirmation announced
+
+---
+
+### 30.6 Mobile Form UX Considerations
+
+**Touch Target Standards:**
+- Interactive elements minimum 48x48px (WCAG AAA)
+- 44x44px acceptable for non-critical targets
+- 16px minimum gap between touch targets
+- No targets smaller than 24x24px
+
+**Input Type Optimization:**
+- type="email": Shows @ and . on mobile keyboard
+- type="tel": Numeric keyboard with +, -, (, )
+- type="number": Numeric keyboard with spinner
+- type="date": Native date picker on most devices
+- type="search": Search-optimized keyboard with clear button
+- Avoid placeholder-only labels (use actual labels)
+
+**Layout & Responsive Design:**
+- Single-column form layout on mobile
+- 100% width inputs with 16px horizontal padding
+- 16px+ font size (prevents iOS auto-zoom on input focus)
+- Fieldsets with clear visual separation using borders/background
+- Sticky form headers for long forms
+- Avoid full-screen overlays that trap user
+
+**Keyboard Behavior Optimization:**
+- Return key in single-field form auto-submits
+- Tab order preserved across portrait/landscape rotation
+- Focus indicators high-contrast (min 3:1 ratio)
+- No keyboard traps (always Tab forward and backward)
+- Autofocus only on first field, not mid-form
+
+**Performance for Mobile:**
+- Lazy load conditional field groups (CSS display: none)
+- Debounce API calls for dependencies (min 500ms)
+- Cache dropdown/select options to avoid re-requests
+- Limit field arrays to 20-50 maximum items
+- Virtualize lists with 100+ items (Intersection Observer)
+- Minimize animations (reduced-motion: prefer-reduced-motion)
+
+---
+
+### 30.7 Form Validation Patterns Summary
+
+**Validation Timing Strategies:**
+
+| Strategy | Trigger | Use Case | Example |
+|----------|---------|----------|---------|
+| **Inline** | As user types | Real-time feedback | Username availability |
+| **On-blur** | Field loses focus | Format validation | Email format |
+| **On-submit** | Form submit | Cross-field checks | Password != username |
+| **Server-side** | Before save | Database validation | Email uniqueness |
+| **Async** | User pauses (500ms) | API validation | ZIP code verification |
+
+**Common Validation Rules & Patterns:**
+
+```javascript
+// Required field
+if (!field.value.trim()) return 'This field is required';
+
+// Email format (use type="email" primarily)
+if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Invalid email';
+
+// Phone (varies by country)
+if (!/^[\d\-\(\)\s+]{10,}$/.test(value)) return 'Invalid phone';
+
+// ZIP code (US 5 or 9 digit)
+if (!/^\d{5}(-\d{4})?$/.test(value)) return 'Invalid ZIP code';
+
+// Password strength
+if (value.length < 8) return 'Min 8 characters';
+if (!/[A-Z]/.test(value)) return 'Requires uppercase';
+if (!/[0-9]/.test(value)) return 'Requires number';
+if (!/[!@#$%^&*]/.test(value)) return 'Requires special char';
+
+// URL format
+if (!/^https?:\/\/.+\..+/.test(value)) return 'Invalid URL';
+
+// Username (alphanumeric, underscores, 4-20 chars)
+if (!/^[a-zA-Z0-9_]{4,20}$/.test(value)) return 'Invalid username';
+
+// Cross-field: passwords match
+if (value !== document.getElementById('password').value) return 'Passwords do not match';
+
+// Conditional: required if other field has value
+if (otherField.value && !field.value) return 'Required when ' + otherField.name + ' is filled';
+```
+
+**Error Message Best Practices:**
+- Be specific: "Email must contain @ symbol" not "Invalid input"
+- Be actionable: "Use 8+ characters with uppercase and number" not "Weak password"
+- Be polite: "Please enter a valid email" not "Email is wrong"
+- Avoid technical jargon: "Phone format: (555) 123-4567" not "Regex pattern failed"
+- Place error near field: Use aria-describedby to associate
+- Make visible: Not in tooltips/hover only, but always shown
+- Summarize at top: Error summary links to fields for quick fix
+
+**When to Validate:**
+- Don't validate on every keystroke (too noisy)
+- Do validate on blur (field complete)
+- Do validate on submit (final check)
+- Do validate async slower operations (debounce 500ms)
+- Don't block form while loading states
+- Do show loading indicator for async validation
+
+**Server-Side Validation (always required!):**
+- Client validation is for UX only
+- Always validate server-side before saving
+- Check unique constraints (email, username)
+- Check business rules (date ranges, dependencies)
+- Return field-level errors from API
+- Provide clear error messages from server
+
+---
+
 This system provides 99% coverage for modern UI/UX design. Apply these rules consistently for professional, accessible, and beautiful interfaces.
