@@ -602,6 +602,134 @@ Show changes immediately (with pending indicator) and rollback on failure. Use C
 See Section 29 in UIUX-MASTER-PROMPT-SYSTEM.md for complete state machines, form persistence, undo/redo, and testing strategies.
 
 ═══════════════════════════════════════════════════════════════════════════════
+SECTION 30: FORM BUILDER PATTERNS
+═══════════════════════════════════════════════════════════════════════════════
+
+Dynamic forms for modern web applications. Essential patterns from basic conditional visibility to advanced multi-step wizards with complex dependencies. Enables flexible, accessible, and maintainable form systems at all scales.
+
+### Conditional Field Visibility
+
+Show/hide form fields based on user selections without page refresh. Reduces cognitive load by displaying only relevant fields. Use CSS transitions for smooth visibility changes, preserve field data when hidden, clear error states on hide, announce visibility changes to screen readers.
+
+**Implementation Pattern:**
+```javascript
+// Toggle fieldset visibility with accessibility updates
+section.classList.toggle('hidden');
+section.setAttribute('aria-hidden', !isVisible);
+requiredFields.forEach(f => f.setAttribute('aria-required', isVisible));
+```
+
+**CSS Transitions:** Use `max-height: 1000px; opacity: 1; transition: all 300ms ease;` for visible state, `max-height: 0; opacity: 0; pointer-events: none; margin-bottom: 0;` for hidden state. Enable smooth animations without jarring layout shifts.
+
+### Field Dependencies
+
+Dependent selects populate options based on parent selection values. Update dropdown option lists dynamically, disable dependent field until parent has value, announce changes via aria-live regions.
+
+**Implementation Pattern:**
+```javascript
+// Populate dependent field based on parent value
+parent.addEventListener('change', () => {
+  dependent.disabled = !parent.value;
+  // Repopulate dependent options based on parent value
+  dependent.value = '';
+});
+```
+
+Clear dependent field when parent selection changes. Validate interdependent field values together. Handle cascading updates (country → state → city).
+
+### Multi-Step Wizards
+
+Create sophisticated step-by-step forms with progress bar, step badges, per-step validation before navigation. Use `aria-current="step"` on active step badge. Validate all required fields in current step before advancing.
+
+**Implementation Pattern:**
+```javascript
+// Step validation and navigation
+function nextStep() {
+  if (validateStep(currentStep)) {
+    currentStep++;
+    progressFill.style.width = `${(currentStep / totalSteps) * 100}%`;
+  }
+}
+```
+
+Display dynamically generated review content on final step. Disable Previous button on step 1. Change Next button text to "Submit" on final step. Preserve form data across steps using form state object.
+
+### Complex Dependencies
+
+Configuration-driven field changes manage visibility, values, and validation rules based on multiple conditions (type, role, region, etc.). Maintain clear dependency graphs to prevent circular updates.
+
+**Implementation Pattern:**
+```javascript
+// Config-driven field management: multiple conditions
+const config = { premium: { admin: ['advanced', 'reporting'] } };
+if (type === 'premium' && role === 'admin') {
+  config[type][role].forEach(id => show(id));
+}
+```
+
+Announce field changes triggered by other field updates. Log dependencies for debugging. Use dependency maps to track which fields affect others.
+
+### Field Arrays
+
+Add/remove repeated field groups (phone numbers, emails, skills, addresses). Disable Remove button when only one item exists. Update aria-labels with item count when fields added/removed.
+
+**Implementation Pattern:**
+```javascript
+// Dynamic field item with labeling
+const item = document.createElement('div');
+item.innerHTML = `<input aria-label="Phone ${count}">`;
+updateRemoveButtons(); // Disable if count === 1
+fieldItems.appendChild(item);
+```
+
+Ensure Remove button is 48×48px touch target minimum. Use flex layout with gap spacing. Full-width Add button on mobile. Announce additions to screen readers.
+
+### Custom Validation
+
+Pattern matching, cross-field validation rules, and centralized error summaries. Validate individual fields on blur, entire form on submit.
+
+**Implementation Pattern:**
+```javascript
+// Custom validators with regex patterns
+validators.email = (v) => /^[\w-\.]+@[\w-]+\.[\w-]+$/.test(v);
+validators.password = (v) => {
+  if (v.length < 8) return 'Min 8 characters';
+  if (!/[A-Z]/.test(v)) return 'Include uppercase';
+};
+```
+
+Display error summary above form listing all validation failures. Clear per-field errors when user edits field. Use `role="alert"` for error message announcements. Support async validation (email existence checks).
+
+### Error Handling & User Feedback
+
+Display validation errors inline (below field) and in summary (above form). Show error icon + text in field. Use appropriate error colors. Persist errors until fixed. Clear related errors when dependency changes.
+
+**Validation Timing:** Validate on blur for better UX. Show inline errors immediately. Prevent submission if errors exist. Support async validation with loading states.
+
+**Error Message Guidelines:** Keep messages short (under 80 chars). Be specific about what's wrong. Suggest how to fix. Use consistent tone and terminology across all messages.
+
+### Accessibility Requirements
+
+- **ARIA Attributes:** aria-hidden toggles with field visibility; aria-required added/removed with required attribute; aria-current="step" on active wizard step; aria-label on all dynamic field labels; aria-describedby linking inputs to error/help text; aria-live="polite" for announcements; role="alert" for errors
+- **Keyboard Navigation:** Full Tab sequence through all form elements in logical order; Enter/Space trigger buttons; Arrow keys navigate dropdowns and multi-choice; Escape closes modals and cancels operations
+- **Focus Management:** Preserve focus during field transitions; Announce focus target to screen readers; Move focus to first error field on validation failure; Announce when focus moved
+- **Semantic HTML:** Use fieldset/legend for grouped fields; button type="button|submit|reset"; form elements not divs; section landmarks for logical grouping; proper heading hierarchy
+
+### Mobile Considerations
+
+- **Touch Targets:** 48×48px minimum for all buttons and interactive elements; Adequate spacing (16px+) between targets; No sub-40px touch zones
+- **Input Sizing:** Font 16px+ on mobile prevents iOS auto-zoom on focus; Full-width input fields with padding (12px horizontal); Clear button visibility and touch target; Avoid fixed labels
+- **Layout Behavior:** Fieldset containers use full viewport width; Responsive single-column on mobile; Field arrays break to vertical stacking on small screens; Proper line-height for readability (1.5+)
+- **Animations:** Use GPU-accelerated transforms instead of width/height changes for performance; Transitions use 300ms+ duration for smooth effect; Respect prefers-reduced-motion user setting
+- **Touch Interaction:** No hover-only visual indicators (use active, focus states); Adequate spacing between touch targets (16px minimum); No fixed positioning that blocks input area; Viewport doesn't zoom unexpectedly
+
+### State Preservation & Recovery
+
+Save form state in localStorage during editing. Restore on page reload or return. Show "Continue editing?" prompt if recovering incomplete form. Clear saved state on successful submission.
+
+See Section 30 in UIUX-MASTER-PROMPT-SYSTEM.md for complete examples, advanced patterns, enterprise-scale implementations, and comprehensive testing strategies.
+
+═══════════════════════════════════════════════════════════════════════════════
 PRE-GENERATION CHECKLIST
 ═══════════════════════════════════════════════════════════════════════════════
 
